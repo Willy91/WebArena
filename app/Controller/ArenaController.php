@@ -10,6 +10,7 @@
     class ArenaController extends AppController
     {
 
+        public $uses = array('Player', 'Fighter', 'Event');
         /**
          * index method : first page
          *
