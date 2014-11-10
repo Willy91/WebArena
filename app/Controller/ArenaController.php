@@ -24,12 +24,12 @@
         
         public function character()  
         {
-
+            $this->set('raw',$this->Fighter->findById(1));
         }
 
         public function diary()  
         {
-            
+            $this->set('raw',$this->Event->find());
 
         }
 
@@ -38,9 +38,18 @@
             
 
         }
+
         public function sight()  
         {
-            
+            if ($this->request->is('post')) {
+                if(key($this->request->data) == 'Fightermove') {
+                    $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
+                }
+                
+                elseif (key($this->request->data) == 'FighterAttack') {
+                    $this->Fighter->doAttack(1, $this->request->data['FighterAttack']['direction']);
+                }  
+            }
 
         }
 
