@@ -22,9 +22,12 @@
         }
 
         
-        public function character()  
+        public function fighter()  
         {
-            $this->set('raw',$this->Fighter->findById(1));
+            $this->set('players',$this->Player->find('list'));
+            if($this->request->is('post')) {
+                $this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name']);
+            }
         }
 
         public function diary()  

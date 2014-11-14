@@ -16,9 +16,31 @@ class Fighter extends AppModel {
 
         ),
 
-   );
+    );
     
-    
+    function add($playerId, $name) {
+
+
+        $data = array(
+            'name' => $name,
+            'player_id' => $playerId,
+            'coordinate_x' => rand(0,15),
+            'coordinate_y' => rand(0,10),
+            'level' => 1,
+            'xp' => 0,
+            'skill_sight' => 0,
+            'skill_strength' => 1,
+            'skill_health' => 3,
+            'current_health' => 3
+        );
+
+        // prepare the model for adding a new entry
+        $this->create();
+
+        // save the data
+        $this->save($data);
+    }
+
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
@@ -27,8 +49,8 @@ class Fighter extends AppModel {
         foreach($tab as $key)
             foreach($key as $value){
                 if ($value['coordinate_y']== $coordonnee_y && 
-                     $value['coordinate_x']== $coordonnee_x)
-                  $a = true;  
+                    $value['coordinate_x']== $coordonnee_x)
+                    $a = true;  
             }
             
         return $a;
@@ -44,7 +66,7 @@ class Fighter extends AppModel {
                 $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
         } elseif ($direction == 'south') {
             if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
-            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
+                $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
         } elseif ($direction == 'east') {
             if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
                 $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
@@ -71,7 +93,7 @@ class Fighter extends AppModel {
         foreach($tab as $key)
             foreach($key as $value){
                 if ($value['coordinate_y']== $coordonnee_y && 
-                     $value['coordinate_x']== $coordonnee_x)
+                    $value['coordinate_x']== $coordonnee_x)
                     return $value['id'];
             }
             
@@ -80,49 +102,49 @@ class Fighter extends AppModel {
     
     function doAttack($fighterId,$direction){
        
-       $datas = $this->read(null, $fighterId); 
+        $datas = $this->read(null, $fighterId); 
        
-       //Obtenir valeur de l'id défenseur
-       if ($direction == 'north') 
-       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId);
-       elseif ($direction == 'south') 
-       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId);
-       elseif ($direction == 'east') 
-       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId);
-       elseif ($direction == 'west') 
-       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId);
-       else
-           return false;
-       
-       echo "$defenderId\n";
-       
-       //Obtenir données du défenseur
-       if(!$defenderId)
-           return false;
-       else{
-          $datas2 = $this->read(null, $defenderId);
-          
-          //obtenir valeur aléatoire
-          $a = rand(1 , 20 );     
-       
-          //Tester si l'attaque réussie ou non
-          if ($a>(10 + $datas2['Fighter']['level'] - $datas['Fighter']['level']))
-          {
-            
-            //Appliquer la force de l'attaque
-              $this->set('skill_health', $datas2['Fighter']['skill_health'] - $datas['Fighter']['skill_strength']);
-             
-              //@todo : Retirer joueur du plateau
+        //Obtenir valeur de l'id défenseur
+        if ($direction == 'north') 
+        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId);
+        elseif ($direction == 'south') 
+        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId);
+        elseif ($direction == 'east') 
+        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId);
+        elseif ($direction == 'west') 
+        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId);
+        else
+            return false;
+           
+        echo "$defenderId\n";
+           
+        //Obtenir données du défenseur
+        if(!$defenderId)
+            return false;
+        else{
+            $datas2 = $this->read(null, $defenderId);
               
-              //sauver modif
-               $this->save();
-          }
-          else{
-              return false;
-          }
+            //obtenir valeur aléatoire
+            $a = rand(1 , 20 );     
            
-           
-       }
+            //Tester si l'attaque réussie ou non
+            if ($a>(10 + $datas2['Fighter']['level'] - $datas['Fighter']['level']))
+            {
+                
+                //Appliquer la force de l'attaque
+                $this->set('skill_health', $datas2['Fighter']['skill_health'] - $datas['Fighter']['skill_strength']);
+                 
+                //@todo : Retirer joueur du plateau
+                  
+                //sauver modif
+                $this->save();
+            }
+            else{
+                return false;
+            }
+               
+               
+        }
        
     }
 
