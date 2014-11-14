@@ -38,7 +38,7 @@ class Fighter extends AppModel {
         $this->create();
 
         // save the data
-        $this->save($data);
+        return $this->save($data);
     }
 
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)

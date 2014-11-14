@@ -26,7 +26,9 @@
         {
             $this->set('players',$this->Player->find('list'));
             if($this->request->is('post')) {
-                $this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name']);
+                if($this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name'])) {
+                    $this->Session->setFlash('Done !');
+                }
             }
         }
 
