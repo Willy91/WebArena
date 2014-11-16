@@ -70,5 +70,11 @@
 
         }
 
+	public function avatar(){
+		if($this->request->is('post')){
+			$this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['file']);
+		}
+	}
+
     }
 ?>
