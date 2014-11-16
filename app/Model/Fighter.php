@@ -41,7 +41,10 @@ class Fighter extends AppModel {
         return $this->save($data);
     }
 
-    //Vérifier si la position est libre
+
+	
+
+
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
@@ -70,8 +73,34 @@ class Fighter extends AppModel {
         return $a;
     }
     
-    
+//changement de niveau
+    function upgrade($fighterId,$upskill)
+	{
+	$datas = $this->read(null, $fighterId); 
+
+	 if ($upskill == 'sight') {
+            
+                $this->set('skill_sight', $datas['Fighter']['skill_sight'] + 1);
+        } elseif ($upskill == 'strength') {
+            
+                $this->set('skill_strength', $datas['Fighter']['skill_strength'] + 1);
+        } elseif ($upskill == 'health') {
+            
+                $this->set('skill_health', $datas['Fighter']['skill_health'] + 3);
+		$this->set('current_health', $datas['Fighter']['current_health'] + 3);
+        }  else {
+            return false;
+        }
+	$this->save();
+
+	return true;
+	}
+
+
+
+
     //Déplacement du fighter
+
     function doMove($fighterId, $direction)
     {
         // récupérer la position et fixer l'id de travail

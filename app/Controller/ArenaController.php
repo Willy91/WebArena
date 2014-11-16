@@ -24,12 +24,22 @@
         
         public function fighter()  
         {
-            $this->set('players',$this->Player->find('list'));
-            if($this->request->is('post')) {
-                if($this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name'])) {
-                    $this->Session->setFlash('Done !');
-                }
-            }
+	$this->set('players',$this->Player->find('list'));
+
+            
+            if($this->request->is('post'))
+ 		{
+ 		if(key($this->request->data) == 'CreateFighter') 
+			{
+                	if($this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name'])) 
+				{
+                   	 	$this->Session->setFlash('Done !');
+                		}
+			}
+		elseif (key($this->request->data) == 'PassLvl') {	
+                    $this->Fighter->upgrade(1, $this->request->data['PassLvl']['Choose a skill to upgrade']);
+            	}
+		}
         }
 
         public function diary()  
@@ -53,7 +63,9 @@
                 
                 elseif (key($this->request->data) == 'FighterAttack') {
                     $this->Fighter->doAttack(1, $this->request->data['FighterAttack']['direction']);
-                }  
+                } 
+		
+	 
             }
 
         }
