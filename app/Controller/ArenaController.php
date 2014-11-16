@@ -10,6 +10,7 @@
     class ArenaController extends AppController
     {
 
+        public $uses = array('Player', 'Fighter', 'Event');
         /**
          * index method : first page
          *
@@ -21,14 +22,19 @@
         }
 
         
-        public function character()  
+        public function fighter()  
         {
-
+            $this->set('players',$this->Player->find('list'));
+            if($this->request->is('post')) {
+                if($this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name'])) {
+                    $this->Session->setFlash('Done !');
+                }
+            }
         }
 
         public function diary()  
         {
-            
+            $this->set('raw',$this->Event->find());
 
         }
 
@@ -37,11 +43,26 @@
             
 
         }
+
         public function sight()  
         {
-            
+            if ($this->request->is('post')) {
+                if(key($this->request->data) == 'Fightermove') {
+                    $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
+                }
+                
+                elseif (key($this->request->data) == 'FighterAttack') {
+                    $this->Fighter->doAttack(1, $this->request->data['FighterAttack']['direction']);
+                }  
+            }
 
         }
+
+	public function avatar(){
+		if($this->request->is('post')){
+			$this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['file']);
+		}
+	}
 
     }
 ?>
