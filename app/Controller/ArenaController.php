@@ -60,7 +60,8 @@
 
 	public function avatar(){
 		if($this->request->is('post')){
-			$this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['file']);
+			//move_uploaded_file($this->request->data['UploadPicture']['avatar']['tmp_name'],"/var/www/html/WebArena/app/resultat.jpg");
+			$this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['avatar']['tmp_name']);
 		}
 	}
 

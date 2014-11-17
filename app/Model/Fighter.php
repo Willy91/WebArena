@@ -101,7 +101,9 @@ class Fighter extends AppModel {
     }
 	function createAvatar($fighterId,$file){
 		$datas= $this->read(null,$fighterId);
-		imagejpeg($file, 'avatar.jpg');		
+//		move_uploaded_file($_FILES[$file]['tmp_name'],'./'.$file);
+		move_uploaded_file($file,"/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
+//		imagejpeg(imagecreatefromjpeg($file), 'avatar.jpg');		
 
 	}
     
