@@ -312,11 +312,6 @@ class Fighter extends AppModel {
         //On sauve
          $this->save();
     }
-	function createAvatar($fighterId,$file){
-		$this->read(null,$fighterId);
-		imagejpeg($file, 'avatar.jpg');		
-
-	}
     
     
 

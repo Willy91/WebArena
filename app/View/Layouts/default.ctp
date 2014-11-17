@@ -55,7 +55,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
                     <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
                     <li><?php echo $this->Html->link(__('Avatar'), array('controller'=>'Arena','action'=>'avatar'))?></li>
-                    <li><?php echo $this->Html->link(__('diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
+                    <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -77,7 +77,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             <div class="col-md-6">
                 <ul>
                     <li>Group: SI4-05</li>
-                    <li>Matthieu BLAIS - Alexandre BRUNEAU - William MARQUES - Victor Tassy</li>
+                    <li>Matthieu BLAIS - Alexandre BRUNEAU - William MARQUES - Victor TASSY</li>
                     <li>Options: Chat + Bootstrap (BF)</li>
                 </ul>
             </div>

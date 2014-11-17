@@ -59,7 +59,10 @@
             if ($this->request->is('post')) {
                 if(key($this->request->data) == 'Fightermove') {
                     $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-                    $this->Session->setFlash('Une action a été réalisée.', 'default', array('class'=> 'alert alert-success alert-dismissible'));
+                    $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
+                    
+
+                    
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {
