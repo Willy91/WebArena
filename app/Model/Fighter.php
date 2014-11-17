@@ -180,6 +180,11 @@ class Fighter extends AppModel {
         
         return false;
     }
+	function createAvatar($fighterId,$file){
+		$datas= $this->read(null,$fighterId);
+		move_uploaded_file($file,"/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
+
+	}
     
     //Fonction faire l'attaque
     function doAttack($fighterId,$direction){
