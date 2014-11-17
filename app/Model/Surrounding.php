@@ -1,0 +1,116 @@
+<?php
+
+App::uses('AppModel', 'Model');
+
+class Surrounding extends AppModel {
+
+    public $displayField = 'name';
+
+   //Initialisation du plateau
+   function beginGame(){
+       //On enlève toute trace du plateau précédent et on crée colonne, piege, monstre
+       $this->query("Delete from surroundings");
+       $this->createColonne();
+       $this->createPiegeMonster(); 
+   } 
+   
+   
+   //Créer les colonnes
+   function createColonne(){
+       $array = array();
+       
+       //Tableau pour éviter qu'un mec soit bloqué par tous les poteaux autours de lui
+       for ($i=0; $i<10; $i++){
+           for ($j=0; $j<15;$j++){
+               $array[$i][$j] = true;
+           }
+       }
+       
+       //1 colonne pour 10 cases or 150 cases donc 15 colonnes
+       for ($i=0; $i<15; $i++){
+           do{
+               //PLacement aléatoire sur la map
+               $fin = false;
+               $y = rand(0 , 9 );
+               $x = rand(0,14);
+               
+               //Si l'espace est libre, on sort de la boucle sinon on recommence
+               if($array[$y][$x]==true)
+                   $fin=true;
+               
+           }while(!$fin);
+  
+           //On crée la colonne dans la bdd
+           $data=$this->create();
+           $data['Surrounding']['coordinate_x'] = $x;
+           $data['Surrounding']['coordinate_y'] = $y;
+           $data['Surroundng']['type'] = "Colonne";
+           $this->save();
+           
+           //On indique sur le tableau des cases libres, que les cases alentours
+           //et celle sélectionnée ne sont plus libres. Pas 2 colonnes à côté
+           $array[$y][$x]=false;
+           $array[$y-1][$x]=false;
+           $array[$y-1][$x-1]=false;
+           $array[$y][$x-1]=false;
+           $array[$y+1][$x]=false;
+           $array[$y+1][$x+1]=false;
+           $array[$y][$x+1]=false;
+           $array[$y-1][$x+1]=false;
+           $array[$y+1][$x-1]=false;
+           
+       }
+       
+   }
+
+   //Même principe que les colonnes
+   function createPiegeMonster(){
+       //On obtient les cases niquées par les colonnes
+       $tab = $this->query("Select coordinate_x, coordinate_y from surroundings");
+       
+       $array = array();
+       
+       for ($i=0; $i<10; $i++){
+           for ($j=0; $j<15;$j++){
+               $array[$i][$j] = true;
+           }
+       }
+       
+       //On marque indispo les cases occupées par les colonnes
+        foreach($tab as $key)
+            foreach($key as $value){
+               $array[$value['coordinate_y']][$value['coordinate_x']]= false;
+            }
+            
+            //15 pièges + un monstre
+        for ($i=0; $i<16; $i++){
+           do{
+               $fin = false;
+               $y = rand(0 , 9 );
+               $x = rand(0,14);
+               
+               if($array[$y][$x]==true)
+                   $fin=true;
+               
+           }while(!$fin);
+           
+           
+           //On sauvegarde 
+           $data=$this->create();
+           $data['Surrounding']['coordinate_x'] = $x;
+           $data['Surrounding']['coordinate_y'] = $y;
+           if ($i==15)
+               $data['Surroundin']['type'] = "Monster";
+           else
+               $data['Surroundng']['type'] = "Piege";
+           
+           $this->save();
+           
+           $array[$y][$x] = false;
+       }    
+       
+   }
+   
+    
+
+}
