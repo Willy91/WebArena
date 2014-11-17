@@ -28,6 +28,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->meta('icon');
 
         echo $this->Html->css('bootstrap.min.css');
+        echo $this->Html->css('webarena.css');
 
         echo $this->fetch('meta');
         echo $this->fetch('css');
@@ -58,22 +59,36 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         </div><!-- /.container-fluid -->
     </nav>
     <div id="container">
-        <div id="content">
+        <div class="container-fluid" id="content">
+            <div class="row">
 
-            <?php echo $this->Session->flash(); ?>
+                <?php echo $this->Session->flash(); ?>
 
-            <?php echo $this->fetch('content'); ?>
+                <?php echo $this->fetch('content'); ?>
+            </div>
         </div>
-        <div id="footer">
-            <?php echo $this->Html->link(
+        <div class="row" id="footer">
+            <div class="col-md-6">
+                <ul>
+                    <li>Group: SI4-05</li>
+                    <li>Matthieu BLAIS - Alexandre BRUNEAU - William MARQUES - Victor Tassy</li>
+                    <li>Options: Chat + Bootstrap (BF)</li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-right">
+                <ul>
+                    <li>Find this project on <?php echo $this->Html->link("GitHub", "https://github.com/Willy91/WebArena");?></li>
+                    <li><?php echo $this->Html->link(
                     $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
                     'http://www.cakephp.org/',
                     array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
                 );
-            ?>
-            <p>
-                <?php echo $cakeVersion; ?>
-            </p>
+                ?></li>
+                
+                <li><?php echo $cakeVersion; ?></li>
+                </ul>
+            </div>
+            
         </div>
     </div>
     <?php echo $this->element('sql_dump'); ?>

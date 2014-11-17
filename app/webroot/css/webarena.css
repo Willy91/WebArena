@@ -1,0 +1,19 @@
+body {
+    background-color: #FAFAFA;
+}
+
+#content {
+    background-color: white;
+    padding: 25px;
+}
+
+#footer {
+    padding : 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+#footer ul {
+    list-style-type: none;
+    padding: 0;
+}
