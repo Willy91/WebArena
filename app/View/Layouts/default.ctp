@@ -53,7 +53,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <ul class="nav navbar-nav">
                     <li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
                     <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
+                    <li><?php echo $this->Html->link(__('Avatar'), array('controller'=>'Arena','action'=>'avatar'))?></li>
+                    <li><?php echo $this->Html->link(__('diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
+
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'Login'))?></li>
+                </ul> 
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
