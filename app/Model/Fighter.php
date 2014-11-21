@@ -202,7 +202,7 @@ class Fighter extends AppModel {
        elseif ($direction == 'west') 
        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId);
        else
-           return false;
+           return 3;
        
        //Si le mec qui défend est en fait le monstre on supprime le monstre et on augmente l'xp
        if($defenderId==-1){
@@ -214,7 +214,7 @@ class Fighter extends AppModel {
        
        //Si on a pas détecté de défender, l'attaque est dans le vide 
        if(!$defenderId)
-           return false;
+           return 1;
        else{
            //Lire les info sur le défenseur
           $datas2 = $this->read(null, $defenderId);
@@ -225,16 +225,23 @@ class Fighter extends AppModel {
           //Si l'attaque réussie
           if ($a>(10 + $datas2['Fighter']['level'] - $datas['Fighter']['level']))
           {
-             //On met a jour la senté du mec attaqué, on sauve, on augmente l'xp de l'attaquant, on sauve
+             
+              $xp=1;
+              //On met a jour la senté du mec attaqué, on sauve, on augmente l'xp de l'attaquant, on sauve
               $this->set('current_health', $datas2['Fighter']['current_health'] - $datas['Fighter']['skill_strength']);
              
               //@todo : Retirer joueur du plateau
-              
+              if ($datas2['current_health']<=0){
+                  $datas2['current_health']=0;
+                  $xp=$xp+$datas2['level'];
+              }
+                  
               //sauver modif
                $this->save();
                $datas = $this->read(null, $fighterId);
-               $this->set('xp', $datas['Fighter']['xp']);
+               $this->set('xp', $datas['Fighter']['xp']+$xp);
                $this->save();
+               return 2;
           }
           else{
               return false;
@@ -311,6 +318,49 @@ class Fighter extends AppModel {
         
         //On sauve
          $this->save();
+    }
+    
+    
+    function InitPosition($idFighter){
+        
+         $array = array();
+        
+        //Tableau pour éviter qu'un mec soit bloqué par tous les poteaux autours de lui
+       for ($i=0; $i<10; $i++){
+           for ($j=0; $j<15;$j++){
+               $array[$i][$j] = true;
+           }
+       }
+       
+       $tab = $this->query("Select coordinate_x, coordinate_y from surroundings");
+       
+       //On marque indispo les cases occupées par les colonnes
+        foreach($tab as $key)
+            foreach($key as $value){
+               $array[$value['coordinate_y']][$value['coordinate_x']]= false;
+            }
+              
+       $data = $this->find('all');
+       
+       pr($data);
+        
+        foreach($data as $key){
+            if($key['Fighter']['current_health']!=0)
+            $array[$key['Fighter']['coordinate_y']][$key['Fighter']['coordinate_x']]= false;
+        }
+        
+        $fin = false;
+        $pos = array();
+      do{
+          $pos[0] = rand(0,15);
+          $pos[1] = rand(0,10);
+
+        if ($array[$pos[1]][$pos[0]]==true)
+            $fin = true;
+          
+      }while(!$fin);
+      
+      return $pos;
     }
     
     
