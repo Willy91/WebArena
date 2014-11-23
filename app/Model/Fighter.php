@@ -1,11 +1,14 @@
 <?php
 
 App::uses('AppModel', 'Model');
+define("POINT", 3);
+define("DELAI", 10);
 
 class Fighter extends AppModel {
 
+    
     public $displayField = 'name';
-
+    public $uses = array('Surrounding');
     public $belongsTo = array(
 
         'Player' => array(
