@@ -24,8 +24,6 @@ class Fighter extends AppModel {
         $data = array(
             'name' => $name,
             'player_id' => $playerId,
-            'coordinate_x' => rand(0,15),
-            'coordinate_y' => rand(0,10),
             'level' => 1,
             'xp' => 0,
             'skill_sight' => 0,
@@ -34,6 +32,10 @@ class Fighter extends AppModel {
             'current_health' => 3
         );
 
+        $pos = $this->InitPosition();
+        
+        $data['coordinate_x'] = $pos[0];
+        $data['coordinate_y'] = $pos[1];
         // prepare the model for adding a new entry
         $this->create();
 
@@ -48,28 +50,24 @@ class Fighter extends AppModel {
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
-        //Obtenir poisiotn des autres fighter
         $tab = $this->query("Select coordinate_x, coordinate_y from fighters where id <> $fighterId");
    
-        //Vérifier que la case est libre
         foreach($tab as $key)
             foreach($key as $value){
-                if ($value['coordinate_y']== $coordonnee_y && 
-                     $value['coordinate_x']== $coordonnee_x)
+                if ($value['coordinate_y']== $coordonnee_y && $value['coordinate_x']== $coordonnee_x)
                   $a = true;  
             }
+        echo $a;
         
-        //Obtenir coordonées des colonnes
         $tab = $this->query("Select coordinate_x, coordinate_y from surroundings where type='Colonne'");
-    
-        //Vérifier que le mec ne va pas sur une colonne
+        pr($tab);
         foreach($tab as $key)
             foreach($key as $value){
                 if ($value['coordinate_y']== $coordonnee_y && 
                      $value['coordinate_x']== $coordonnee_x)
                   $a = true;  
             }    
-            
+            echo $a;
         return $a;
     }
     
@@ -106,9 +104,6 @@ class Fighter extends AppModel {
         // récupérer la position et fixer l'id de travail
         $datas = $this->read(null, $fighterId);      
         
-        
-        //Vérifier si en fonction de la direction on sort du plateau et si la case est libre
-        //Si elle est libre on met a jour les coordonées
         if ($direction == 'north') {
             if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
                 $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
@@ -134,29 +129,25 @@ class Fighter extends AppModel {
     
     //Piege mortel
     function deadPiege($fighterId){
-        //Obtenir coordonées des pieges
         $tab = $this->query("Select coordinate_x, coordinate_y from surroundings where type='Piege'");
     
-        //Lire les données sur le fighter
         $data=$this->read(null,$fighterId);
         
-        //Vérifier s'il se trouve sur un piege. 
-        //Si il est sur un piège, il meurt
+        
         foreach($tab as $key)
             foreach($key as $value){
                 if ($value['coordinate_y']== $data['Fighter']['coordinate_y'] && 
                      $value['coordinate_x']== $data['Fighter']['coordinate_x'])
-                  $this->set('current_health', 0);
+                  $this->set('skill_health', 0);
             }
             
-         //Sauver modif
          $this->save();
     }
     
     //Obtenir l'ID du mec attaqué
     function getIdDef($coordonnee_x, $coordonnee_y, $fighterID){
         //Obtenir les autres fighter susceptibles d'être attaqué
-        $tab = $this->query("Select * from fighters where id<> $fighterID");
+        $tab = $this->query("Select * from fighters where id<> $fighterID and current_health>0");
         
         //Vérifier si l'un des fighter est attaqué en fonction de sa position et retourner l'ID du mec attaqué
         foreach($tab as $key)
@@ -216,11 +207,16 @@ class Fighter extends AppModel {
        if(!$defenderId)
            return 1;
        else{
+           
            //Lire les info sur le défenseur
           $datas2 = $this->read(null, $defenderId);
           
+          if($datas['Fighter']['guild_id']!=NULL)
+               $attackBonus = $this->getAttackBonus($datas['Fighter']['guild_id'],$datas2, $fighterId);
+          
+          echo "Attack $attackBonus";
           //Aléatoire pour l'attaque
-          $a = rand(1 , 20 );     
+          $a = rand(1 , 20 ) + $attackBonus;     
        
           //Si l'attaque réussie
           if ($a>(10 + $datas2['Fighter']['level'] - $datas['Fighter']['level']))
@@ -229,11 +225,11 @@ class Fighter extends AppModel {
               $xp=1;
               //On met a jour la senté du mec attaqué, on sauve, on augmente l'xp de l'attaquant, on sauve
               $this->set('current_health', $datas2['Fighter']['current_health'] - $datas['Fighter']['skill_strength']);
-             
+             echo "Current_health". $datas2['Fighter']['current_health'];
               //@todo : Retirer joueur du plateau
-              if ($datas2['current_health']<=0){
-                  $datas2['current_health']=0;
-                  $xp=$xp+$datas2['level'];
+              if ($datas2['Fighter']['current_health'] - $datas['Fighter']['skill_strength']<=0){
+                  $this->set('current_health', 0);
+                  $xp=$xp+$datas2['Fighter']['level'];
               }
                   
               //sauver modif
@@ -252,76 +248,21 @@ class Fighter extends AppModel {
        
     }
     
-    //Ramasser un outil
-    function getTools($fighterId,$toolId){
-        //Sélection de l'objet par son ID 
-        $tab = $this->query("Select * from tools where id == $toolId");
-        //lecture du mec qui a ramassé
-         $datas = $this->read(null, $fighterId);
-         
-         //Pour chaque (mais en fait y en a qu'un mais bref, je code avec le cul)
-         foreach ($tab as $key) {
-            foreach ($key as $value) {
-
-                //en fonction du type d'objet, on augmente le skill avec le bonus de l'objet
-                switch ($value['type_bonus']) {
-                    case 1:
-                        $this->set('skill_strenght',$datas['Fighter']['skill_strenght'] + $value['bonus']);
-                        break;
-                    case 2:
-                        $this->set('skill_sight',$datas['Fighter']['skill_sight'] + $value['bonus']);
-                        break;
-                    case 3:
-                        $this->set('skill_health',$datas['Fighter']['skill_health'] + $value['bonus']);
-                        break;
-                    case 4: //genre de potion de santé
-                        if ($datas['Fighter']['current_health'] + $value['bonus']<=$datas['Fighter']['skill_health'])
-                            $this->set('current_health',$datas['Fighter']['current_health'] + $value['bonus']);
-                        else
-                            $this->set('current_health',$datas['Fighter']['skill_health']);
-                        break;
-                }
-            }
+    function getAttackBonus($guild_id, $defender, $idAttack){
+        $data=$this->find('all', array('conditions' => array('guild_id' => $guild_id, 'Fighter.id !=' => $idAttack)));
+        $bonus = 0;
+        foreach($data as $key){
+            if(($key['Fighter']['coordinate_x']==$defender['Fighter']['coordinate_x']+1 && $key['Fighter']['coordinate_y']==$defender['Fighter']['coordinate_y'])
+                    || ($key['Fighter']['coordinate_x']==$defender['Fighter']['coordinate_x']- 1 && $key['Fighter']['coordinate_y']==$defender['Fighter']['coordinate_y'])
+                    || ($key['Fighter']['coordinate_x']==$defender['Fighter']['coordinate_x'] && $key['Fighter']['coordinate_y']+1==$defender['Fighter']['coordinate_y'])
+                    || ($key['Fighter']['coordinate_x']==$defender['Fighter']['coordinate_x'] && $key['Fighter']['coordinate_y']-1==$defender['Fighter']['coordinate_y']))
+                $bonus++;
+            
         }
-        //On sauve
-         $this->save();
+        return $bonus;
     }
     
-    //Jeter l'objet 
-    function throwTools($fighterId, $toolId){
-        //On obtient les info sur l'objet a jeter
-        $tab = $this->query("Select * from tools where id == $toolId");
-        
-        //On lit les infos sur le mec 
-        $datas = $this->read(null, $fighterId);
-         
-        //Pour chaque objet (je code avec le cul y en a qu'un vu la requete)
-         foreach ($tab as $key) {
-            foreach ($key as $value) {
-
-                //On enlève le bonus.
-                switch ($value['type_bonus']) {
-                    case 1:
-                        $this->set('skill_strenght',$datas['Fighter']['skill_strenght'] -= $value['bonus']);
-                        break;
-                    case 2:
-                        $this->set('skill_sight',$datas['Fighter']['skill_sight'] - $value['bonus']);
-                        break;
-                    case 3:
-                        $this->set('skill_health',$datas['Fighter']['skill_health'] - $value['bonus']);
-                        if ($datas['Fighter']['skill_health']<$datas['Fighter']['current_health'])
-                            $this->set('current_health',$datas['Fighter']['skill_health']);
-                        break;
-                }
-            }
-        }
-        
-        //On sauve
-         $this->save();
-    }
-    
-    
-    function InitPosition($idFighter){
+    function InitPosition(){
         
          $array = array();
         
@@ -344,16 +285,17 @@ class Fighter extends AppModel {
        
        pr($data);
         
-        foreach($data as $key){
-            if($key['Fighter']['current_health']!=0)
-            $array[$key['Fighter']['coordinate_y']][$key['Fighter']['coordinate_x']]= false;
-        }
+        foreach($data as $key)
+           // foreach($key as $value){
+               if ($key['Fighter']['current_health']>0)
+               $array[$key['Fighter']['coordinate_y']][$key['Fighter']['coordinate_x']]= false;
+           // }
         
         $fin = false;
         $pos = array();
       do{
-          $pos[0] = rand(0,15);
-          $pos[1] = rand(0,10);
+          $pos[0] = rand(0,14);
+          $pos[1] = rand(0,9);
 
         if ($array[$pos[1]][$pos[0]]==true)
             $fin = true;
@@ -363,6 +305,84 @@ class Fighter extends AppModel {
       return $pos;
     }
     
+     //Function to join a guild by its name
+    function joinGuild($idFighter, $idGuild){
+        $data=$this->findById($idFighter);
+        $data['Fighter']['guild_id']= $idGuild;
+        return $this->save($data);
+    }
     
+    //Function revive for a dead figther
+    function reviveFighter($idFighter){
+        $data = $this->findById($idFighter);
+        
+        if($data['Fighter']['current_health']==0){
+           $data['Fighter']['level'] = 1;
+           $data['Fighter']['xp'] = 0;
+           $data['Fighter']['skill_sight'] = 0;
+           $data['Fighter']['skill_strenght'] = 1;
+           $data['Fighter']['skill_health'] = 3;
+           $data['Fighter']['current_health'] = 3;
+           $tab = $this->InitPosition();
+           $data['Fighter']['coordinate_x'] = $tab[0];
+           $data['Fighter']['coordinate_y'] = $tab[1];
+           $data['Fighter']['next_action_time'] = "0000-00-00 00:00:00";
+           return $this->save($data);
+        }
+        else return false;
+    }
+
+    function getFighterview($idFighter){
+        return $this->findById($idFighter);
+    }
+    
+    function deathFromSurrounding($idFighter, $bool){
+        if ($bool == true){
+            $data = $this->findById($idFighter);
+            $data['Fighter']['current_health'] = 0;
+            $this->save($data);
+        }
+    }
+    
+    function chooseFighter($idFighter){
+        $this->Session->write('User.fighter', $idFighter);
+    }
+    
+    function getFighterUser($idUser){
+        return $this->find('all', array('conditions'=>array('player_id'=>$idUser)));
+    }
+    
+    function newAction($idFighter){
+        $nb = $this->Session->read("$idFighter.nbAction");
+        $data=$this->findById($idFighter);
+        
+        if(date("Y-m-d H:i:s")<=$data['Fighter']['next_action_time'])
+                return false;
+        else{
+        
+        
+        if (date("Y-m-d H:i:s")>($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+2*DELAI,date("m"),date("d"),date("Y"))))
+            $nb--;
+        if (date("Y-m-d H:i:s")>($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+3*DELAI,date("m"),date("d"),date("Y"))))
+            $nb--;  
+        if (date("Y-m-d H:i:s")>($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+DELAI,date("m"),date("d"),date("Y")))){
+            $nb--;
+            $data['Fighter']['next_action_time'] = date("Y-m-d H:i:s");
+        }    
+        
+        if($nb<0)
+            $nb=0;
+        
+        $nb++;
+        if ($nb==POINT){
+            $data['Fighter']['next_action_time']=date ("Y-m-d H:i:s", mktime(date("H"),date("i"),date("s")+DELAI,date("m"),date("d"),date("Y")));
+            $this->save($data);
+        }
+        
+        $this->Session->write("$idFighter.nbAction", $nb);
+        return true;
+        }
+    }
+
 
 }
