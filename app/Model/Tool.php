@@ -10,7 +10,7 @@ App::uses('AppModel', 'Model');
 
 class Tool extends AppModel {
 
-    public $displayField = 'name';
+     public $displayField = 'name';
 
     public $belongsTo = array(
 
@@ -25,48 +25,81 @@ class Tool extends AppModel {
     );
     
     //Vérifier si un fighter a déjà un équipement du type
-    function equipFighter($fighterId, $toolId){
-        $datas = $this->read(null, $toolId);
-        
-        $tab = $this->query("Select * from tools where player_id == $fighterId");
-        
-        //S'il a déjà un équipement du type alors on demande s'il veut l'échanger ou non.
-        foreach ($tab as $key) {
-            foreach ($key as $value) {
-                if ($value['type_bonus']==$datas['Tool']['type_bonus']){
-                    //@todo : Demander si on remplace ou non
-                }
-                
-            }
-            }
-    }
-    
-    //On attribue un fighter à un objet
-    function getFighter($fighterId, $toolId){
-       $this->read(null, $toolId);
-        
-       $this->set('fighter_id', $fighterId);
-        
-       $this->save();
-    }
-    
-    //On enlève un objet à un fighter
-    function removeTool($fighterId, $toolId){
-        
-        $tab = $this->query("Select * from fighters where id == $fighterId");
-        $this->read(null, $toolId);
-        
-        //On dépose l'objet à la position du mec
-        foreach ($tab as $key) {
-            foreach ($key as $value) {
-                $this->set('coordinate_x', $value['coordinate_x']);
-                $this->set('coordinate_y', $value['coordinate_y']);
-            }
+    function pickTool($data, $toolId){
+        $data2 = $this->findById($toolId);
+     
+        $data2['Tool']['fighter_id']=$data['Fighter']['id'];
+        $this->save($data2);
+        if($data2['Tool']['type']=='Armure'){
+             $data['Fighter']['skill_health']= $data['Fighter']['skill_health']+$data2['Tool']['bonus'];
+             $data['Fighter']['current_health']=$data['Fighter']['current_health']+$data2['Tool']['bonus'];
         }
-                
-        $this->set('fighter_id', NULL);
-        
-        $this->save();
+        if($data2['Tool']['type']=='Epee')
+            $data['Fighter']['skill_strenght']= $data['Fighter']['skill_strength']+$data2['Tool']['bonus'];
+        if($data2['Tool']['type']=='Lunette')
+            $data['Fighter']['skill_sight']= $data['Fighter']['skill_sight']+$data2['Tool']['bonus'];
+        $this->Fighter->save($data);
     }
+    
+    function getTool($idTool){
+        return $this->findById($idTool);
+    }
+      
+
+    function initPosition($data2){
+        $this->query("Delete from tools");
+        $array = array();
+       
+       for ($i=0; $i<10; $i++){
+           for ($j=0; $j<15;$j++){
+               $array[$i][$j] = true;
+           }
+       }
+       
+       //On marque indispo les cases occupées par l'es colonnes'environnement
+        foreach($data2 as $key)
+               $array[$key['Surrounding']['coordinate_y']][$key['Surrounding']['coordinate_x']]= false;
+        
+            
+        //20 objets
+        for ($i=0; $i<25; $i++){
+           do{
+               $fin = false;
+               $y = rand(0 , 9 );
+               $x = rand(0,14);
+               
+               if($array[$y][$x]==true)
+                   $fin=true;
+               
+           }while(!$fin);
+           
+           
+           //On sauvegarde 
+           $data=$this->create();
+           $data['Tool']['coordinate_x'] = $x;
+           $data['Tool']['coordinate_y'] = $y;
+        
+           $a = rand(0,3);
+           switch($a){
+               case 0: $data['Tool']['type'] = 'Armure'; break;
+               case 1: $data['Tool']['type'] = 'Epee'; break;
+               case 2: $data['Tool']['type'] = 'Lunettes'; break;
+               case 3 : $data['Tool']['type'] = 'Armure'; break;
+           }
+           $data['Tool']['bonus'] = rand(1,3);
+           
+           
+           $this->save($data);
+           
+           $array[$y][$x] = false;
+       }  
+        
+        
+    }
+    
+    function getFreeTool(){
+        return $this->find('all', array('conditions' => array('fighter_id'=>NULL)));
+    }
+    
     
 }

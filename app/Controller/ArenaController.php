@@ -10,7 +10,7 @@
     class ArenaController extends AppController
     {
 
-        public $uses = array('Player', 'Fighter', 'Event');
+        public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
         /**
          * index method : first page
          *
@@ -24,6 +24,39 @@
         
         public function fighter()  
         {
+            //Fighter view. Need IdFighter
+        //$this->getFighterview($idFighter);
+        
+        
+        //Function to join a guild
+        //Need the name of the guild and the id of the fighter
+        //$this->Fighter->joinGuild($IdFighter, $this->Guild->getIdGuild($nameGuild) );
+        
+        
+        
+        //Function to revive. Need the idFighter 
+        //$this->Fighter->reviveFighter($idFighter);
+
+
+        //Function to create a guild. Need the fighter ID and the name of the guild
+        //$this->Guild->CreateGuild("Test2");
+        
+        
+        
+        //Function to get all the name of guilds.
+        //Return an array Array like this
+        //(
+        //  [0] => Array
+        //(
+        //    [Guild] => Array
+        //        (
+        //            [name] => Test
+        //       )
+        //  )
+        //)
+        //$this->Guild->getAllGuild();
+            
+            
 	$this->set('players',$this->Player->find('list'));
 
             
@@ -56,10 +89,31 @@
 
         public function sight()  
         {
+          //$this->Fighter->InitPosition(1);
+        
+       // $this->set('raw',$this->Fighter->find('all'));
+          
+        
+      //  $this->Surrounding->beginGame();
+        //$this->Fighter->add(1, "ttt");
+        
+        //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
+        
+      // $this->Tool->pickTool($this->Fighter->getFighterview(5), 52);
+            
             if ($this->request->is('post')) {
                 if(key($this->request->data) == 'Fightermove') {
                     $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-                    $this->Session->setFlash('Une action a été réalisée.', 'default', array('class'=> 'alert alert-success alert-dismissible'));
+                    $c = $this->Surrounding->nearFromPiege($this->Fighter->findById(5));
+                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById(5));
+                $a = $this->Surrounding->fighterOnPiege($this->Fighter->findById(5));
+                $b = $this->Surrounding->fighterOnMonster($this->Fighter->findById(5));
+                $this->Fighter->deathFromSurrounding(5, $a);
+                    
+                    $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
+                    
+
+                    
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {

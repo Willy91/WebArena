@@ -4,8 +4,8 @@ App::uses('AppModel', 'Model');
 
 class Surrounding extends AppModel {
 
-    public $displayField = 'name';
-
+        public $displayField = 'name';
+    public $uses = array('Fighter');
    //Initialisation du plateau
    function beginGame(){
        //On enlève toute trace du plateau précédent et on crée colonne, piege, monstre
@@ -44,8 +44,8 @@ class Surrounding extends AppModel {
            $data=$this->create();
            $data['Surrounding']['coordinate_x'] = $x;
            $data['Surrounding']['coordinate_y'] = $y;
-           $data['Surroundng']['type'] = "Colonne";
-           $this->save();
+           $data['Surrounding']['type'] = "Colonne";
+           $this->save($data);
            
            //On indique sur le tableau des cases libres, que les cases alentours
            //et celle sélectionnée ne sont plus libres. Pas 2 colonnes à côté
@@ -60,6 +60,8 @@ class Surrounding extends AppModel {
            $array[$y+1][$x-1]=false;
            
        }
+       
+       
        
    }
 
@@ -100,17 +102,76 @@ class Surrounding extends AppModel {
            $data['Surrounding']['coordinate_x'] = $x;
            $data['Surrounding']['coordinate_y'] = $y;
            if ($i==15)
-               $data['Surroundin']['type'] = "Monster";
+               $data['Surrounding']['type'] = "Monster";
            else
-               $data['Surroundng']['type'] = "Piege";
+               $data['Surrounding']['type'] = "Piege";
            
-           $this->save();
+           $this->save($data);
            
            $array[$y][$x] = false;
        }    
        
    }
    
+   function nearFromPiege($data2){
+       $data = $this->find('all', array('conditions'=>array('type' => "Piege")));
+       $x = $data2['Fighter']['coordinate_x'];
+       $y = $data2['Fighter']['coordinate_y'];
+       foreach ($data as $key){
+           if($key['Surrounding']['coordinate_x']==$x+1 && $key['Surrounding']['coordinate_y']==$y)
+               return true;
+           if($key['Surrounding']['coordinate_x']==$x-1 && $key['Surrounding']['coordinate_y']==$y)
+               return true;
+           if($key['Surrounding']['coordinate_x']==$x && $key['Surrounding']['coordinate_y']==$y+1)
+               return true;
+           if($key['Surrounding']['coordinate_x']==$x && $key['Surrounding']['coordinate_y']==$y-1)
+               return true;
+       }
+       return false;
+   }
+   
+   function fighterOnPiege($data2){
+       $data = $this->find('all', array('conditions'=>array('type' => "Piege")));
+       $x = $data2['Fighter']['coordinate_x'];
+       $y = $data2['Fighter']['coordinate_y'];
+       foreach ($data as $key){
+           if($key['Surrounding']['coordinate_x']==$x && $key['Surrounding']['coordinate_y']==$y)
+               return true;
+       }
+       return false;
+   }
+   
+   function nearFromMonster($data2){
+       $data = $this->find('all', array('conditions'=>array('type' => "Monster")));
+       $x = $data2['Fighter']['coordinate_x'];
+       $y = $data2['Fighter']['coordinate_y'];
+       foreach ($data as $key){
+           if($key['Surrounding']['coordinate_x']==$x+1 && $key['Surrounding']['coordinate_y']==$y)
+               return true;
+           if($key['Surrounding']['coordinate_x']==$x-1 && $key['Surrounding']['coordinate_y']==$y)
+               return true;
+           if($key['Surrounding']['coordinate_x']==$x && $key['Surrounding']['coordinate_y']==$y+1)
+               return true;
+           if($key['Surrounding']['coordinate_x']==$x && $key['Surrounding']['coordinate_y']==$y-1)
+               return true;
+       }
+       return false;
+   }
+   
+   function fighterOnMonster($data2){
+       $data = $this->find('all', array('conditions'=>array('type' => "Monster")));
+       $x = $data2['Fighter']['coordinate_x'];
+       $y = $data2['Fighter']['coordinate_y'];
+       foreach ($data as $key){
+           if($key['Surrounding']['coordinate_x']==$x && $key['Surrounding']['coordinate_y']==$y)
+               return true;
+       }
+       return false;
+   }
+    
+   function getAllSurrounding(){
+       return $this->find('all');
+   }
     
 
 }
