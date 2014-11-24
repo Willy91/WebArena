@@ -1,9 +1,9 @@
 body {
-    background-color: #FAFAFA;
+    background-color: #ecf0f1;
 }
 
 #content {
-    background-color: white;
+    background-color: #ecf0f1;
     padding: 25px;
 }
 
@@ -16,4 +16,12 @@ body {
 #footer ul {
     list-style-type: none;
     padding: 0;
+}
+.form-control{
+	width:20%;
+	margin-left: 40%;
+	margin-bottom: 10px;
+}
+form{
+	text-align: center;
 }
