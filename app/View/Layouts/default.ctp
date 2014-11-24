@@ -59,7 +59,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'Login'))?></li>
+                    <li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>
                 </ul> 
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -100,5 +100,30 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <?php echo $this->element('sql_dump'); ?>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <?php echo $this->Html->script('bootstrap.min'); ?>
+
+    <div class="modal fade" id="loginModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title">Log In</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <input class="form-control" placeholder="Email" type="email">
+                  </div>
+                  <div class="form-group">
+
+                    <input class="form-control" placeholder="Password" type="password">
+                  </div>
+                  <p class="text-right"><a href="#">Forgot password?</a></p>
+                </div>
+                <div class="modal-footer">
+                  <a href="#" data-dismiss="modal" class="btn">Close</a>
+                  <a href="#" class="btn btn-primary">Log-in</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
