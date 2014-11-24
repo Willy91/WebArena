@@ -39,7 +39,7 @@
             </tr>
         </thead>
  
- 
+        <?php pr($result_array[0]['Surrounding']['coordinate_y']) ?>
         <tbody>
             <?php foreach ($result_array as $item) :?>
                 <tr>
@@ -47,7 +47,7 @@
                     <td><?php echo $item['Surrounding']['type']; ?></td>
                      <td><?php echo $item['Surrounding']['coordinate_x']; ?></td>
                     <td><?php echo $item['Surrounding']['coordinate_y']; ?></td>
-                <tr>
+                </tr>
 
             <?php endforeach;?>
         </tbody>
