@@ -18,7 +18,11 @@
          */
         public function index()
         {
-            $this-> set ('myname'," Julien Falconnet ");
+        }
+
+        public function signup() 
+        {
+
         }
 
         
