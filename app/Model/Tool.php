@@ -101,5 +101,34 @@ class Tool extends AppModel {
         return $this->find('all', array('conditions' => array('fighter_id'=>NULL)));
     }
     
+    function getToolSight($data){
+       $x = $data['Fighter']['coordinate_x'];
+       $y = $data['Fighter']['coordinate_y'];
+       
+       $data2 = $this->find('all');
+       $nb = 0;
+       $tab = array();
+       foreach($data2 as $key){
+           $sight_x = $key['Tool']['coordinate_x']-$x;
+           if ($sight_x<0)
+               $sight_x = $sight_x*(-1);
+           $sight_y = $key['Tool']['coordinate_y']-$y;
+           if ($sight_y<0)
+               $sight_y = $sight_y*(-1);
+           $total = $sight_x+$sight_y;
+          
+           if ($total<=$data['Fighter']['skill_sight'] && $key['Tool']['fighter_id']==NULL){
+                echo $total . " ";
+               $key['Distance']=$total;
+                $tab[$nb]=$key;
+               $nb++;
+           }
+               
+       }
+       
+       return $tab;
+       
+   }
+    
     
 }

@@ -24,6 +24,15 @@
         {
 
         }
+        
+        function newAction(){
+        $nb = $this->Cookie->read("nbAction");
+        
+        
+        $this->Cookie->write("nbAction", $this->Fighter->Action($nb, $this->Cookie->read('idFighter')));
+      
+        
+    }
 
         
         public function fighter()  
@@ -87,7 +96,8 @@
 
         public function login()  
         {
-            
+            $this->Cookie->write('idFighter', 5);
+            $this->Cookie->write('nbAction', 0);
 
         }
 

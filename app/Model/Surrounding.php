@@ -172,6 +172,39 @@ class Surrounding extends AppModel {
    function getAllSurrounding(){
        return $this->find('all');
    }
+   
+   function getSurroundingSight($data){
+       $x = $data['Fighter']['coordinate_x'];
+       $y = $data['Fighter']['coordinate_y'];
+       
+       $data2 = $this->find('all');
+       $nb = 0;
+       $tab = array();
+       foreach($data2 as $key){
+           $sight_x = $key['Surrounding']['coordinate_x']-$x;
+           if ($sight_x<0)
+               $sight_x = $sight_x*(-1);
+           $sight_y = $key['Surrounding']['coordinate_y']-$y;
+           if ($sight_y<0)
+               $sight_y = $sight_y*(-1);
+           $total = $sight_x+$sight_y;
+           if ($total<=$data['Fighter']['skill_sight'] && $key['Surrounding']['type']!='Monster' ){
+               
+               $key['Distance']=$total;
+               $tab[$nb]=$key;
+               $nb++;
+           }
+           if ($key['Surrounding']['type']=='Monster' && $total<=1 && $data['Fighter']['skill_sight']>0){
+               $tab[$nb]=$key;
+               $nb++;
+           }
+               
+               
+       }
+       
+       return $tab;
+       
+   }
     
 
 }
