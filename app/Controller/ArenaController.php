@@ -100,7 +100,9 @@
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
         
       // $this->Tool->pickTool($this->Fighter->getFighterview(5), 52);
-            
+            $this->set('result_array', $this->Surrounding->getAllSurrounding());
+            $result_array=$this->Surrounding->getAllSurrounding();
+
             if ($this->request->is('post')) {
                 if(key($this->request->data) == 'Fightermove') {
                     $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);

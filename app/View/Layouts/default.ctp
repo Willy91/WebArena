@@ -29,10 +29,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
         echo $this->Html->css('bootstrap.min.css');
         echo $this->Html->css('webarena.css');
+        echo $this->Html->css('tableCSS.css');
 
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
+
     ?>
 </head>
 <body>
@@ -100,6 +102,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <?php echo $this->element('sql_dump'); ?>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <?php echo $this->Html->script('bootstrap.min'); ?>
+
+    <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
+    <?php echo $this->Html->script('dataTableJS.js');?>
 
     <div class="modal fade" id="loginModal">
         <div class="modal-dialog">
