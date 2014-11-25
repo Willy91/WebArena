@@ -121,6 +121,13 @@
 
 
         }
+
+        public function Deconnection()
+        {
+
+            $this->Session->delete('Connected');
+            
+        }
 	public function BeforeFilter(){
 
 	echo   $this->request->params['action'];
