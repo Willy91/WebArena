@@ -99,37 +99,29 @@
 
         }
 
-        public function login()  
+        public function login()
         {
-
-            //$this->Player->createNew('truc3@hotmail.fr','dqsfsf56');
-		if( $this->Player->checkLogin('truc3@hotmail.fr','dqsfsf56')== true)
-	$this->Session->write('Connected', $this->Player->getidPlayer("truc3@hotmail.fr"));
-	//echo $this->Player->getidPlayer("truc3@hotmail.fr");
-	//$data = $this->Session->read('Connected');
-	//pr($data);
-	$this->Session->write('Connected',$this->Player->getidPlayer("truc3@hotmail.fr") );
-	//$this->Session->write('Connected',$this->Player->getidPlayer("truc2@hotmail.fr") );
-	echo  ($this->Session->read('Connected'));	
-	
-	if($this->Session->check($this->Player->getidPlayer('truc3@hotmail.fr')))
-	echo 'cest bon';
-	
-
-            $this->Cookie->write('idFighter', 5);
-            $this->Cookie->write('nbAction', 0);
-
+            pr($this->Session->read('Connected'));
+            if($this->request->is('post')) {
+                if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])== true) {
+                    pr("ok");
+                    $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                }
+                // $this->Cookie->write('idFighter', 5);
+                // $this->Cookie->write('nbAction', 0);
+            }
 
         }
-	public function BeforeFilter(){
 
-	echo   $this->request->params['action'];
+	public function BeforeFilter() {
 
-	if($this->Session->read('Connected')=!true && $this->request->params['action']!='login')
-		{
-		//$this->request->params['action'];
-		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
-		}
+    	echo   $this->request->params['action'];
+
+    	if($this->Session->read('Connected')!=true && $this->request->params['action']!='login')
+    	{
+    		//$this->request->params['action'];
+    		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
+    	}
 	}
 
         public function sight()  
