@@ -11,6 +11,10 @@
     </div>
     
     <?php echo $this->Form->submit('Log In', array('class' => 'btn btn-primary'));?>
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
   </form>
   </div>
+  <div id="status">
+</div>
 </div>

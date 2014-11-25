@@ -38,6 +38,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     ?>
 </head>
 <body>
+
+    <?php echo $this->Html->script('fb');?>
+
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
