@@ -347,17 +347,14 @@ class Fighter extends AppModel {
         }
     }
     
-    function chooseFighter($idFighter){
-        $this->Session->write('User.fighter', $idFighter);
-    }
+   
     
     function getFighterUser($idUser){
         return $this->find('all', array('conditions'=>array('player_id'=>$idUser)));
     }
     
-    function newAction($idFighter){
-        $nb = $this->Session->read("$idFighter.nbAction");
-        $data=$this->findById($idFighter);
+    function Action($nb, $fighterId){
+        $data=$this->findById($fighterId);
         
         if(date("Y-m-d H:i:s")<=$data['Fighter']['next_action_time'])
                 return false;
@@ -381,11 +378,39 @@ class Fighter extends AppModel {
             $data['Fighter']['next_action_time']=date ("Y-m-d H:i:s", mktime(date("H"),date("i"),date("s")+DELAI,date("m"),date("d"),date("Y")));
             $this->save($data);
         }
-        
-        $this->Session->write("$idFighter.nbAction", $nb);
-        return true;
-        }
+        return $nb;
     }
+    }
+    
+    function getFighterSight($data){
+       $x = $data['Fighter']['coordinate_x'];
+       $y = $data['Fighter']['coordinate_y'];
+       
+       $data2 = $this->find('all');
+       $nb = 0;
+       $tab = array();
+       foreach($data2 as $key){
+           $sight_x = $key['Fighter']['coordinate_x']-$x;
+           
+           if ($sight_x<0)
+               $sight_x = $sight_x*(-1);
+           $sight_y = $key['Fighter']['coordinate_y']-$y;
+           if ($sight_y<0)
+               $sight_y = $sight_y*(-1);
+           echo " sighty ".$sight_y. " sightx " . $sight_x;
+           $total = $sight_x+$sight_y;
+            echo " total ".$total;
+           if ($total<=$data['Fighter']['skill_sight'] && $key['Fighter']['current_health']>0 && $data['Fighter']['id']!=$key['Fighter']['id']){
+               $key['Distance']=$total;
+               $tab[$nb]=$key;
+               $nb++;
+           }
+               
+       }
+       
+       return $tab;
+       
+   }
 
 
 }

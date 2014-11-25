@@ -1,3 +1,4 @@
+<h1>Board</h1>
 <div class="col-md-2">
     <?php echo $this->Form->create('Fightermove', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
 
@@ -25,4 +26,30 @@
         </div>
         <?php echo $this->Form->end(); ?>
     </div>
+</div>
+
+<div class="col-md-10">
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Type</th>
+                <th>X</th>
+                <th>Y</th>
+            </tr>
+        </thead>
+ 
+        <?php pr($result_array[0]['Surrounding']['coordinate_y']) ?>
+        <tbody>
+            <?php foreach ($result_array as $item) :?>
+                <tr>
+                    <td><?php echo $item['Surrounding']['id']; ?></td>
+                    <td><?php echo $item['Surrounding']['type']; ?></td>
+                     <td><?php echo $item['Surrounding']['coordinate_x']; ?></td>
+                    <td><?php echo $item['Surrounding']['coordinate_y']; ?></td>
+                </tr>
+
+            <?php endforeach;?>
+        </tbody>
+    </table>
 </div>

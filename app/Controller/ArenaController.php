@@ -11,7 +11,11 @@
     {
 
         public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
-        public $components = array('Session');
+
+        public $components = array('Session','Cookie');
+
+        
+
         /**
          * index method : first page
          *
@@ -19,8 +23,21 @@
          */
         public function index()
         {
-            $this-> set ('myname'," Julien Falconnet ");
         }
+
+        public function signup() 
+        {
+
+        }
+        
+        function newAction(){
+        $nb = $this->Cookie->read("nbAction");
+        
+        
+        $this->Cookie->write("nbAction", $this->Fighter->Action($nb, $this->Cookie->read('idFighter')));
+      
+        
+    }
 
         
         public function fighter()  
@@ -84,6 +101,7 @@
 
         public function login()  
         {
+
             //$this->Player->createNew('truc3@hotmail.fr','dqsfsf56');
 		if( $this->Player->checkLogin('truc3@hotmail.fr','dqsfsf56')== true)
 	$this->Session->write('Connected', $this->Player->getidPlayer("truc3@hotmail.fr"));
@@ -97,6 +115,11 @@
 	if($this->Session->check($this->Player->getidPlayer('truc3@hotmail.fr')))
 	echo 'cest bon';
 	
+
+            $this->Cookie->write('idFighter', 5);
+            $this->Cookie->write('nbAction', 0);
+
+
         }
 	public function BeforeFilter(){
 
@@ -122,7 +145,9 @@
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
         
       // $this->Tool->pickTool($this->Fighter->getFighterview(5), 52);
-            
+            $this->set('result_array', $this->Surrounding->getAllSurrounding());
+            $result_array=$this->Surrounding->getAllSurrounding();
+
             if ($this->request->is('post')) {
                 if(key($this->request->data) == 'Fightermove') {
                     $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
@@ -140,19 +165,17 @@
                 
                 elseif (key($this->request->data) == 'FighterAttack') {
                     $this->Fighter->doAttack(1, $this->request->data['FighterAttack']['direction']);
-                } 
+                }
+
+                elseif (key($this->request->data) == 'UploadPicture') {
+                    $this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['avatar']['tmp_name']);
+                }
 		
 	 
             }
 
         }
 
-	public function avatar(){
-		if($this->request->is('post')){
-			//move_uploaded_file($this->request->data['UploadPicture']['avatar']['tmp_name'],"/var/www/html/WebArena/app/resultat.jpg");
-			$this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['avatar']['tmp_name']);
-		}
-	}
 
     }
 ?>

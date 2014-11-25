@@ -23,3 +23,15 @@ echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDe
     </div>
 </div>
 <?php echo $this->Form->end(); ?>
+
+<?php echo $this->Form->create('UploadPicture',array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false))); ?>
+<div class="form-group">
+    <label class="col-sm-2 control-label">Change Avatar</label>
+    <div class="col-sm-10"><?php echo $this->Form->file('avatar'); ?></div>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10"><?php echo $this->Form->submit('Upload', array('class' => 'btn btn-primary'));?>
+    </div>
+</div>
+<?php $this->Form->end(); ?>
+    
