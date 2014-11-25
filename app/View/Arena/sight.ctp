@@ -39,7 +39,7 @@
         </thead>
  
         <tbody>
-            <?php foreach ($result_array as $item) :?>
+            <?php foreach ($result_sight as $item) :?>
                 <tr>
                     <td><?php echo $item['Surrounding']['type']; ?></td>
                      <td><?php echo $item['Surrounding']['coordinate_x']; ?></td>
@@ -67,22 +67,32 @@
             echo "<td>$i</td>";
             for ($j=0; $j < 14; $j++) { 
                 $set=false;      
-                    foreach ($result_array as $item) {
+                    foreach ($result_sight as $item) {
                         if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==$i){
                             $value = $item['Surrounding']['type'];
-                            echo "<td>$value</td>";
+                            echo "<td><img src=\"../img/$value.png\"></td>";
                             $set=true;
                         }
                     }
-                if($set==false){
-                    echo "<td></td>";
-                }
+                   foreach ($result_tool as $item) {
+                        if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==$i){
+                            $value = $item['Tool']['type'];
+                            echo "<td><img src=\"../img/$value.png\"></td>";
+                            
+                            $set=true;
+                        }
+                    }
+                    if($me['Fighter']['coordinate_y']==$j && $me['Fighter']['coordinate_x']==$i){
+                        echo "<td><img src=\"../img/Warrior.png\"></td>";
+                        $set=true;
+                    }
+                    if($set==false){
+                        echo "<td></td>";
+                    }
                 }
             }
             echo "</tr>";
         ?>
-        <?php foreach ($result_array as $item ):?>
-            
-        <?php endforeach; ?>
+
     </tbody>
 </table>
