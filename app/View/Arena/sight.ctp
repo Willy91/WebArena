@@ -29,21 +29,18 @@
 </div>
 
 <div class="col-md-10">
-    <table id="example" class="display" cellspacing="0" width="100%">
+    <table id="sight_table" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>id</th>
                 <th>Type</th>
                 <th>X</th>
                 <th>Y</th>
             </tr>
         </thead>
  
-        <?php pr($result_array[0]['Surrounding']['coordinate_y']) ?>
         <tbody>
             <?php foreach ($result_array as $item) :?>
                 <tr>
-                    <td><?php echo $item['Surrounding']['id']; ?></td>
                     <td><?php echo $item['Surrounding']['type']; ?></td>
                      <td><?php echo $item['Surrounding']['coordinate_x']; ?></td>
                     <td><?php echo $item['Surrounding']['coordinate_y']; ?></td>
@@ -53,3 +50,39 @@
         </tbody>
     </table>
 </div>
+<h1>Damier</h1>
+<table id="damier">
+    <thead>
+        <tr>
+            <?php for($i=0;$i<15;$i++){
+                echo "<th>$i</th>";
+            }?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php for($i=1;$i<14;$i++){
+            echo "<tr>";
+
+
+            echo "<td>$i</td>";
+            for ($j=0; $j < 14; $j++) { 
+                $set=false;      
+                    foreach ($result_array as $item) {
+                        if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==$i){
+                            $value = $item['Surrounding']['type'];
+                            echo "<td>$value</td>";
+                            $set=true;
+                        }
+                    }
+                if($set==false){
+                    echo "<td></td>";
+                }
+                }
+            }
+            echo "</tr>";
+        ?>
+        <?php foreach ($result_array as $item ):?>
+            
+        <?php endforeach; ?>
+    </tbody>
+</table>
