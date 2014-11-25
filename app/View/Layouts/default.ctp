@@ -65,10 +65,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>
+                    <?php if($this->Session->read('Connected')): ?>
+                        <li><?php echo $this->Html->link(__('Logout'),array('controller'=>'Arena','action'=>'logout'))?></li>
+                    <?php else: ?>
+                        <li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>
+                    <?php endif; ?>
                 </ul> 
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </nav>
     <div class="modal fade" id="loginModal" tabindex="-1">
         <div class="modal-dialog">

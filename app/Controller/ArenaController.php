@@ -101,6 +101,7 @@
 
         public function login()
         {
+            $this->Session->delete('Connected');
             pr($this->Session->read('Connected'));
             if($this->request->is('post')) {
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])== true) {
@@ -113,16 +114,25 @@
 
         }
 
-	public function BeforeFilter() {
+        public function logout()
+        {
 
-    	echo   $this->request->params['action'];
+            $this->Session->delete('Connected');
+            $this->redirect(array('controller' => 'Arena', 'action' => 'index'));
+            
+        }
 
-    	if($this->Session->read('Connected')!=true && $this->request->params['action']!='login')
-    	{
-    		//$this->request->params['action'];
-    		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
+
+    	public function BeforeFilter() {
+
+        	echo   $this->request->params['action'];
+
+        	if($this->Session->read('Connected')!=true && $this->request->params['action']!='login')
+        	{
+        		//$this->request->params['action'];
+        		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
+        	}
     	}
-	}
 
         public function sight()  
         {
