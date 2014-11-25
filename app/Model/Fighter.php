@@ -60,10 +60,10 @@ class Fighter extends AppModel {
                 if ($value['coordinate_y']== $coordonnee_y && $value['coordinate_x']== $coordonnee_x)
                   $a = true;  
             }
-        echo $a;
+        
         
         $tab = $this->query("Select coordinate_x, coordinate_y from surroundings where type='Colonne'");
-        pr($tab);
+        
         foreach($tab as $key)
             foreach($key as $value){
                 if ($value['coordinate_y']== $coordonnee_y && 
@@ -130,23 +130,7 @@ class Fighter extends AppModel {
         return true;
     }
     
-    //Piege mortel
-    function deadPiege($fighterId){
-        $tab = $this->query("Select coordinate_x, coordinate_y from surroundings where type='Piege'");
-    
-        $data=$this->read(null,$fighterId);
-        
-        
-        foreach($tab as $key)
-            foreach($key as $value){
-                if ($value['coordinate_y']== $data['Fighter']['coordinate_y'] && 
-                     $value['coordinate_x']== $data['Fighter']['coordinate_x'])
-                  $this->set('skill_health', 0);
-            }
-            
-         $this->save();
-    }
-    
+
     //Obtenir l'ID du mec attaqué
     function getIdDef($coordonnee_x, $coordonnee_y, $fighterID){
         //Obtenir les autres fighter susceptibles d'être attaqué

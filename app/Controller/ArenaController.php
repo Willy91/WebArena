@@ -27,7 +27,7 @@
 
         public function signup() 
         {
-
+           
         }
         
         function newAction(){
@@ -101,12 +101,15 @@
 
         public function login()
         {
-            $this->Session->delete('Connected');
-            pr($this->Session->read('Connected'));
+            //$this->Session->delete('Connected');
+          //  pr($this->Session->read('Connected'));
+              $this->Player->createNew("root","root");
             if($this->request->is('post')) {
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])== true) {
                     pr("ok");
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                    $this->Cookie->write('idFighter',1);
+                    
                 }
                 // $this->Cookie->write('idFighter', 5);
                 // $this->Cookie->write('nbAction', 0);
@@ -136,30 +139,46 @@
 
         public function sight()  
         {
-          //$this->Fighter->InitPosition(1);
+            /**Elle affichera les combattants et les objets du décors en vue classés par
+distance croissante.**/
+            
+            
+          //Réinitialiser les objets s'ils ont tous été rammasé  
+          $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
         
-       // $this->set('raw',$this->Fighter->find('all'));
+        //$this->Surrounding->beginGame();
+        //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
           
         
-      //  $this->Surrounding->beginGame();
-        //$this->Fighter->add(1, "ttt");
-        
-        //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
-        
-      // $this->Tool->pickTool($this->Fighter->getFighterview(5), 52);
-            $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
-            $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
-           // $result_array=$this->Surrounding->getAllSurrounding();
+        $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
+        $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
 
-            $this->set('me',$this->Fighter->findById(1));
+
+
+            $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
             if ($this->request->is('post')) {
                 if(key($this->request->data) == 'Fightermove') {
-                    $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-                    $c = $this->Surrounding->nearFromPiege($this->Fighter->findById(1));
-                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById(1));
-                $a = $this->Surrounding->fighterOnPiege($this->Fighter->findById(1));
-                $b = $this->Surrounding->fighterOnMonster($this->Fighter->findById(1));
-                $this->Fighter->deathFromSurrounding(1, $a);
+                    $this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']);
+                
+                $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
+                $tab2 = $this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
+                $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
+                $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
+
+
+                $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
+                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
+                
+                //Retourn True si le fighter est mort à cause d'un piège
+                $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter'))));
+                //Return True si le fighter est mort à cause du monstre
+                $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter'))));
+                
+                echo " _test $a $b $c $d ";
+                pr($tab);
+                pr($tab2);
+                /*
+                $this->Fighter->deathFromSurrounding(1, $a);*/
                     
                     $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
                     
@@ -168,12 +187,16 @@
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {
-                    $this->Fighter->doAttack(1, $this->request->data['FighterAttack']['direction']);
+                    $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
                 }
-
+                 //CA NA RIEN A FAIRE LA
                 elseif (key($this->request->data) == 'UploadPicture') {
-                    $this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['avatar']['tmp_name']);
+                    $this->Fighter->createAvatar($this->Cookie->read('idFighter'),$this->request->data['UploadPicture']['avatar']['tmp_name']);
                 }
+                
+                elseif (key($this->request->data) == 'pickTool') {
+                    $this->Tool->fighterOnTool($this->Cookie->read('idFighter'));
+            }
 		
 	 
             }
