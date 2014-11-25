@@ -38,11 +38,17 @@ class Player extends AppModel {
 	function getidPlayer($mail)
 	{
 	
-		$data=$this->find('first', array('conditions' => array('email =' => $mail), 'fields' => array('id')));
+		$data=$this->find('first', array('constraints' => array('email =' => $mail), 'fields' => array('id')));
 		return $data['Player']['id'] ;
 
 
 	}
+        
+        function getIdFighter($mail){
+            $data = $this->find('first', array('constraints' => array('email' => $mail)));
+            return $data['Player']['id'];
+            
+        }
 }
 
 	

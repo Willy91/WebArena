@@ -23,14 +23,39 @@
          */
         public function index()
         {
+            //PAGE D ACCUEIL 
+            /*
+            un slider des avatars
+             * Retourne un tableau décroissant des fighters classés par level
+             * $this->Fighter->getRankFighter()
+             */
         }
 
+        
+        public function hallofframe(){
+        /*
+        
+        Ajoutez une page «hall of fame» en espace public où vous présentez une liste de
+statistiques sur les caractéristiques, les dates de connexion etc, en utilisant au moins 4
+«charts» de jqplot
+        */
+            
+            
+        }
+        
         public function signup() 
         {
-           
+           //DOIT RECEVOIR LE NOM ET LE MOT DE PASS DU MEC QUI S INSCRIT   
+           if($this->Player->createNew($mail,$pass)){
+                //DIRIGER VERS LA PAGE CREATION DU FIGHTER ET OBLIGER LE JOUEUR A CREER SON FIGHTER        
+           }
+                   
+                   
         }
         
         function newAction(){
+            
+            //A TESTER QUAND CA MARCHERA BIEN
         $nb = $this->Cookie->read("nbAction");
         
         
@@ -45,7 +70,10 @@
             //Fighter view. Need IdFighter
         //$this->getFighterview($idFighter);
         
-        
+            /*
+            $nb = $this->Fighter->getNbFighterFromPlayer($this->Player->getIdFighter($mail));
+               if ($nb == 0)
+        */
         //Function to join a guild
         //Need the name of the guild and the id of the fighter
         //$this->Fighter->joinGuild($IdFighter, $this->Guild->getIdGuild($nameGuild) );
@@ -103,16 +131,20 @@
         {
             //$this->Session->delete('Connected');
           //  pr($this->Session->read('Connected'));
-              $this->Player->createNew("root","root");
+             
             if($this->request->is('post')) {
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])== true) {
                     pr("ok");
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                    $this->Cookie->write('nbAction', 0);
+                    
+                    //REDIRIGER VERS LA PAGE DE CHOIX DU FIGHTER
+                    //en attendant..
                     $this->Cookie->write('idFighter',1);
                     
                 }
                 // $this->Cookie->write('idFighter', 5);
-                // $this->Cookie->write('nbAction', 0);
+
             }
 
         }
@@ -140,24 +172,34 @@
         public function sight()  
         {
             /**Elle affichera les combattants et les objets du décors en vue classés par
-distance croissante.**/
+distance croissante.
+             * 
+             * faites apparaître un tooltip au survol des trucs sur le damier.
+             * 
+             * **/
             
             
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
         
+        
+          //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
         //$this->Surrounding->beginGame();
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
           
-        
+        //Partie à alex
         $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
         $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
 
 
-
+            //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
+            //Si on a des paramètres reçus en post
             if ($this->request->is('post')) {
+                //Si le mec veut bouger 
                 if(key($this->request->data) == 'Fightermove') {
+                    
+                    //Do Move 
                     $this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']);
                 
                 $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
@@ -174,9 +216,6 @@ distance croissante.**/
                 //Return True si le fighter est mort à cause du monstre
                 $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter'))));
                 
-                echo " _test $a $b $c $d ";
-                pr($tab);
-                pr($tab2);
                 /*
                 $this->Fighter->deathFromSurrounding(1, $a);*/
                     

@@ -60,7 +60,8 @@ class Tool extends AppModel {
     }
       
     function useAgainTool($data){
-        $nb = $this->find('count', array('conditions' => array('fighter_id' => 'NULL')));
+   
+        $nb = $this->find('count', array('constraints' => array('fighter_id' => 'NULL')));
         if ($nb==0){
             $this->initPostion($data);
             return true;

@@ -396,5 +396,14 @@ class Fighter extends AppModel {
        
    }
 
+   
+   function getNbFighterFromPlayer($idPlayer){
+       $nb = $this->find('count', array('constraints' => array('player_id' => $idPlayer)));
+       return $nb;
+   }
+   
+   function getRankFighter(){
+       return $this->find('all', array('order' => array('level'=>'desc')));
+   }
 
 }
