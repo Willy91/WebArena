@@ -11,6 +11,7 @@
     {
 
         public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
+        public $components = array('Cookie');
         /**
          * index method : first page
          *
@@ -134,19 +135,17 @@
                 
                 elseif (key($this->request->data) == 'FighterAttack') {
                     $this->Fighter->doAttack(1, $this->request->data['FighterAttack']['direction']);
-                } 
+                }
+
+                elseif (key($this->request->data) == 'UploadPicture') {
+                    $this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['avatar']['tmp_name']);
+                }
 		
 	 
             }
 
         }
 
-	public function avatar(){
-		if($this->request->is('post')){
-			//move_uploaded_file($this->request->data['UploadPicture']['avatar']['tmp_name'],"/var/www/html/WebArena/app/resultat.jpg");
-			$this->Fighter->createAvatar(1,$this->request->data['UploadPicture']['avatar']['tmp_name']);
-		}
-	}
 
     }
 ?>
