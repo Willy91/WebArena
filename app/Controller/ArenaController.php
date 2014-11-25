@@ -147,17 +147,19 @@
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
         
       // $this->Tool->pickTool($this->Fighter->getFighterview(5), 52);
-            $this->set('result_array', $this->Surrounding->getAllSurrounding());
-            $result_array=$this->Surrounding->getAllSurrounding();
+            $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
+            $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
+           // $result_array=$this->Surrounding->getAllSurrounding();
 
+            $this->set('me',$this->Fighter->findById(1));
             if ($this->request->is('post')) {
                 if(key($this->request->data) == 'Fightermove') {
                     $this->Fighter->doMove(1, $this->request->data['Fightermove']['direction']);
-                    $c = $this->Surrounding->nearFromPiege($this->Fighter->findById(5));
-                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById(5));
-                $a = $this->Surrounding->fighterOnPiege($this->Fighter->findById(5));
-                $b = $this->Surrounding->fighterOnMonster($this->Fighter->findById(5));
-                $this->Fighter->deathFromSurrounding(5, $a);
+                    $c = $this->Surrounding->nearFromPiege($this->Fighter->findById(1));
+                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById(1));
+                $a = $this->Surrounding->fighterOnPiege($this->Fighter->findById(1));
+                $b = $this->Surrounding->fighterOnMonster($this->Fighter->findById(1));
+                $this->Fighter->deathFromSurrounding(1, $a);
                     
                     $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
                     

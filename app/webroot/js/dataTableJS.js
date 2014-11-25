@@ -1,3 +1,6 @@
 $(document).ready(function() { 
-	$('#example').DataTable(); 
+	$('#sight_table').DataTable(); 
+	$('#damier').DataTable({
+		"paging":   false
+	});
 } );
