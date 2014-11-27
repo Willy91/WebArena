@@ -23,21 +23,26 @@
          */
         public function index()
         {
+
         }
 
         public function signup() 
         {
-
+            if($this->request->is('post')) {
+                if($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password'])
+                    $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
+                else
+                    $this->Session->setFlash('Passwords not correct', 'flash_error');
+            }
         }
         
-        function newAction(){
-        $nb = $this->Cookie->read("nbAction");
-        
-        
-        $this->Cookie->write("nbAction", $this->Fighter->Action($nb, $this->Cookie->read('idFighter')));
+        function newAction()
+        {
+            $nb = $this->Cookie->read("nbAction");
+            $this->Cookie->write("nbAction", $this->Fighter->Action($nb, $this->Cookie->read('idFighter')));
       
         
-    }
+        }
 
         
         public function fighter()  
@@ -102,11 +107,10 @@
         public function login()
         {
             $this->Session->delete('Connected');
-            pr($this->Session->read('Connected'));
             if($this->request->is('post')) {
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])== true) {
-                    pr("ok");
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                    $this->redirect(array('controller'=>'arena', 'action'=>'index'));
                 }
                 // $this->Cookie->write('idFighter', 5);
                 // $this->Cookie->write('nbAction', 0);
@@ -125,9 +129,7 @@
 
     	public function BeforeFilter() {
 
-        	echo   $this->request->params['action'];
-
-        	if($this->Session->read('Connected')!=true && $this->request->params['action']!='login')
+        	if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
         		//$this->request->params['action'];
         		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
