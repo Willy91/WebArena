@@ -2,6 +2,8 @@
 
 App::uses('AppModel', 'Model');
 App::uses('Security', 'Utility');
+App::uses('CakeEmail', 'Network/Email');
+
 
 class Player extends AppModel {
 
@@ -43,6 +45,26 @@ class Player extends AppModel {
 
 
 	}
+        
+        function getIdFighter($mail){
+            $data = $this->find('first', array('conditions' => array('email' => $mail)));
+            return $data['Player']['id'];
+            
+        }
+        
+        
+         public function send_email($dest=null)
+{
+                $Email = new CakeEmail('gmail');
+                $Email->to($dest);
+                $Email->subject('Automagically generated email');
+                $Email->replyTo('matthieu.blais@live.fr');
+                $Email->from ('matthieu.blais1@gmail.com');
+                $Email->message("dfsdf");
+                $Email->send();
+        return $this->redirect(array('action' => 'index'));
+}
+        
 }
 
 	
