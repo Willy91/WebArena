@@ -43,6 +43,32 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
             
         }
         
+        public function guild(){
+             
+            
+            $data = $this->Guild->getAllGuild();
+            $tab = array();
+            $i=0;
+            foreach($data as $key){
+                $tab[$i]['Guild'] = $key['Guild'];
+                $tab[$i]['Nb'] = $this->Fighter->getNbGuild($key['Guild']['id']);
+                $i++;
+            }
+            $this->set('result_guild', $tab);
+            $this->set('name_guild', $this->Guild->getGuildName($this->Fighter->getIdGuild($this->Cookie->read('idFighter'))));
+            if($this->request->is('post'))
+ 		{
+ 		if(key($this->request->data) == 'CreateGuild'){
+                 $this->Guild->createGuild($this->request->data['CreateGuild']['name']);
+                 $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['CreateGuild']['name']));
+                }
+                if(key($this->request->data) == 'JoinGuild'){
+                    $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['JoinGuild']['name']));
+                }
+                
+                }
+        }
+        
         public function signup() 
         {
            //DOIT RECEVOIR LE NOM ET LE MOT DE PASS DU MEC QUI S INSCRIT   
@@ -68,7 +94,9 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
         public function fighter()  
         {
             //Fighter view. Need IdFighter
-        //$this->getFighterview($idFighter);
+            $tab = $this->Fighter->getFighterview($this->Cookie->read('idFighter'));
+            pr($tab);
+        $this->set('table_fighter', $tab);
         
             /*
             $nb = $this->Fighter->getNbFighterFromPlayer($this->Player->getIdFighter($mail));
@@ -110,10 +138,8 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
  		{
  		if(key($this->request->data) == 'CreateFighter') 
 			{
-                	if($this->Fighter->add("545f827c-576c-4dc5-ab6d-27c33186dc3e", $this->request->data['CreateFighter']['name'])) 
-				{
-                   	 	$this->Session->setFlash('Done !');
-                		}
+                            $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
+                    
 			}
 		elseif (key($this->request->data) == 'PassLvl') {	
                     $this->Fighter->upgrade(1, $this->request->data['PassLvl']['Choose a skill to upgrade']);
@@ -164,8 +190,10 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
 
         	if($this->Session->read('Connected')!=true && $this->request->params['action']!='login')
         	{
-        		//$this->request->params['action'];
+        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index'){
+                        $this->request->params['action'];
         		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
+                        }
         	}
     	}
 

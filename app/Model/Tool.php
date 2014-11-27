@@ -60,10 +60,9 @@ class Tool extends AppModel {
     }
       
     function useAgainTool($data){
-   
-        $nb = $this->find('count', array('constraints' => array('fighter_id' => 'NULL')));
+        $nb = $this->find('count', array('conditions' => array('fighter_id' => NULL)));
         if ($nb==0){
-            $this->initPostion($data);
+            $this->initPostionTool($data);
             return true;
         }
         else
@@ -71,7 +70,7 @@ class Tool extends AppModel {
     }
     
     
-    function initPosition($data2){
+    function initPositionTool($data2){
        // $this->query("Delete from tools");
         $array = array();
        
@@ -85,7 +84,7 @@ class Tool extends AppModel {
         foreach($data2 as $key)
                $array[$key['Surrounding']['coordinate_y']][$key['Surrounding']['coordinate_x']]= false;
         
-            
+           
         //20 objets
         for ($i=0; $i<25; $i++){
            do{
@@ -114,7 +113,7 @@ class Tool extends AppModel {
            $data['Tool']['bonus'] = rand(1,3);
            
            
-           $this->save($data);
+          $this->save($data);
            
            $array[$y][$x] = false;
        }  

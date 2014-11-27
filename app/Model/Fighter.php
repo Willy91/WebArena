@@ -398,7 +398,7 @@ class Fighter extends AppModel {
 
    
    function getNbFighterFromPlayer($idPlayer){
-       $nb = $this->find('count', array('constraints' => array('player_id' => $idPlayer)));
+       $nb = $this->find('count', array('conditions' => array('player_id' => $idPlayer)));
        return $nb;
    }
    
@@ -406,4 +406,13 @@ class Fighter extends AppModel {
        return $this->find('all', array('order' => array('level'=>'desc')));
    }
 
+   function getNbGuild($idGuild){
+       echo $idGuild;
+        return $this->find('count', array('conditions'=>array('guild_id'=>$idGuild)));
+    }
+    
+   function getIdGuild($idFighter){
+       $data = $this->findById($idFighter);
+       return $data['Fighter']['guild_id'];
+   }
 }

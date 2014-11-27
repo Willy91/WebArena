@@ -62,7 +62,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
                     <li><?php echo $this->Html->link(__('Avatar'), array('controller'=>'Arena','action'=>'avatar'))?></li>
                     <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
-
+			
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if($this->Session->read('Connected')): ?>

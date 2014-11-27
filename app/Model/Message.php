@@ -21,7 +21,7 @@ class Message extends AppModel {
     
     function getAllMessage($idFighter){
         
-        return $this->find('all', array('constraints', array('fighter_id' => $idFighter)));
+        return $this->find('all', array('conditions', array('fighter_id' => $idFighter)));
         
         
     }
