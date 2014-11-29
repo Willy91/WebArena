@@ -30,8 +30,10 @@
              * Retourne un tableau décroissant des fighters classés par level
              * $this->Fighter->getRankFighter()
              */
-            $tab = $this->Fighter->getAllFighterview("545f827c-576c-4dc5-ab6d-27c33186dc3e");
-            pr($tab);
+            $tab = $this->Fighter->getAllFighterview();
+            $this->Cookie->check('idFighter');
+          
+            
             $this->set('table_fighter2', $tab);
             
             if($this->request->is('post')){
@@ -53,7 +55,7 @@
         
         public function guild(){
              
-            
+            $this->Cookie->check('idFighter');
             $data = $this->Guild->getAllGuild();
             $tab = array();
             $i=0;
@@ -80,7 +82,7 @@
                 
                 }
         }
-    
+
         
         
         function newAction(){
@@ -97,10 +99,12 @@
         
         public function fighter()  
         {
-           
+            
+           $this->Cookie->check('idFighter');
+           pr($this->Cookie);
 
             //Fighter view. Need IdFighter
-            $tab = $this->Fighter->getAllFighterviewPlayer("545f827c-576c-4dc5-ab6d-27c33186dc3e");
+            $tab = $this->Fighter->getAllFighterviewPlayer($this->Session->read('Connected'));
             
             $this->set('table_fighter2', $tab);
         
@@ -142,26 +146,33 @@
             
             if($this->request->is('post'))
  		{
-                echo key($this->request->data);
  		if(key($this->request->data) == 'CreateFighter') 
 			{
-                            $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
-                    
+                        if ($this->request->data['CreateFighter']['name']!=""){
+                               $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
+                               $this->redirect(array('action' => 'fighter'));
+                        }
+                        
+                                 
 			}
-		elseif (key($this->request->data) == 'PassLvl') {	
-                    $this->Fighter->upgrade(1, $this->request->data['PassLvl']['Choose a skill to upgrade']);
-            	}
+		elseif (key($this->request->data) == 'UploadPicture') {
+                    if(strlen($this->request->data['UploadPicture']['avatar']) !=0){
+                                $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
+                    }
+                }
                 
 		}
         }
 
         public function diary()  
         {
+            $this->Cookie->check('idFighter');
             $data = $this->Event->getEvent();
             $this->set('raw',$data);
             
         }
         public function resend_password(){
+           $this->Cookie->check('idFighter');
             if($this->request->is('post')){
 
    /*          $Email = new CakeEmail('gmail');
@@ -179,7 +190,7 @@
         }
         public function login()
         {
-
+            $this->Cookie->check('idFighter');
             if($this->request->is('post')) {
 
             if(key($this->request->data) == 'Login') {
@@ -187,8 +198,12 @@
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])) {
                    
                     $this->Cookie->write('nbAction', 0);
-                    $this->Cookie->write('idFighter',1);
-
+                    
+                    $d = $this->Fighter->find('first', array ('conditions' => array('player_id' => $this->Player->getidPlayer($this->request->data['Login']['Email address']))));
+                    
+                    $this->Cookie->write('idFighter',$d['Fighter']['id'], false, '1 Month');
+                    
+                    
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
                     $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
             
@@ -220,7 +235,7 @@
 
 
     	public function BeforeFilter() {
-           
+            
             
             if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
@@ -290,10 +305,7 @@ distance croissante.
                 elseif (key($this->request->data) == 'FighterAttack') {		
 	                     $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
                 }
-                 //CA NA RIEN A FAIRE LA
-                elseif (key($this->request->data) == 'UploadPicture') {
-                    $this->Fighter->createAvatar($this->Cookie->read('idFighter'),$this->request->data['UploadPicture']['avatar']['tmp_name']);
-                }
+                 
                 
                 elseif (key($this->request->data) == 'pickTool') {
                     $this->Tool->fighterOnTool($this->Cookie->read('idFighter'));

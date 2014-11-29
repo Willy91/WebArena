@@ -68,7 +68,8 @@
     
     <div class="col-md-4">
         <div class="text-center">
-        <?php echo $this->Html->image('logo1.png', array('alt' => 'CakePHP'));?>
+        <?php $a = $table_fighter['Fighter']['id'].".jpg";
+        echo $this->Html->image($a, array('alt' => 'CakePHP'));?>
         
         <?php echo $this->Form->create('UploadPicture',array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false))); ?>
 <div class="form-group">
