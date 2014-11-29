@@ -7,15 +7,10 @@
       <?php echo $this->Form->input('Email address', array('class' => 'form-control'));?>
     </div>
     <div class="form-group">
-      <?php echo $this->Form->input('Password', array('class' => 'form-control'));?>
+      <?php echo $this->Form->input('Password', array('class' => 'form-control', 'type'=>'password'));?>
     </div>
     
     <?php echo $this->Form->submit('Log In', array('class' => 'btn btn-primary'));
     echo $this->Form->end();?>
-    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
-
-  </div>
-  <div id="status">
 </div>
 </div>

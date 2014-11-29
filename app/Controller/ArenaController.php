@@ -33,12 +33,12 @@
 
         
         public function hallofframe(){
-        /*
+            /*
         
-        Ajoutez une page «hall of fame» en espace public où vous présentez une liste de
-statistiques sur les caractéristiques, les dates de connexion etc, en utilisant au moins 4
-«charts» de jqplot
-        */
+            Ajoutez une page «hall of fame» en espace public où vous présentez une liste de
+            statistiques sur les caractéristiques, les dates de connexion etc, en utilisant au moins 4
+            «charts» de jqplot
+            */
             
             
         }
@@ -71,13 +71,15 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
         
         public function signup() 
         {
-           //DOIT RECEVOIR LE NOM ET LE MOT DE PASS DU MEC QUI S INSCRIT   
-           if($this->Player->createNew($mail,$pass)){
-                //DIRIGER VERS LA PAGE CREATION DU FIGHTER ET OBLIGER LE JOUEUR A CREER SON FIGHTER        
-           }
-                   
-                   
+
+            if($this->request->is('post')) {
+                if($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password'])
+                    $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
+                else
+                    $this->Session->setFlash('Passwords not correct', 'flash_error');
+            }
         }
+        
         
         function newAction(){
             
@@ -88,7 +90,7 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
         $this->Cookie->write("nbAction", $this->Fighter->Action($nb, $this->Cookie->read('idFighter')));
       
         
-    }
+        }
 
         
         public function fighter()  
@@ -96,7 +98,7 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
             //Fighter view. Need IdFighter
             $tab = $this->Fighter->getFighterview($this->Cookie->read('idFighter'));
             pr($tab);
-        $this->set('table_fighter', $tab);
+            $this->set('table_fighter', $tab);
         
             /*
             $nb = $this->Fighter->getNbFighterFromPlayer($this->Player->getIdFighter($mail));
@@ -155,19 +157,13 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
 
         public function login()
         {
-            //$this->Session->delete('Connected');
-          //  pr($this->Session->read('Connected'));
-             
             if($this->request->is('post')) {
-                if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])== true) {
-                    pr("ok");
+                if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])) {
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                    
                     $this->Cookie->write('nbAction', 0);
-                    
-                    //REDIRIGER VERS LA PAGE DE CHOIX DU FIGHTER
-                    //en attendant..
                     $this->Cookie->write('idFighter',1);
-                    
+                    $this->redirect(array('controller'=>'arena', 'action'=>'index'));     
                 }
                 // $this->Cookie->write('idFighter', 5);
 
@@ -186,9 +182,7 @@ statistiques sur les caractéristiques, les dates de connexion etc, en utilisant
 
     	public function BeforeFilter() {
 
-        	echo   $this->request->params['action'];
-
-        	if($this->Session->read('Connected')!=true && $this->request->params['action']!='login')
+        	if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
         		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index'){
                         $this->request->params['action'];
@@ -264,12 +258,7 @@ distance croissante.
                 elseif (key($this->request->data) == 'pickTool') {
                     $this->Tool->fighterOnTool($this->Cookie->read('idFighter'));
             }
-		
-	 
             }
-
         }
-
-
     }
 ?>
