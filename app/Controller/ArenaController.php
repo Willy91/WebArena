@@ -11,6 +11,7 @@
     class ArenaController extends AppController
     {
 
+
         public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
 
     
@@ -275,7 +276,10 @@ distance croissante.
                 if(key($this->request->data) == 'Fightermove') {
                     
                     //Do Move 
-                    $this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']);
+                    if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction'])){
+                        $dataf = $this->Fighter->findById($idFighter);
+                        $this->Event->MoveEvent($dataf,'direction');
+                    }
                 
                 $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
                 $tab2 = $this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -287,7 +291,7 @@ distance croissante.
                 $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
                 
                 //Retourn True si le fighter est mort à cause d'un piège
-                $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter'))));
+                    $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter'))));
                 //Return True si le fighter est mort à cause du monstre
                 $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter'))));
                 

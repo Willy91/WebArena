@@ -1,10 +1,10 @@
-    <?php
+        <?php
 
 App::uses('AppModel', 'Model');
 
 class Event extends AppModel {
     
-    
+    public $uses = array('Fighter');    
     
     function doAttackEvent($idFighter, $idDefender){
         $data = $this->Fighter->findById($idFighter);
@@ -82,7 +82,7 @@ class Event extends AppModel {
     
     
     function newGuildEvent($idFighter, $nameGuild){
-        $data = $this->Fighter->findById($idFighter);
+        //$data = $this->Fighter->findById($idFighter);
         
         $name = $data['Fighter']['name'] . " crée une nouvelle guilde sous le nom de " . $nameGuild;
         
@@ -132,8 +132,8 @@ class Event extends AppModel {
         return $tab;
     }
 
-    function MoveEvent($idFighter,$direction){
-        $data = $this->Fighter->findById($idFighter);
+    function MoveEvent($data,$direction){
+        //$data = $this->Fighter->findById($idFighter);
 
         $data2 = $this->create();
 

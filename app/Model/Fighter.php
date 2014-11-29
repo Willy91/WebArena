@@ -1,14 +1,14 @@
   <?php
 
 App::uses('AppModel', 'Model');
+
 define("POINT", 3);
 define("DELAI", 10);
 
 class Fighter extends AppModel {
 
-    
     public $displayField = 'name';
-    public $uses = array('Surrounding');
+    public $uses = array('Surrounding','Event');
     public $belongsTo = array(
 
         'Player' => array(
@@ -103,50 +103,42 @@ class Fighter extends AppModel {
     //Déplacement du fighter
 
     function doMove($fighterId, $direction)
-    {
-        // récupérer la position et fixer l'id de travail
-        $datas = $this->read(null, $fighterId);      
-        
-        if ($direction == 'north') {
-            if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
-                $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
-              } elseif ($direction == 'south') {
-            if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
-            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
-          //$this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'east') {
-            if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
-                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
-              //$this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'west') {            
-            if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
-                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
-                //$this->Event->MoveEvent($fighterId,$direction);
+{
+// récupérer la position et fixer l'id de travail
+$datas = $this->read(null, $fighterId);
 
-              //this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'south') {
-            if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
-            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
-          //this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'east') {
-            if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
-                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
-           //   this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'west') {            
-            if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
-                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
-           //   this->Event->MoveEvent($fighterId,$direction);
+if ($direction == 'north') {
+if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
+{
+$this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
+//$Even->MoveEvent($fighterId,$direction);
+}
+} elseif ($direction == 'south') {
+if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
+$this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
+//$Even->MoveEvent($fighterId,$direction);
+} elseif ($direction == 'east') {
+if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
+{
+$this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
+//$Even->MoveEvent($fighterId,$direction);
+}
+} elseif ($direction == 'west') {
+if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
+{
+$this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
+//$Even->MoveEvent($fighterId,$direction);
+}
+} else {
+return false;
+}
 
-        } else {
-            return false;
-        }
-        
-        // sauver la modif
-        $this->save();
-        
-        
-        return true;
-    }
+// sauver la modif
+$this->save();
+
+
+return true;
+}
     
 
     //Obtenir l'ID du mec attaqué
