@@ -13,7 +13,7 @@ function signinCallback(authResult) {
             var request = gapi.client.oauth2.userinfo.get();
             request.execute(function (response) {
                 document.getElementById('SignupEmailAddress').value = response.email;
-                document.getElementById('SignupEmailAddress').disabled = true;
+                //document.getElementById('SignupEmailAddress').disabled = true;
             });
         });
   } else if (authResult['error']) {

@@ -26,23 +26,21 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
     </title>
     <?php
         echo $this->Html->meta('icon');
-
         echo $this->Html->css('bootstrap.css');
         echo $this->Html->css('webarena.css');
         echo $this->Html->css('tableCSS.css');
-	echo $this->Html->css('jquery.jqplot.min.css');
-echo $this->Html->css('Custom.css');
+	    echo $this->Html->css('jquery.jqplot.min.css');
+        echo $this->Html->css('Custom.css');
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
-
     ?>
 </head>
 <body>
 
     
 
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -73,11 +71,7 @@ echo $this->Html->css('Custom.css');
                         <li><?php echo $this->Html->link(__('Logout'),array('controller'=>'Arena','action'=>'logout'))?></li>
                     <?php else: ?>
                         <!--<li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>-->
-<<<<<<< HEAD
-			<li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
-=======
-                        <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
->>>>>>> 187059df172abeda2528170771b24814ad3a207c
+			            <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
                     <?php endif; ?>
                 </ul> 
             </div>
@@ -149,19 +143,14 @@ echo $this->Html->css('Custom.css');
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <?php echo $this->Html->script('bootstrap.min'); ?>
     <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
-<<<<<<< HEAD
     <?php echo $this->Html->script('dataTableJS.js');
-echo $this->Html->script('jquery.jqplot.min.js');
+    echo $this->Html->script('jquery.jqplot.min.js');
 	echo $this->Html->script('jqplot.pieRenderer.min.js');
-echo $this->Html->script('jqplot.donutRenderer.min.js');
+    echo $this->Html->script('jqplot.donutRenderer.min.js');
 
 
 ?>
-=======
-    <?php echo $this->Html->script('dataTableJS.js');?>
 
-
->>>>>>> 187059df172abeda2528170771b24814ad3a207c
 </body>
 </html>
 
