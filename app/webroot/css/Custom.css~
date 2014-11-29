@@ -1,0 +1,22 @@
+.fond {
+  background-image: url('explosion.jpg');
+ margin-right: -15px;
+  margin-left: -15px;
+}
+
+#footer { 
+
+ margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: -15px;
+background-color:#3e3f3a;
+bottom:0;
+}
+
+.top-margin{ margin-top:50px; }
+
+.item{
+    text-align: center;
+}
+
+body { overflow-x: hidden;}
