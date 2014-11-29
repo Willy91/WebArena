@@ -282,7 +282,7 @@ distance croissante.
                     
                     //Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
-                        echo "bonjour";
+                        
                         $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                     }
                     else
