@@ -71,6 +71,6 @@
   function testAPI() {
     FB.api('/me', function(response) {
       document.getElementById('SignupEmailAddress').value = response.email;
-      document.getElementById('SignupEmailAddress').disabled = true;
+      //document.getElementById('SignupEmailAddress').disabled = true;
     });
   }
