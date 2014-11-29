@@ -175,6 +175,7 @@
         {
 
             if($this->request->is('post')) {
+            if(key($this->request->data) == 'Login') {
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])) {
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
                     
@@ -182,7 +183,11 @@
                     $this->Cookie->write('idFighter',1);
                     $this->redirect(array('controller'=>'arena', 'action'=>'index'));     
                 }
-                // $this->Cookie->write('idFighter', 5);
+            }
+            elseif (key($this->request->data) == 'Password_forgotten') {
+                $this->Player->send_email($this->request->data['Password_forgotten']['Email']);
+                return $this->redirect(array('action' => 'resend_password'));
+            }
 
             }
 
