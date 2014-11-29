@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 App::uses('AppModel', 'Model');
 
@@ -131,5 +131,74 @@ class Event extends AppModel {
         
         return $tab;
     }
+
+    function MoveEvent($idFighter,$direction){
+        $data = $this->Fighter->findById($idFighter);
+
+        $data2 = $this->create();
+
+        $data2['Event']['name'] = $data['Fighter']['name'] . "moves to " . $direction;
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $this->save($data2);
+    }
     
+    function FailMove($idFighter,$direction){
+        $data = $this->Fighter->findById($idFighter);
+
+        $data2 = $this->create();
+
+        $data2['Event']['name'] = $data['Fighter']['name'] . "fails to move to " . $direction;
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $this->save($data2);
+
+    }
+
+    function TrapEvent($idFighter){
+        $data = $this->Fighter->findById($idFighter);
+
+        $data2 = $this->create();
+
+        $data2['Event']['name'] = $data['Fighter']['name'] . "déclenche un piège";
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $this->save($data2);
+
+    }
+
+    function MonsterEvent($idFighter){
+        $data = $this->Fighter->findById($idFighter);
+
+        $data2 = $this->create();
+
+        $data2['Event']['name'] = $data['Fighter']['name'] . "a tué un monstre";
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $this->save($data2);
+
+    }
+
+    
+
+    function UplevelEvent($idFighter){
+        $data = $this->Fighter->findById($idFighter);
+
+        $data2 = $this->create();
+        
+        $data2['Event']['name'] = $data['Fighter']['name'] . "vient de gagner un niveau! Niveau ". $data['Fighter']['level'];
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $this->save($data2);
+
+
+    }
+
+
+
 }

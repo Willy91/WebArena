@@ -1,6 +1,7 @@
 <?php 
 
     App::uses('AppController', 'Controller');
+    App::uses('CakeEmail', 'Network/Email');
 
     /**
      * Main controller of our small application
@@ -11,11 +12,11 @@
     {
 
         public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
+
     
         public $components = array('Cookie','Session');
 
-        
-
+       
         /**
          * index method : first page
          *
@@ -88,7 +89,12 @@
                     $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
                 else
                     $this->Session->setFlash('Passwords not correct', 'flash_error');
+                if($this->request->data == 'Password_forgotten'){
+                    pr("hello");
+                }
             }
+
+
         }
         
         
@@ -170,26 +176,48 @@
             $this->set('raw',$data);
             
         }
+        public function resend_password(){
+            if($this->request->is('post')){
 
+   /*          $Email = new CakeEmail('gmail');
+                $Email->emailFormat('html');
+                $Email->template('forgotten_password','email');
+                $Email->to($this->request->data['Password_forgotten']['Email']);
+                $Email->subject('Automagically generated email');
+                $Email->from ('abruneau@ece.fr');
+                $Email->send();
+                 return $this->redirect(array('action' => 'index'));
+                 */
+                $this->Player->send_email($this->request->data['Password_forgotten']['Email']);
+                return $this->redirect(array('action' => 'resend_password'));
+            }
+        }
         public function login()
         {
+
             if($this->request->is('post')) {
-                
-                if(key($this->request->data) == 'Login') {
+
+            if(key($this->request->data) == 'Login') {
+
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])) {
                    
                     
                     $this->Cookie->write('nbAction', 0);
                     $this->Cookie->write('idFighter',1);
+
                     
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
                    
                     
                     $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
-          
-                        
-                }}
-                // $this->Cookie->write('idFighter', 5);
+            
+                }
+            }
+            elseif (key($this->request->data) == 'Password_forgotten') {
+                $this->Player->send_email($this->request->data['Password_forgotten']['Email']);
+                return $this->redirect(array('action' => 'resend_password'));
+            }
+
 
             }
 
@@ -272,8 +300,8 @@ distance croissante.
                     
                 }
                 
-                elseif (key($this->request->data) == 'FighterAttack') {
-                    $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
+                elseif (key($this->request->data) == 'FighterAttack') {		
+	                     $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
                 }
                  //CA NA RIEN A FAIRE LA
                 elseif (key($this->request->data) == 'UploadPicture') {
@@ -282,7 +310,7 @@ distance croissante.
                 
                 elseif (key($this->request->data) == 'pickTool') {
                     $this->Tool->fighterOnTool($this->Cookie->read('idFighter'));
-            }
+                }
             }
         }
     }

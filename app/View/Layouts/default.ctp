@@ -40,7 +40,7 @@ echo $this->Html->css('Custom.css');
 </head>
 <body>
 
-    <?php //echo $this->Html->script('fb');?>
+    
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -73,7 +73,11 @@ echo $this->Html->css('Custom.css');
                         <li><?php echo $this->Html->link(__('Logout'),array('controller'=>'Arena','action'=>'logout'))?></li>
                     <?php else: ?>
                         <!--<li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>-->
+<<<<<<< HEAD
 			<li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
+=======
+                        <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
+>>>>>>> 187059df172abeda2528170771b24814ad3a207c
                     <?php endif; ?>
                 </ul> 
             </div>
@@ -109,7 +113,7 @@ echo $this->Html->css('Custom.css');
            
 
                 <?php echo $this->Session->flash(); ?>
-
+                
                 <?php echo $this->fetch('content'); ?>
             </div>
         </div>
@@ -145,6 +149,7 @@ echo $this->Html->css('Custom.css');
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <?php echo $this->Html->script('bootstrap.min'); ?>
     <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
+<<<<<<< HEAD
     <?php echo $this->Html->script('dataTableJS.js');
 echo $this->Html->script('jquery.jqplot.min.js');
 	echo $this->Html->script('jqplot.pieRenderer.min.js');
@@ -152,6 +157,11 @@ echo $this->Html->script('jqplot.donutRenderer.min.js');
 
 
 ?>
+=======
+    <?php echo $this->Html->script('dataTableJS.js');?>
+
+
+>>>>>>> 187059df172abeda2528170771b24814ad3a207c
 </body>
 </html>
 
