@@ -1,5 +1,6 @@
 <?php echo $this->Html->script('login.js');?>
-
+<?php echo $this->Html->script('fb');?>
+<?php echo $this->Html->script('gplus');?>
 <div class="col-md-8 col-md-offset-2 panel panel-default top-margin">
     <div class="col-md-6 panel panel-default">
     <h2>Join the Battle !</h2>
@@ -16,7 +17,21 @@
         </div>
         <div class="text-center">
         <?php echo $this->Form->submit('Sign Up', array('class' => 'btn btn-primary'));
-        echo $this->Form->end();?></div>
+        echo $this->Form->end();?>
+        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+        </fb:login-button>
+
+        <span id="signinButton">
+            <span
+                class="g-signin"
+                data-callback="signinCallback"
+                data-clientid="655601395522-65h99la8bvv5ufd6k5ag9vn8rk236kqg.apps.googleusercontent.com"
+                data-cookiepolicy="single_host_origin"
+                data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email">
+            </span>
+        </span>
+        </div>
+
     </div>
 </div>
 
