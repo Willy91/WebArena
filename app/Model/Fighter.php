@@ -110,19 +110,19 @@ class Fighter extends AppModel {
         if ($direction == 'north') {
             if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
                 $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
-              this->Event->MoveEvent($fighterId,$direction);
+            
         } elseif ($direction == 'south') {
             if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
             $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
-          this->Event->MoveEvent($fighterId,$direction);
+          //$this->Event->MoveEvent($fighterId,$direction);
         } elseif ($direction == 'east') {
             if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
                 $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
-              this->Event->MoveEvent($fighterId,$direction);
+              //$this->Event->MoveEvent($fighterId,$direction);
         } elseif ($direction == 'west') {            
             if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
                 $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
-              this->Event->MoveEvent($fighterId,$direction);
+                //$this->Event->MoveEvent($fighterId,$direction);
         } else {
             return false;
         }
