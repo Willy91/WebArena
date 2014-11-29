@@ -263,14 +263,17 @@ distance croissante.
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
         //$this->Surrounding->beginGame();
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
-          echo $this->Cookie->read('idFighter');
+          
+        $this->Cookie->check('idFighter');
         //Partie à alex
-        $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
-        $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
+        $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
+        $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
 
+        //$this->set('result_fighter',$this->Fighter->getSeen(1));
         $this->set('result_fighter',$this->Fighter->find('all'));
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
+
             //Si on a des paramètres reçus en post
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
@@ -295,7 +298,7 @@ distance croissante.
                 /*
                 $this->Fighter->deathFromSurrounding(1, $a);*/
                     
-                    $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
+                   // $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
                     
                     $this->redirect(array('controller' => 'Arena', 'action' => 'sight'));
                     
