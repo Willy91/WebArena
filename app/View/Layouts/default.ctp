@@ -39,7 +39,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 </head>
 <body>
 
-    <?php //echo $this->Html->script('fb');?>
+    
 
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -68,7 +68,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <?php if($this->Session->read('Connected')): ?>
                         <li><?php echo $this->Html->link(__('Logout'),array('controller'=>'Arena','action'=>'logout'))?></li>
                     <?php else: ?>
-                        <li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>
+                        <!--<li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>-->
+                        <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
                     <?php endif; ?>
                 </ul> 
             </div>
@@ -103,7 +104,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             <div class="row">
 
                 <?php echo $this->Session->flash(); ?>
-
+                
                 <?php echo $this->fetch('content'); ?>
             </div>
         </div>
@@ -138,6 +139,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <?php echo $this->Html->script('bootstrap.min'); ?>
     <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
     <?php echo $this->Html->script('dataTableJS.js');?>
+
+
 </body>
 </html>
 

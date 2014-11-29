@@ -12,10 +12,5 @@
     
     <?php echo $this->Form->submit('Log In', array('class' => 'btn btn-primary'));
     echo $this->Form->end();?>
-    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
-
-  </div>
-  <div id="status">
 </div>
 </div>
