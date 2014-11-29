@@ -11,8 +11,8 @@
     {
 
         public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
-
-        public $components = array('Session','Cookie');
+    
+        public $components = array('Cookie','Session');
 
         
 
@@ -29,6 +29,13 @@
              * Retourne un tableau décroissant des fighters classés par level
              * $this->Fighter->getRankFighter()
              */
+            $tab = $this->Fighter->getAllFighterview("545f827c-576c-4dc5-ab6d-27c33186dc3e");
+            pr($tab);
+            $this->set('table_fighter2', $tab);
+            
+            if($this->request->is('post')){
+                $this->redirect(array('controller'=>'arena', 'action'=>'login'));
+            }
         }
 
         
@@ -39,8 +46,8 @@
             statistiques sur les caractéristiques, les dates de connexion etc, en utilisant au moins 4
             «charts» de jqplot
             */
-            
-            
+           
+           
         }
         
         public function guild(){
@@ -61,9 +68,13 @@
  		if(key($this->request->data) == 'CreateGuild'){
                  $this->Guild->createGuild($this->request->data['CreateGuild']['name']);
                  $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['CreateGuild']['name']));
+                 $this->redirect(array('controller'=>'Arena', 'action'=>'guild'));
+                 
                 }
                 if(key($this->request->data) == 'JoinGuild'){
                     $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['JoinGuild']['name']));
+                
+                    $this->redirect(array('controller'=>'Arena', 'action'=>'guild'));
                 }
                 
                 }
@@ -95,10 +106,12 @@
         
         public function fighter()  
         {
+           
+
             //Fighter view. Need IdFighter
-            $tab = $this->Fighter->getFighterview($this->Cookie->read('idFighter'));
-            pr($tab);
-            $this->set('table_fighter', $tab);
+            $tab = $this->Fighter->getAllFighterviewPlayer("545f827c-576c-4dc5-ab6d-27c33186dc3e");
+            
+            $this->set('table_fighter2', $tab);
         
             /*
             $nb = $this->Fighter->getNbFighterFromPlayer($this->Player->getIdFighter($mail));
@@ -138,6 +151,7 @@
             
             if($this->request->is('post'))
  		{
+                echo key($this->request->data);
  		if(key($this->request->data) == 'CreateFighter') 
 			{
                             $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
@@ -146,25 +160,35 @@
 		elseif (key($this->request->data) == 'PassLvl') {	
                     $this->Fighter->upgrade(1, $this->request->data['PassLvl']['Choose a skill to upgrade']);
             	}
+                
 		}
         }
 
         public function diary()  
         {
-            $this->set('raw',$this->Event->find());
-
+            $data = $this->Event->getEvent();
+            $this->set('raw',$data);
+            
         }
 
         public function login()
         {
             if($this->request->is('post')) {
+                
+                if(key($this->request->data) == 'Login') {
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])) {
-                    $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                   
                     
                     $this->Cookie->write('nbAction', 0);
                     $this->Cookie->write('idFighter',1);
-                    $this->redirect(array('controller'=>'arena', 'action'=>'index'));     
-                }
+                    
+                    $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                   
+                    
+                    $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
+          
+                        
+                }}
                 // $this->Cookie->write('idFighter', 5);
 
             }
@@ -181,10 +205,11 @@
 
 
     	public function BeforeFilter() {
-
-        	if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
+           
+            
+            if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
-        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index'){
+        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index' && $this->request->params['action']!='hallofframe'){
                         $this->request->params['action'];
         		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
                         }
@@ -208,7 +233,7 @@ distance croissante.
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
         //$this->Surrounding->beginGame();
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
-          
+          echo $this->Cookie->read('idFighter');
         //Partie à alex
         $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
         $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));

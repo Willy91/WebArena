@@ -270,7 +270,7 @@ class Fighter extends AppModel {
               
        $data = $this->find('all');
        
-       pr($data);
+       
         
         foreach($data as $key)
            // foreach($key as $value){
@@ -321,6 +321,14 @@ class Fighter extends AppModel {
 
     function getFighterview($idFighter){
         return $this->findById($idFighter);
+    }
+    
+    function getAllFighterviewPlayer($idPlayer){
+        return $this->find('all', array('conditions' => array('player_id like' => $idPlayer)));
+    }
+    
+    function getAllFighterview(){
+        return $this->find('all');
     }
     
     function deathFromSurrounding($idFighter, $bool){
@@ -415,4 +423,6 @@ class Fighter extends AppModel {
        $data = $this->findById($idFighter);
        return $data['Fighter']['guild_id'];
    }
+   
+   
 }
