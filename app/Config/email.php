@@ -42,15 +42,14 @@ class EmailConfig {
 	
         public $gmail = array(
         'host' => 'smtp.gmail.com',
-        'port' => 465,
-        'username' => 'matthieu.blais1@gmail.com',
-        'password' => 'isaeti07',
+        'port' => 587,
+        'username' => 'alexbruneau93@gmail.com',
+        'password' => 'abruneau300593',
         'transport' => 'Smtp',
             'tls' => true
            );
-
     
-    public $default = array(
+ /*   public $default = array(
 		'transport' => 'Mail',
 		'from' => 'you@localhost',
 		//'charset' => 'utf-8',
@@ -101,5 +100,5 @@ class EmailConfig {
 		//'charset' => 'utf-8',
 		//'headerCharset' => 'utf-8',
 	);
-
+*/
 }

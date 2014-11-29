@@ -16,8 +16,6 @@
 ?>
 <?php
 $content = explode("\n", $content);
-
-foreach ($content as $line):
-	echo '<p> ' . $line . "</p>\n";
-endforeach;
+echo "Reset your password : $value " ;
+echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'));
 ?>
