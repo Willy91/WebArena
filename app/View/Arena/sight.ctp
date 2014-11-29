@@ -100,18 +100,13 @@
                         }
                     }
                     foreach ($result_fighter as $item) {
-                        if(($item['Fighter']['coordinate_y']==$j && $item['Fighter']['coordinate_x']==($abs)
-                            &&
-                            ($item['Fighter']['coordinate_y']!=$me['Fighter']['coordinate_y'] && 
-                                $item['Fighter']['coordinate_x']!=$me['Fighter']['coordinate_x']
-                             ))){
-                            echo "<td>$abs $j<img src=\"../img/Warrior.png\"></td>";
+                        if($item['Fighter']['coordinate_y']==$j && $item['Fighter']['coordinate_x']==($abs)){
+                            $id=$item['Fighter']['id'].".jpg";
+                            echo "<td>$i $j";
+                            echo $this->Html->image($id,array('width' => "60",'height'=>"57" ));
+                            echo "</td>";
                             $set=true;
                         }
-                    }
-                    if($me['Fighter']['coordinate_y']==$j && $me['Fighter']['coordinate_x']==($abs)){
-                        echo "<td>$abs $j<img src=\"../img/Warrior.png\"></td>";
-                        $set=true;
                     }
                     if($set==false){
                         echo "<td>$abs $j<img src=\"../img/case.png\"></td>";

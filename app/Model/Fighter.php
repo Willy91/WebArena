@@ -49,7 +49,6 @@ class Fighter extends AppModel {
 
 	
 
-
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
