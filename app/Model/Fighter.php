@@ -110,8 +110,7 @@ class Fighter extends AppModel {
         if ($direction == 'north') {
             if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
                 $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
-            
-        } elseif ($direction == 'south') {
+              } elseif ($direction == 'south') {
             if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
             $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
           //$this->Event->MoveEvent($fighterId,$direction);
@@ -123,6 +122,21 @@ class Fighter extends AppModel {
             if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
                 $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
                 //$this->Event->MoveEvent($fighterId,$direction);
+
+              //this->Event->MoveEvent($fighterId,$direction);
+        } elseif ($direction == 'south') {
+            if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
+            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
+          //this->Event->MoveEvent($fighterId,$direction);
+        } elseif ($direction == 'east') {
+            if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
+                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
+           //   this->Event->MoveEvent($fighterId,$direction);
+        } elseif ($direction == 'west') {            
+            if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
+                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
+           //   this->Event->MoveEvent($fighterId,$direction);
+
         } else {
             return false;
         }
@@ -274,7 +288,7 @@ class Fighter extends AppModel {
               
        $data = $this->find('all');
        
-       pr($data);
+       
         
         foreach($data as $key)
            // foreach($key as $value){
@@ -325,6 +339,14 @@ class Fighter extends AppModel {
 
     function getFighterview($idFighter){
         return $this->findById($idFighter);
+    }
+    
+    function getAllFighterviewPlayer($idPlayer){
+        return $this->find('all', array('conditions' => array('player_id like' => $idPlayer)));
+    }
+    
+    function getAllFighterview(){
+        return $this->find('all');
     }
     
     function deathFromSurrounding($idFighter, $bool){
@@ -419,4 +441,6 @@ class Fighter extends AppModel {
        $data = $this->findById($idFighter);
        return $data['Fighter']['guild_id'];
    }
+   
+   
 }

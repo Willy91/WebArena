@@ -15,7 +15,7 @@
  */
 
 $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
+$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,10 +27,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <?php
         echo $this->Html->meta('icon');
 
-        echo $this->Html->css('bootstrap.min.css');
+        echo $this->Html->css('bootstrap.css');
         echo $this->Html->css('webarena.css');
         echo $this->Html->css('tableCSS.css');
-
+	echo $this->Html->css('jquery.jqplot.min.css');
+echo $this->Html->css('Custom.css');
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
@@ -41,7 +42,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
     
 
-    <nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -62,14 +63,21 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
                         <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
                         <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
-                    <?php endif ?>
+			<li><?php echo $this->Html->link(__('Guild'), array('controller'=>'Arena','action'=>'guild'))?></li>
+                    <?php else: ?>
+			<li><?php echo $this->Html->link(__('Hall Of Frame'), array('controller'=>'Arena','action'=>'hallofframe'))?></li>
+		    <?php endif; ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if($this->Session->read('Connected')): ?>
                         <li><?php echo $this->Html->link(__('Logout'),array('controller'=>'Arena','action'=>'logout'))?></li>
                     <?php else: ?>
                         <!--<li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>-->
+<<<<<<< HEAD
+			<li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
+=======
                         <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
+>>>>>>> 187059df172abeda2528170771b24814ad3a207c
                     <?php endif; ?>
                 </ul> 
             </div>
@@ -99,16 +107,19 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             </div>
         </div>
     </div>
-    <div id="container">
-        <div class="container-fluid" id="content">
-            <div class="row">
+    <div id="container" class="fond" style="padding-top:50px">
+	        <div class="row" id="fond">
+	<div class="container-fluid col-md-10 col-md-offset-1" id="content">
+           
 
                 <?php echo $this->Session->flash(); ?>
                 
                 <?php echo $this->fetch('content'); ?>
             </div>
         </div>
-        <div class="row" id="footer">
+    </div>
+<footer class="navbar-static-bottom">
+<div class="container-fluid panel-footer" id="footer">
             <div class="col-md-6">
                 <ul>
                     <li>Group: SI4-05</li>
@@ -130,17 +141,27 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 </ul>
             </div>
             
-        </div>
+ 
     </div>
-
+</footer>
 
     <?php echo $this->element('sql_dump'); ?>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <?php echo $this->Html->script('bootstrap.min'); ?>
     <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
+<<<<<<< HEAD
+    <?php echo $this->Html->script('dataTableJS.js');
+echo $this->Html->script('jquery.jqplot.min.js');
+	echo $this->Html->script('jqplot.pieRenderer.min.js');
+echo $this->Html->script('jqplot.donutRenderer.min.js');
+
+
+?>
+=======
     <?php echo $this->Html->script('dataTableJS.js');?>
 
 
+>>>>>>> 187059df172abeda2528170771b24814ad3a207c
 </body>
 </html>
 
