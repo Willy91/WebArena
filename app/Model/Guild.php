@@ -20,9 +20,8 @@ class Guild extends AppModel {
     
     //function to get all the names of the guild
     function getAllGuild(){
-        $data = $this->find('all', array('fields' => array('name')));
-    
-        pr($data);
+        $data = $this->find('all');
+
         return $data;
     }
     
@@ -31,6 +30,16 @@ class Guild extends AppModel {
         echo $data['Guild']['id'];
         return $data['Guild']['id'];
     }
+    
+    function getGuildName($id){
+       if ($id != NULL){
+        $data = $this->find('first', array('conditions' => array('id'=>$id)));
+       return $data['Guild']['name'];
+       }
+       else
+           return "";
+    }
+    
     
     
 }

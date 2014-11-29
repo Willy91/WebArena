@@ -34,4 +34,50 @@ echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDe
     </div>
 </div>
 <?php $this->Form->end(); ?>
+
+<div class="col-md-4">
+    <table id="guild_table" class="display" cellspacing="0" width="100%">
+        <tr>
+            <th>Name</th>
+            <td><?php echo $table_fighter['Fighter']['name']?></td>
+        </tr>
+        <tr>
+            <th>Position X</th>
+            <td><?php echo $table_fighter['Fighter']['coordinate_x']?></td>
+        </tr>
+        <tr>
+            <th>Position Y</th>
+            <td><?php echo $table_fighter['Fighter']['coordinate_y']?></td>
+        </tr>
+        <tr>
+            <th>Level</th>
+            <td><?php echo $table_fighter['Fighter']['level']?></td>
+        </tr>
+        <tr>
+            <th>Xp</th>
+            <td><?php echo $table_fighter['Fighter']['xp']?></td>
+        </tr>
+        <tr>
+            <th>Capacité de vue</th>
+            <td><?php echo $table_fighter['Fighter']['skill_sight']?></td>
+        </tr>
+        <tr>
+            <th>Force</th>
+            <td><?php echo $table_fighter['Fighter']['skill_strength']?></td>
+        </tr>
+        <tr>
+            <th>Santé totale</th>
+            <td><?php echo $table_fighter['Fighter']['skill_health']?></td>
+        </tr>
+        <tr>
+            <th>Santé actuelle</th>
+            <td><?php echo $table_fighter['Fighter']['current_health']?></td>
+        </tr>
+            
+        
+        
+        
+    </table>  
+    
+</div>
     

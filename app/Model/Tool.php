@@ -24,6 +24,20 @@ class Tool extends AppModel {
 
     );
     
+    
+    function fighterOnTool($data2){
+       $data = $this->find('all', array('conditions'=>array('fighter_id' => "NULL")));
+       $x = $data2['Fighter']['coordinate_x'];
+       $y = $data2['Fighter']['coordinate_y'];
+       foreach ($data as $key){
+           if($key['Tool']['coordinate_x']==$x && $key['Tool']['coordinate_y']==$y){
+               $this->pickTool($data2, $key['Tool']['id']);
+               return true;
+           }     
+       }
+       return false;
+   }
+    
     //Vérifier si un fighter a déjà un équipement du type
     function pickTool($data, $toolId){
         $data2 = $this->findById($toolId);
@@ -45,9 +59,19 @@ class Tool extends AppModel {
         return $this->findById($idTool);
     }
       
-
-    function initPosition($data2){
-        $this->query("Delete from tools");
+    function useAgainTool($data){
+        $nb = $this->find('count', array('conditions' => array('fighter_id' => NULL)));
+        if ($nb==0){
+            $this->initPostionTool($data);
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    
+    function initPositionTool($data2){
+       // $this->query("Delete from tools");
         $array = array();
        
        for ($i=0; $i<10; $i++){
@@ -60,7 +84,7 @@ class Tool extends AppModel {
         foreach($data2 as $key)
                $array[$key['Surrounding']['coordinate_y']][$key['Surrounding']['coordinate_x']]= false;
         
-            
+           
         //20 objets
         for ($i=0; $i<25; $i++){
            do{
@@ -89,7 +113,7 @@ class Tool extends AppModel {
            $data['Tool']['bonus'] = rand(1,3);
            
            
-           $this->save($data);
+          $this->save($data);
            
            $array[$y][$x] = false;
        }  

@@ -39,7 +39,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 </head>
 <body>
 
-    <?php echo $this->Html->script('fb');?>
+    
 
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -58,17 +58,22 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
-                    <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
-                    <li><?php echo $this->Html->link(__('Avatar'), array('controller'=>'Arena','action'=>'avatar'))?></li>
-                    <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
-
+                    <?php if ($this->Session->read('Connected')): ?>
+                        <li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
+                        <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
+                        <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
+                    <?php endif ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>
+                    <?php if($this->Session->read('Connected')): ?>
+                        <li><?php echo $this->Html->link(__('Logout'),array('controller'=>'Arena','action'=>'logout'))?></li>
+                    <?php else: ?>
+                        <!--<li><a href="#loginModal" data-toggle="modal" data-target="#loginModal">Login</a></li>-->
+                        <li><?php echo $this->Html->link(__('Login'), array('controller'=>'Arena','action'=>'login'))?></li>
+                    <?php endif; ?>
                 </ul> 
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </nav>
     <div class="modal fade" id="loginModal" tabindex="-1">
         <div class="modal-dialog">
@@ -99,7 +104,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             <div class="row">
 
                 <?php echo $this->Session->flash(); ?>
-
+                
                 <?php echo $this->fetch('content'); ?>
             </div>
         </div>
@@ -128,11 +133,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         </div>
     </div>
 
+
     <?php echo $this->element('sql_dump'); ?>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <?php echo $this->Html->script('bootstrap.min'); ?>
-
     <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
     <?php echo $this->Html->script('dataTableJS.js');?>
+
+
 </body>
 </html>
+
