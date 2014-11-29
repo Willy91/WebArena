@@ -34,7 +34,15 @@
     <?php echo $this->Form->submit('Log In', array('class' => 'btn btn-primary'));
     echo $this->Form->end();?>
 
-        <a>Password forgotten?</a>
+	<h2>Ask for a new password</h2>
+	 <?php echo $this->Form->create('Password_forgotten')?>
+
+        <div class="form-group">
+          <?php echo $this->Form->input('Email', array('class' => 'form-control'));?>
+        </div>
+
+        <?php echo $this->Form->submit('Send Password', array('class' => 'btn btn-primary'));
+        echo $this->Form->end();?>
     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
     </div>
@@ -50,13 +58,6 @@
 </div>
 
 <div class="col-md-4 col-md-offset-4 panel panel-default">
-	 <?php echo $this->Form->create('Password_forgotten')?>
 
-        <div class="form-group">
-          <?php echo $this->Form->input('Email', array('class' => 'form-control'));?>
-        </div>
-
-        <?php echo $this->Form->submit('Send Password', array('class' => 'btn btn-primary'));
-        echo $this->Form->end();?>
 </div>
 
