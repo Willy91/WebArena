@@ -278,9 +278,14 @@ distance croissante.
                 if(key($this->request->data) == 'Fightermove') {
                     
                     //Do Move 
-                    if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction'])){
-                        $dataf = $this->Fighter->findById($idFighter);
-                        $this->Event->MoveEvent($dataf,'direction');
+                    if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
+                        echo "bonjour";
+                        $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
+                    }
+                    else
+                    {
+                        $this->Event->FailMove($dataf,$this->request->data['Fightermove']['direction'] );
+
                     }
                 
                 $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
