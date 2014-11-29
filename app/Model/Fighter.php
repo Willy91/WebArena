@@ -46,10 +46,35 @@ class Fighter extends AppModel {
         return $this->save($data);
     }
 
+    function getSeen($id){
+      $user=$this->findById($id);
+      $x=$user['Fighter']['coordinate_x'];
+      $y=$user['Fighter']['coordinate_y'];
 
-	
-
-
+      $data2 = $this->find('all');
+       $nb = 0;
+       $tab = array();
+       foreach($data2 as $key){
+           $sight_x = $key['Fighter']['coordinate_x']-$x;
+           if ($sight_x<0)
+               $sight_x = $sight_x*(-1);
+           $sight_y = $key['Fighter']['coordinate_y']-$y;
+           if ($sight_y<0)
+               $sight_y = $sight_y*(-1);
+           $total = $sight_x+$sight_y;
+          
+           if ($total<=$user['Fighter']['skill_sight'] && $key['Fighter']['id']==NULL){
+                echo $total . " ";
+               $key['Distance']=$total;
+                $tab[$nb]=$key;
+               $nb++;
+           }
+               
+       }
+       $tab[$nb]=$user;
+       //array_push($tab,$user);
+       return $tab;
+    }
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
