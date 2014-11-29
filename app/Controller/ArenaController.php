@@ -266,7 +266,7 @@ distance croissante.
         $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
         $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
 
-
+        $this->set('result_fighter',$this->Fighter->find('all'));
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
             //Si on a des paramètres reçus en post
@@ -282,7 +282,6 @@ distance croissante.
                 $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
                 $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
 
-
                 $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
                 $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
                 
@@ -296,7 +295,7 @@ distance croissante.
                     
                     $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
                     
-
+                    $this->redirect(array('controller' => 'Arena', 'action' => 'sight'));
                     
                 }
                 

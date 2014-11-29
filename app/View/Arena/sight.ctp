@@ -83,27 +83,38 @@
 
             for ($j=0; $j < 14; $j++) { 
                 $set=false;      
+                $abs=9-$i;
                     foreach ($result_sight as $item) {
-                        if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==(14-$i)){
+                        if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==($abs)){
                             $value = $item['Surrounding']['type'];
-                            echo "<td><img src=\"../img/$value.png\"></td>";
+                            echo "<td>$abs $j <img src=\"../img/$value.png\"></td>";
                             $set=true;
                         }
                     }
                    foreach ($result_tool as $item) {
-                        if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==(14-$i)){
+                        if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==($abs)){
                             $value = $item['Tool']['type'];
-                            echo "<td><img src=\"../img/$value.png\"></td>";
+                            echo "<td>$i $j<img src=\"../img/$value.png\"></td>";
                             
                             $set=true;
                         }
                     }
-                    if($me['Fighter']['coordinate_y']==$j && $me['Fighter']['coordinate_x']==(14-$i)){
-                        echo "<td><img src=\"../img/Warrior.png\"></td>";
+                    foreach ($result_fighter as $item) {
+                        if(($item['Fighter']['coordinate_y']==$j && $item['Fighter']['coordinate_x']==($abs)
+                            &&
+                            ($item['Fighter']['coordinate_y']!=$me['Fighter']['coordinate_y'] && 
+                                $item['Fighter']['coordinate_x']!=$me['Fighter']['coordinate_x']
+                             ))){
+                            echo "<td>$abs $j<img src=\"../img/Warrior.png\"></td>";
+                            $set=true;
+                        }
+                    }
+                    if($me['Fighter']['coordinate_y']==$j && $me['Fighter']['coordinate_x']==($abs)){
+                        echo "<td>$abs $j<img src=\"../img/Warrior.png\"></td>";
                         $set=true;
                     }
                     if($set==false){
-                        echo "<td><img src=\"../img/case.png\"></td>";
+                        echo "<td>$abs $j<img src=\"../img/case.png\"></td>";
                     }
                 }
             }
