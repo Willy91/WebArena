@@ -80,22 +80,7 @@
                 
                 }
         }
-        
-        public function signup() 
-        {
-
-            if($this->request->is('post')) {
-                if($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password'])
-                    $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
-                else
-                    $this->Session->setFlash('Passwords not correct', 'flash_error');
-                if($this->request->data == 'Password_forgotten'){
-                    pr("hello");
-                }
-            }
-
-
-        }
+    
         
         
         function newAction(){
@@ -201,14 +186,10 @@
 
                 if( $this->Player->checkLogin($this->request->data['Login']['Email address'],$this->request->data['Login']['Password'])) {
                    
-                    
                     $this->Cookie->write('nbAction', 0);
                     $this->Cookie->write('idFighter',1);
 
-                    
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
-                   
-                    
                     $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
             
                 }
@@ -216,6 +197,12 @@
             elseif (key($this->request->data) == 'Password_forgotten') {
                 $this->Player->send_email($this->request->data['Password_forgotten']['Email']);
                 return $this->redirect(array('action' => 'resend_password'));
+            }
+            elseif (key($this->request->data) == 'Signup') {
+                if($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password']) {
+                    pr($this->request->data);
+                    $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
+                }
             }
 
 
