@@ -91,8 +91,8 @@ class Tool extends AppModel {
         for ($i=0; $i<25; $i++){
            do{
                $fin = false;
-               $y = rand(0 , 9 );
-               $x = rand(0,14);
+               $y = rand(0 , LONGUEUR_Y-1 );
+               $x = rand(0,LARGEUR_X-1);
                
                if($array[$y][$x]==true)
                    $fin=true;

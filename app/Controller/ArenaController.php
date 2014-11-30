@@ -3,6 +3,12 @@
     App::uses('AppController', 'Controller');
     App::uses('CakeEmail', 'Network/Email');
 
+    
+    define("LARGEUR_X", 15);
+    define("LONGUEUR_Y", 10);
+    define("POINT", 3);
+    define("DELAI", 10);
+    
     /**
      * Main controller of our small application
      *
@@ -346,7 +352,8 @@ distance croissante.
              * 
              * **/
             $this->Cookie->check('idFighter');
-           
+            $this->Cookie->check('nbAction');
+           pr($this->Cookie);
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
          
@@ -377,7 +384,7 @@ distance croissante.
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
                 if (key($this->request->data) == 'Tool') {
-                  
+                    $this->newAction();
                     $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
                 }
                 
@@ -385,7 +392,7 @@ distance croissante.
                     
                     //Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
-                            
+                            $this->newAction();
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else
@@ -423,9 +430,11 @@ distance croissante.
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {		
-	                     $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
+	            $this->newAction();         
+                    $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
                 }
                  elseif(key($this->request->data) == 'Scream'){
+                     $this->newAction();
                      $this->Event->Crier($this->Fighter->findById($this->Cookie->read('idFighter')), $this->request->data["Scream"]['name']);
                  }
                 
