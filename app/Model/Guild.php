@@ -4,6 +4,7 @@ App::uses('AppModel', 'Model');
 
 class Guild extends AppModel {
 
+  public $hasMany = array('Fighter');
    //Function to create a new guild
     function CreateGuild($name){
         
