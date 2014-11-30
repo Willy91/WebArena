@@ -155,7 +155,7 @@
                     }
             }
             elseif (key($this->request->data) == 'Upload') {
-                    $this->Fighter->updateAvatar('idFighter',$this->request->data['Upload']['avatar']['tmp_name']);                
+                    $this->Fighter->updateAvatar($this->Cookie->read('idFighter'),$this->request->data['Upload']['avatar']['tmp_name']);                
             }
             elseif(key($this->request->data)=='PassLvl')
                     $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);

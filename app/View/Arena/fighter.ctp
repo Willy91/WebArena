@@ -114,6 +114,7 @@
 <div class="form-group">
 
     <div class="col-md-10"><?php echo $this->Form->file('avatar'); ?></div>
+    <?php echo $this->Form->input('Skill',array('type' => 'hidden'));?>
 </div>
 <div class="form-group">
     <div class="col-md-12 text-center"><?php echo $this->Form->submit('Upload Avatar', array('class' => 'btn btn-primary'));?>
