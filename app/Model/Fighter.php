@@ -23,7 +23,7 @@ class Fighter extends AppModel {
     
     function add($playerId, $name) {
 
-        if($this->find('count', array("conditions" => array('name' => $name, 'player_id' => $playerId)))==0){
+        if($this->find('count', array("conditions" => array('name' => $name)))==0){
         $data = array(
             'name' => $name,
             'player_id' => $playerId,
@@ -487,5 +487,15 @@ return true;
        return $data['Fighter']['guild_id'];
    }
    
+   function getFighterForMessage($idFighter){
+       return $this->find('all', array('conditions' => array('Fighter.id !=' => $idFighter), 'fields' => array('name')));
+       
+       
+       
+   }
+   
+   function getFighterByName($name){
+       return $this->find('first', array('conditions' => array('name' => $name)));
+   }
    
 }

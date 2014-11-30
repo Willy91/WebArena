@@ -12,7 +12,7 @@
     {
 
 
-        public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
+        public $uses = array('Player', 'Fighter', 'Message', 'Event','Guild','Surrounding','Tool');
 
     
         public $components = array('Cookie','Session');
@@ -233,6 +233,89 @@
 
         }
 
+        public function message(){
+            
+            $this->Cookie->check('idFighter');
+            
+           $this->set('message_table', $this->Message->getAllMessage($this->Cookie->read('idFighter')));
+           
+           
+           
+           
+           if($this->request->is('post')) {
+               if (key($this->request->data) == 'SendEmail'){
+                   $this->redirect(array('action'=>'message_display'));
+               }
+               if (key($this->request->data) == 'EmailSent'){
+                   $this->redirect(array('action'=>'message_sent'));
+               }
+               if (key($this->request->data) == 'EmailBox'){
+                   $this->redirect(array('action'=>'message'));
+               }
+               
+           }
+           
+        }
+        
+        
+        public function message_sent(){
+            
+            $this->Cookie->check('idFighter');
+            
+           $this->set('message_table', $this->Message->getAllMessageSent($this->Cookie->read('idFighter')));
+           
+           
+           
+           
+           if($this->request->is('post')) {
+               if (key($this->request->data) == 'SendEmail'){
+                   $this->redirect(array('action'=>'message_display'));
+               }
+               if (key($this->request->data) == 'EmailSent'){
+                   $this->redirect(array('action'=>'message_sent'));
+               }
+               if (key($this->request->data) == 'EmailBox'){
+                   $this->redirect(array('action'=>'message'));
+               }
+               
+           }
+           
+        }
+        
+         public function message_display(){
+           $this->Cookie->check('idFighter');
+             $data = $this->Fighter->getFighterForMessage($this->Cookie->read('idFighter'));
+           $tab = array();
+           $n = 0;
+           foreach($data as $option){
+               $tab[$option['Fighter']['name']] = $option['Fighter']['name'] ;
+                          
+               
+           }
+           
+           $this->set('fighter_option', $tab);
+           $this->set('fighter_defaut', $data[0]['Fighter']['name']);
+             
+             if($this->request->is('post')) {
+               if (key($this->request->data) == 'Back'){
+                   $this->redirect(array('action'=>'message'));
+               }
+               if (key($this->request->data) == 'CreateMessage'){
+                   $data = array();
+                   $data['title'] = $this->request->data['CreateMessage']['object'];
+                   $data['message'] = $this->request->data['CreateMessage']['message'];
+                   $dest = $this->Fighter->getFighterByName($this->request->data['CreateMessage']['to']);
+                   
+                   $this->Message->sendMessage($data,$this->Cookie->read('idFighter'), $dest);
+                   $this->redirect(array('action'=>'message'));
+               }
+               
+           }
+         }
+      
+        
+        
+        
         public function logout()
         {
 
@@ -272,12 +355,11 @@ distance croissante.
         //$this->Surrounding->beginGame();
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
           
-        $this->Cookie->check('idFighter');
+    
         //Partie à alex
         $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
         $dd2 =$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
-        pr($dd1);
-        pr($dd2);
+        
         $this->set('result_sight', $dd1);
         $this->set('result_tool', $dd2);
 

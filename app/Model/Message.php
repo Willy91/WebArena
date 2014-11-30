@@ -4,6 +4,18 @@ App::uses('AppModel', 'Model');
 
 class Message extends AppModel {
 
+    public $belongsTo = array(
+
+        'Fighter' => array(
+
+            'className' => 'Fighter',
+
+            'foreignKey' => 'fighter_id_from',
+
+        ),
+
+    );
+    
     
     function sendMessage($data,$sender, $dest){
         
@@ -21,12 +33,17 @@ class Message extends AppModel {
     
     function getAllMessage($idFighter){
         
-        return $this->find('all', array('conditions', array('fighter_id' => $idFighter)));
+        return $this->find('all', array('conditions'=> array('fighter_id' => $idFighter), 'order' => array('date DESC')));
         
         
     }
     
-    
+    function getAllMessageSent($idFighter){
+        
+        return $this->find('all', array('conditions'=> array('fighter_id_from' => $idFighter), 'order' => array('date DESC')));
+        
+        
+    }
     
     
     

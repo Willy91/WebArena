@@ -202,7 +202,7 @@ class Surrounding extends AppModel {
                
        }
        
-       pr($tab);
+  
        
        return $tab;
        
