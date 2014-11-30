@@ -65,8 +65,7 @@ class Fighter extends AppModel {
            if ($sight_y<0)
                $sight_y = $sight_y*(-1);
            $total = $sight_x+$sight_y;
-          
-           if ($total<=$user['Fighter']['skill_sight'] && $key['Fighter']['id']==NULL){
+           if ($total<=$user['Fighter']['skill_sight']){
                 echo $total . " ";
                $key['Distance']=$total;
                 $tab[$nb]=$key;
@@ -74,7 +73,8 @@ class Fighter extends AppModel {
            }
                
        }
-       $tab[$nb]=$user;
+
+      // $tab[$nb]=$user;
        //array_push($tab,$user);
        return $tab;
     }
