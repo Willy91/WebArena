@@ -218,7 +218,7 @@ return true;
   function updateAvatar($fighterId,$file){
     $data=$this->read(null,$fighterId);
     //unlink("/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
-    $output="/var/www/html/WebArena/app/webroot/img/".$fighterId.".jpg";
+    $output= $_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$fighterId.".jpg";
     unlink("$output");
     move_uploaded_file($file,$output);
   }
