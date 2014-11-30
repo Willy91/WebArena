@@ -369,7 +369,7 @@ distance croissante.
        // $this->Surrounding->beginGame();
        // $this->Tool->initPosition();
           
-    pr($this->Cookie);
+   
         //Partie à alex
         $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
         $dd2 =$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
