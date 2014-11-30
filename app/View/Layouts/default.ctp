@@ -63,6 +63,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
                         <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
                         <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
 			<li><?php echo $this->Html->link(__('Guild'), array('controller'=>'Arena','action'=>'guild'))?></li>
+			<li><?php echo $this->Html->link(__('Email box'), array('controller'=>'Arena','action'=>'message'))?></li>
                     <?php else: ?>
 			<li><?php echo $this->Html->link(__('Hall Of Fame'), array('controller'=>'Arena','action'=>'halloffame'))?></li>
 		    <?php endif; ?>
@@ -102,7 +103,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
             </div>
         </div>
     </div>
-    <div id="container" class="fond" style="padding-top:50px">
+    <div id="container" class="fond" style="padding-top:50px; margin-top:-20px">
 	        <div class="row" id="fond">
 	<div class="container-fluid col-md-10 col-md-offset-1" id="content">
            

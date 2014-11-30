@@ -1,14 +1,13 @@
   <?php
 
 App::uses('AppModel', 'Model');
-define("POINT", 3);
-define("DELAI", 10);
+
+
 
 class Fighter extends AppModel {
 
-    
     public $displayField = 'name';
-    public $uses = array('Surrounding');
+    public $uses = array('Surrounding','Event');
     public $belongsTo = array(
 
         'Player' => array(
@@ -23,7 +22,7 @@ class Fighter extends AppModel {
     
     function add($playerId, $name) {
 
-
+        if($this->find('count', array("conditions" => array('name' => $name)))==0){
         $data = array(
             'name' => $name,
             'player_id' => $playerId,
@@ -41,19 +40,47 @@ class Fighter extends AppModel {
         $data['coordinate_y'] = $pos[1];
         // prepare the model for adding a new entry
         $this->create();
-
+        copy($_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/template.jpg",$_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$data['fighterId']."jpg");
         // save the data
         return $this->save($data);
+        }
+        else
+            return false;
     }
 
+    function getSeen($id){
+      $user=$this->findById($id);
+      $x=$user['Fighter']['coordinate_x'];
+      $y=$user['Fighter']['coordinate_y'];
 
-	
+      $data2 = $this->find('all');
+       $nb = 0;
+       $tab = array();
+       foreach($data2 as $key){
+           $sight_x = $key['Fighter']['coordinate_x']-$x;
+           if ($sight_x<0)
+               $sight_x = $sight_x*(-1);
+           $sight_y = $key['Fighter']['coordinate_y']-$y;
+           if ($sight_y<0)
+               $sight_y = $sight_y*(-1);
+           $total = $sight_x+$sight_y;
+           if ($total<=$user['Fighter']['skill_sight']){
+                echo $total . " ";
+               $key['Distance']=$total;
+                $tab[$nb]=$key;
+               $nb++;
+           }
+               
+       }
 
-
+      // $tab[$nb]=$user;
+       //array_push($tab,$user);
+       return $tab;
+    }
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
-        $tab = $this->query("Select coordinate_x, coordinate_y from fighters where id <> $fighterId");
+        $tab = $this->query("Select coordinate_x, coordinate_y from fighters where id <> $fighterId and current_health>0");
    
         foreach($tab as $key)
             foreach($key as $value){
@@ -66,11 +93,13 @@ class Fighter extends AppModel {
         
         foreach($tab as $key)
             foreach($key as $value){
+                pr($value);
                 if ($value['coordinate_y']== $coordonnee_y && 
                      $value['coordinate_x']== $coordonnee_x)
                   $a = true;  
             }    
-            echo $a;
+        
+            
         return $a;
     }
     
@@ -105,34 +134,51 @@ class Fighter extends AppModel {
     function doMove($fighterId, $direction)
     {
         // récupérer la position et fixer l'id de travail
-        $datas = $this->read(null, $fighterId);      
-        
-        if ($direction == 'north') {
-            if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
-                $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
-              //this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'south') {
+        $datas = $this->read(null, $fighterId);
+
+        if ($direction == 'east') {
+
+            if ($datas['Fighter']['coordinate_x']+1<Configure::read('Largeur_x') && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
+            {
+            $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
+            //$Even->MoveEvent($fighterId,$direction);
+            }
+            else
+              return false;
+        } 
+        elseif ($direction == 'west') {
             if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
             $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
-          //this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'east') {
-            if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
-                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
-           //   this->Event->MoveEvent($fighterId,$direction);
-        } elseif ($direction == 'west') {            
-            if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
-                $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
-           //   this->Event->MoveEvent($fighterId,$direction);
-        } else {
+          else 
             return false;
-        }
+            //$Even->MoveEvent($fighterId,$direction);
+        } 
+        elseif ($direction == 'north') {
+            if ($datas['Fighter']['coordinate_y']+1<Configure::read('Longueur_y') && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
+            
+            $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
+            else 
+              return false;
+            //$Even->MoveEvent($fighterId,$direction);
+          
+        } 
+        elseif ($direction == 'south') {
+
+            if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
+            
+            $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
+            //$Even->MoveEvent($fighterId,$direction);
+            else 
+              return false;
+        } 
         
+
         // sauver la modif
         $this->save();
-        
-        
-        return true;
-    }
+
+
+return true;
+}
     
 
     //Obtenir l'ID du mec attaqué
@@ -167,6 +213,14 @@ class Fighter extends AppModel {
 		move_uploaded_file($file,"/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
 
 	}
+
+  function updateAvatar($fighterId,$file){
+    $data=$this->read(null,$fighterId);
+    //unlink("/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
+    $output= $_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$fighterId.".jpg";
+    unlink("$output");
+    move_uploaded_file($file,$output);
+  }
     
     //Fonction faire l'attaque
     function doAttack($fighterId,$direction){
@@ -285,8 +339,8 @@ class Fighter extends AppModel {
         $fin = false;
         $pos = array();
       do{
-          $pos[0] = rand(0,14);
-          $pos[1] = rand(0,9);
+          $pos[0] = rand(0,LARGUEUR_X-1);
+          $pos[1] = rand(0,LONGUEUR_Y-1);
 
         if ($array[$pos[1]][$pos[0]]==true)
             $fin = true;
@@ -325,6 +379,12 @@ class Fighter extends AppModel {
 
     function getFighterview($idFighter){
         return $this->findById($idFighter);
+    }
+    
+    function getFighterId($name, $player){
+        $data = $this->find('first', array('conditions'=> array('name'=> $name, 'player_id'=>$player)));
+    
+        return $data['Fighter']['id'];
     }
     
     function getAllFighterviewPlayer($idPlayer){
@@ -428,5 +488,15 @@ class Fighter extends AppModel {
        return $data['Fighter']['guild_id'];
    }
    
+   function getFighterForMessage($idFighter){
+       return $this->find('all', array('conditions' => array('Fighter.id !=' => $idFighter), 'fields' => array('name')));
+       
+       
+       
+   }
+   
+   function getFighterByName($name){
+       return $this->find('first', array('conditions' => array('name' => $name)));
+   }
    
 }

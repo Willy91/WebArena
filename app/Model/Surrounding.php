@@ -20,8 +20,8 @@ class Surrounding extends AppModel {
        $array = array();
        
        //Tableau pour éviter qu'un mec soit bloqué par tous les poteaux autours de lui
-       for ($i=0; $i<10; $i++){
-           for ($j=0; $j<15;$j++){
+       for ($i=0; $i<Configure::read('Largeur_x'); $i++){
+           for ($j=0; $j<Configure::read('Longueur_y');$j++){
                $array[$i][$j] = true;
            }
        }
@@ -31,11 +31,11 @@ class Surrounding extends AppModel {
            do{
                //PLacement aléatoire sur la map
                $fin = false;
-               $y = rand(0 , 9 );
-               $x = rand(0,14);
+               $y = rand(0 , Configure::read('Longueur_y')-1 );
+               $x = rand(0, Configure::read('Largeur_x')-1);
                
                //Si l'espace est libre, on sort de la boucle sinon on recommence
-               if($array[$y][$x]==true)
+               if($array[$x][$y]==true)
                    $fin=true;
                
            }while(!$fin);
@@ -49,15 +49,15 @@ class Surrounding extends AppModel {
            
            //On indique sur le tableau des cases libres, que les cases alentours
            //et celle sélectionnée ne sont plus libres. Pas 2 colonnes à côté
-           $array[$y][$x]=false;
-           $array[$y-1][$x]=false;
-           $array[$y-1][$x-1]=false;
-           $array[$y][$x-1]=false;
-           $array[$y+1][$x]=false;
-           $array[$y+1][$x+1]=false;
-           $array[$y][$x+1]=false;
-           $array[$y-1][$x+1]=false;
-           $array[$y+1][$x-1]=false;
+           $array[$x][$y]=false;
+           $array[$x-1][$y]=false;
+           $array[$x-1][$y-1]=false;
+           $array[$x][$y-1]=false;
+           $array[$x+1][$y]=false;
+           $array[$x+1][$y+1]=false;
+           $array[$x][$y+1]=false;
+           $array[$x-1][$y+1]=false;
+           $array[$x+1][$y-1]=false;
            
        }
        
@@ -72,8 +72,8 @@ class Surrounding extends AppModel {
        
        $array = array();
        
-       for ($i=0; $i<10; $i++){
-           for ($j=0; $j<15;$j++){
+       for ($i=0; $i<Configure::read('Largeur_x'); $i++){
+           for ($j=0; $j<Configure::read('Longueur_y');$j++){
                $array[$i][$j] = true;
            }
        }
@@ -81,17 +81,17 @@ class Surrounding extends AppModel {
        //On marque indispo les cases occupées par les colonnes
         foreach($tab as $key)
             foreach($key as $value){
-               $array[$value['coordinate_y']][$value['coordinate_x']]= false;
+               $array[$value['coordinate_x']][$value['coordinate_y']]= false;
             }
             
             //15 pièges + un monstre
         for ($i=0; $i<16; $i++){
            do{
                $fin = false;
-               $y = rand(0 , 9 );
-               $x = rand(0,14);
+               $y = rand(0 , Configure::read('Longueur_y')-1);
+               $x = rand(0,Configure::read('Largeur_x')-1);
                
-               if($array[$y][$x]==true)
+               if($array[$x][$y]==true)
                    $fin=true;
                
            }while(!$fin);
@@ -108,7 +108,7 @@ class Surrounding extends AppModel {
            
            $this->save($data);
            
-           $array[$y][$x] = false;
+           $array[$x][$y] = false;
        }    
        
    }
@@ -202,6 +202,7 @@ class Surrounding extends AppModel {
                
        }
        
+     
        return $tab;
        
    }
