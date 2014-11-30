@@ -142,43 +142,32 @@
         //$this->Guild->getAllGuild();
             
         $this->set('fighter', $this->Cookie->read('idFighter'));    
-	$this->set('players',$this->Player->find('list'));
+        $this->set('players',$this->Player->find('list'));
 
             
-            if($this->request->is('post'))
+        if($this->request->is('post'))
  		{
-                
- 		if(key($this->request->data) == 'CreateFighter') 
+ 		    if(key($this->request->data) == 'CreateFighter') 
 			{
-                        if ($this->request->data['CreateFighter']['name']!=""){
-                               $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
-                               $this->redirect(array('action' => 'fighter'));
-                        }
-                        
-                                 
-			}
-		elseif (key($this->request->data) == 'Upload') {
-                       if(strlen($this->request->data['Upload']['avatar'])!=0){
-                           //TODO
-                       }
-                       
-                 
-                      }
-                elseif(key($this->request->data)=='PassLvl')
+                    if ($this->request->data['CreateFighter']['name']!=""){
+                           $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
+                           $this->redirect(array('action' => 'fighter'));
+                    }
+            }
+            elseif (key($this->request->data) == 'Upload') {
+                    $this->Fighter->updateAvatar('idFighter',$this->request->data['Upload']['avatar']);                
+            }
+            elseif(key($this->request->data)=='PassLvl')
+                    $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
+            elseif(key($this->request->data)=='ReviveFighter')
                     $this->redirect(array('action' => 'sight'));
-//$this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
-                elseif(key($this->request->data)=='ReviveFighter')
-                    $this->redirect(array('action' => 'sight'));
-                elseif (key($this->request->data)=='ChangeFighter') {
+            elseif(key($this->request->data)=='ChangeFighter') {
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
                     $this->Cookie->write('idFighter', $id);
-                }
-                       
-                $this->redirect(array('action' => 'fighter'));
-                
-                }
-                 
-                }
+            }     
+            $this->redirect(array('action' => 'fighter'));
+        }
+    }
                 
 		
         

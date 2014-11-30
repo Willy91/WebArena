@@ -99,13 +99,13 @@
                 $set=false;      
                 $abs=9-$i;
 
-                    foreach ($result_sight as $item) {
+  /*                  foreach ($result_sight as $item) {
                         if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==($abs)){
                             $value = $item['Surrounding']['type'];
                             echo "<td>$abs $j <img src=\"../img/$value.png\"></td>";
                             $set=true;
                         }
-                    }
+                    }*/
                    foreach ($result_tool as $item) {
                         if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==($abs)){
                             $value = $item['Tool']['type'];
