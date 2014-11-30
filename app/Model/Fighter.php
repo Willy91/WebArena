@@ -23,7 +23,7 @@ class Fighter extends AppModel {
     
     function add($playerId, $name) {
 
-
+        if($this->find('count', array("conditions" => array('name' => $name, 'player_id' => $playerId)))==0){
         $data = array(
             'name' => $name,
             'player_id' => $playerId,
@@ -44,6 +44,9 @@ class Fighter extends AppModel {
 
         // save the data
         return $this->save($data);
+        }
+        else
+            return false;
     }
 
     function getSeen($id){
@@ -133,6 +136,7 @@ class Fighter extends AppModel {
         $datas = $this->read(null, $fighterId);
 
         if ($direction == 'north') {
+
             if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
             {
             $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
@@ -158,6 +162,7 @@ class Fighter extends AppModel {
           
         } 
         elseif ($direction == 'west') {
+
             if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
             
             $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] - 1);
@@ -365,6 +370,12 @@ return true;
 
     function getFighterview($idFighter){
         return $this->findById($idFighter);
+    }
+    
+    function getFighterId($name, $player){
+        $data = $this->find('first', array('conditions'=> array('name'=> $name, 'player_id'=>$player)));
+    
+        return $data['Fighter']['id'];
     }
     
     function getAllFighterviewPlayer($idPlayer){

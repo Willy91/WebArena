@@ -20,6 +20,17 @@ class Event extends AppModel {
         $this->save($new);
         
     }
+
+
+    function NobodyAttackEvent($data){
+        $name = $data['Fighter']['name'] . " attaque dans le vide";
+        $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $new['Event']['date'] = date("Y-m-d H:i:s");
+        $this->save($new);
+
+
+    }
     
     function failAttackEvent($idFighter, $idDefender){
         $data = $this->Fighter->findById($idFighter);
@@ -171,8 +182,8 @@ class Event extends AppModel {
 
     }
 
-    function MonsterEvent($idFighter){
-        $data = $this->Fighter->findById($idFighter);
+    function MonsterEvent($data){
+        //$data = $this->Fighter->findById($idFighter);
 
         $data2 = $this->create();
 

@@ -76,12 +76,15 @@
                 <tr>
                     <td><?php echo $item['Surrounding']['type']; ?></td>
                      <td><?php echo $item['Distance']; ?></td>
-                    
-                </tr>
 
+                </tr>
+                
             <?php endforeach;?>
+            <?php if($neartrap==true) echo "<tr><td>Brise suspecte</td><td>1</td></tr>" ?>
+                <?php if($nearmonster==true) echo "<tr><td>Puanteur</td><td>1</td></tr>" ?>
         </tbody>
     </table>
+
 </div>
 <div class="col-sm-12">        
 <h1>Damier</h1>
@@ -91,7 +94,7 @@
             echo "<tr>";
 
 
-            for ($j=0; $j < 14; $j++) { 
+            for ($j=0; $j < 15; $j++) { 
                 $set=false;      
                 $abs=9-$i;
 
