@@ -121,9 +121,9 @@ class Event extends AppModel {
         
     }
     
-    function Crier($idFighter, $Name){
+    function Crier($data, $Name){
         
-        $data = $this->Fighter->findById($idFighter);
+       pr($Name);
         
         $data2 = $this->create();
         $data2['Event']['name'] = $Name;

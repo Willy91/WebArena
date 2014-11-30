@@ -26,11 +26,13 @@ class Tool extends AppModel {
     
     
     function fighterOnTool($data2){
-       $data = $this->find('all', array('conditions'=>array('fighter_id' => "NULL")));
+       $data = $this->find('all', array('conditions'=>array('fighter_id' => NULL)));
        $x = $data2['Fighter']['coordinate_x'];
        $y = $data2['Fighter']['coordinate_y'];
+   
        foreach ($data as $key){
            if($key['Tool']['coordinate_x']==$x && $key['Tool']['coordinate_y']==$y){
+               
                $this->pickTool($data2, $key['Tool']['id']);
                return true;
            }     
@@ -74,25 +76,25 @@ class Tool extends AppModel {
        // $this->query("Delete from tools");
         $array = array();
        
-       for ($i=0; $i<10; $i++){
-           for ($j=0; $j<15;$j++){
+       for ($i=0; $i<Configure::read('Largeur_x'); $i++){
+           for ($j=0; $j<Configure::read('Longueur_y');$j++){
                $array[$i][$j] = true;
            }
        }
        
        //On marque indispo les cases occupées par l'es colonnes'environnement
         foreach($data2 as $key)
-               $array[$key['Surrounding']['coordinate_y']][$key['Surrounding']['coordinate_x']]= false;
+               $array[$key['Surrounding']['coordinate_x']][$key['Surrounding']['coordinate_y']]= false;
         
            
         //20 objets
         for ($i=0; $i<25; $i++){
            do{
                $fin = false;
-               $y = rand(0 , 9 );
-               $x = rand(0,14);
+               $y = rand(0 , Configure::read('Longueur_y')-1 );
+               $x = rand(0,Configure::read('Largeur_x')-1);
                
-               if($array[$y][$x]==true)
+               if($array[$x][$y]==true)
                    $fin=true;
                
            }while(!$fin);
@@ -115,7 +117,7 @@ class Tool extends AppModel {
            
           $this->save($data);
            
-           $array[$y][$x] = false;
+           $array[$x][$y] = false;
        }  
         
         

@@ -3,6 +3,12 @@
     App::uses('AppController', 'Controller');
     App::uses('CakeEmail', 'Network/Email');
 
+    
+    define("LARGEUR_X", 15);
+    define("LONGUEUR_Y", 10);
+    define("POINT", 3);
+    define("DELAI", 10);
+    
     /**
      * Main controller of our small application
      *
@@ -12,7 +18,7 @@
     {
 
 
-        public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
+        public $uses = array('Player', 'Fighter', 'Message', 'Event','Guild','Surrounding','Tool');
 
     
         public $components = array('Cookie','Session');
@@ -146,43 +152,32 @@
         //$this->Guild->getAllGuild();
             
         $this->set('fighter', $this->Cookie->read('idFighter'));    
-	$this->set('players',$this->Player->find('list'));
+        $this->set('players',$this->Player->find('list'));
 
             
-            if($this->request->is('post'))
+        if($this->request->is('post'))
  		{
-                
- 		if(key($this->request->data) == 'CreateFighter') 
+ 		    if(key($this->request->data) == 'CreateFighter') 
 			{
-                        if ($this->request->data['CreateFighter']['name']!=""){
-                               $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
-                               $this->redirect(array('action' => 'fighter'));
-                        }
-                        
-                                 
-			}
-		elseif (key($this->request->data) == 'Upload') {
-                       if(strlen($this->request->data['Upload']['avatar'])!=0){
-                           //TODO
-                       }
-                       
-                 
-                      }
-                elseif(key($this->request->data)=='PassLvl')
+                    if ($this->request->data['CreateFighter']['name']!=""){
+                           $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
+                           $this->redirect(array('action' => 'fighter'));
+                    }
+            }
+            elseif (key($this->request->data) == 'Upload') {
+                    $this->Fighter->updateAvatar($this->Cookie->read('idFighter'),$this->request->data['Upload']['avatar']['tmp_name']);                
+            }
+            elseif(key($this->request->data)=='PassLvl')
+                    $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
+            elseif(key($this->request->data)=='ReviveFighter')
                     $this->redirect(array('action' => 'sight'));
-//$this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
-                elseif(key($this->request->data)=='ReviveFighter')
-                    $this->redirect(array('action' => 'sight'));
-                elseif (key($this->request->data)=='ChangeFighter') {
+            elseif(key($this->request->data)=='ChangeFighter') {
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
                     $this->Cookie->write('idFighter', $id);
-                }
-                       
-                $this->redirect(array('action' => 'fighter'));
-                
-                }
-                 
-                }
+            }     
+            $this->redirect(array('action' => 'fighter'));
+        }
+    }
                 
 		
         
@@ -248,6 +243,89 @@
 
         }
 
+        public function message(){
+            
+            $this->Cookie->check('idFighter');
+            
+           $this->set('message_table', $this->Message->getAllMessage($this->Cookie->read('idFighter')));
+           
+           
+           
+           
+           if($this->request->is('post')) {
+               if (key($this->request->data) == 'SendEmail'){
+                   $this->redirect(array('action'=>'message_display'));
+               }
+               if (key($this->request->data) == 'EmailSent'){
+                   $this->redirect(array('action'=>'message_sent'));
+               }
+               if (key($this->request->data) == 'EmailBox'){
+                   $this->redirect(array('action'=>'message'));
+               }
+               
+           }
+           
+        }
+        
+        
+        public function message_sent(){
+            
+            $this->Cookie->check('idFighter');
+            
+           $this->set('message_table', $this->Message->getAllMessageSent($this->Cookie->read('idFighter')));
+           
+           
+           
+           
+           if($this->request->is('post')) {
+               if (key($this->request->data) == 'SendEmail'){
+                   $this->redirect(array('action'=>'message_display'));
+               }
+               if (key($this->request->data) == 'EmailSent'){
+                   $this->redirect(array('action'=>'message_sent'));
+               }
+               if (key($this->request->data) == 'EmailBox'){
+                   $this->redirect(array('action'=>'message'));
+               }
+               
+           }
+           
+        }
+        
+         public function message_display(){
+           $this->Cookie->check('idFighter');
+             $data = $this->Fighter->getFighterForMessage($this->Cookie->read('idFighter'));
+           $tab = array();
+           $n = 0;
+           foreach($data as $option){
+               $tab[$option['Fighter']['name']] = $option['Fighter']['name'] ;
+                          
+               
+           }
+           
+           $this->set('fighter_option', $tab);
+           $this->set('fighter_defaut', $data[0]['Fighter']['name']);
+             
+             if($this->request->is('post')) {
+               if (key($this->request->data) == 'Back'){
+                   $this->redirect(array('action'=>'message'));
+               }
+               if (key($this->request->data) == 'CreateMessage'){
+                   $data = array();
+                   $data['title'] = $this->request->data['CreateMessage']['object'];
+                   $data['message'] = $this->request->data['CreateMessage']['message'];
+                   $dest = $this->Fighter->getFighterByName($this->request->data['CreateMessage']['to']);
+                   
+                   $this->Message->sendMessage($data,$this->Cookie->read('idFighter'), $dest);
+                   $this->redirect(array('action'=>'message'));
+               }
+               
+           }
+         }
+      
+        
+        
+        
         public function logout()
         {
 
@@ -278,23 +356,28 @@ distance croissante.
              * 
              * **/
             $this->Cookie->check('idFighter');
-            
-            
+            $this->Cookie->check('nbAction');
+
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
          
         
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
-        $this->Surrounding->beginGame();
+        //$this->Surrounding->beginGame();
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
           
-        $this->Cookie->check('idFighter');
+    
         //Partie à alex
-        $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
-        $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
+        $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
+        $dd2 =$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
+
+        $this->set('result_sight', $dd1);
+        $this->set('result_tool', $dd2);
 
         //$this->set('result_fighter',$this->Fighter->getSeen(1));
-        $this->set('result_fighter',$this->Fighter->find('all'));
+        //$this->set('result_fighter',$this->Fighter->find('all'));
+        $this->set('result_fighter',$this->Fighter->getSeen($this->Cookie->read('idFighter')));
+
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
                 $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -304,11 +387,16 @@ distance croissante.
             //Si on a des paramètres reçus en post
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
-                if(key($this->request->data) == 'Fightermove') {
+                if (key($this->request->data) == 'Tool') {
+                    $this->newAction();
+                    $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
+                }
+                
+                elseif(key($this->request->data) == 'Fightermove') {
                     
                     //Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
-                            
+                            $this->newAction();
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else
@@ -346,13 +434,14 @@ distance croissante.
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {		
-	                     $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
+	            $this->newAction();         
+                    $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
                 }
-                 
+                 elseif(key($this->request->data) == 'Scream'){
+                     $this->newAction();
+                     $this->Event->Crier($this->Fighter->findById($this->Cookie->read('idFighter')), $this->request->data["Scream"]['name']);
+                 }
                 
-                elseif (key($this->request->data) == 'pickTool') {
-                    $this->Tool->fighterOnTool($this->Cookie->read('idFighter'));
-                }
             }
         }
     }
