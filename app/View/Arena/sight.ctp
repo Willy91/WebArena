@@ -47,7 +47,17 @@
         </div>
         <?php echo $this->Form->end(); ?>
     </div>
+    
+    <div class="form-group">  
+        <div class="text-center">
+        <?php echo $this->Form->create('pickTool', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?> 
+        <?php echo $this->Form->submit('pickTool', array('class' => 'btn btn-primary'));?>
+        <?php echo $this->Form->end(); ?>
+        </div>
     </div>
+
+    </div>
+
   </div>
 </div>
 </div>
