@@ -274,7 +274,7 @@ distance croissante.
              * 
              * **/
             $this->Cookie->check('idFighter');
-            pr($this->Cookie);
+            
             
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());

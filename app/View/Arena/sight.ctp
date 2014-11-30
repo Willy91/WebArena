@@ -94,7 +94,7 @@
             echo "<tr>";
 
 
-            for ($j=0; $j < 14; $j++) { 
+            for ($j=0; $j < 15; $j++) { 
                 $set=false;      
                 $abs=9-$i;
 
