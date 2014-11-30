@@ -102,7 +102,7 @@
         {
             
            $this->Cookie->check('idFighter');
-           pr($this->Cookie);
+           //pr($this->Cookie);
 
             //Fighter view. Need IdFighter
             $tab = $this->Fighter->getAllFighterviewPlayer($this->Session->read('Connected'));
