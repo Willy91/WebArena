@@ -6,7 +6,7 @@ class Event extends AppModel {
     
     public $uses = array('Fighter');    
     
-    function doAttackEvent($idFighter, $idDefender){
+    function doAttackEvent($data, $data2){
         $data = $this->Fighter->findById($idFighter);
         $data2 = $this->Fighter->findById($idDefender);
         
@@ -23,11 +23,13 @@ class Event extends AppModel {
 
 
     function NobodyAttackEvent($data){
-        $name = $data['Fighter']['name'] . " attaque dans le vide";
-        $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
-        $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("Y-m-d H:i:s");
-        $this->save($new);
+      $data2 = $this->create();
+
+        $data2['Event']['name'] = $data['Fighter']['name'] . " attaque dans le vent";
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
+        $this->save($data2);
 
 
     }
@@ -47,8 +49,8 @@ class Event extends AppModel {
         
     }
     
-    function newFighterEvent($idFighter){
-        $data = $this->Fighter->findById($idFighter);
+    function newFighterEvent($data){
+        //$data = $this->Fighter->findById($idFighter);
         
         $name = "Entrée de " . $data['Fighter']['name'];
         
@@ -126,7 +128,7 @@ class Event extends AppModel {
        pr($Name);
         
         $data2 = $this->create();
-        $data2['Event']['name'] = $Name;
+        $data2['Event']['name'] = $data['Fighter']['name']." screams ".$Name;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -192,6 +194,17 @@ class Event extends AppModel {
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
+
+    }
+    function DeathMonsterEvent($data){
+    $data2 = $this->create();
+
+        $data2['Event']['name'] = $data['Fighter']['name'] . "a été tué par un monstre";
+        $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
+        $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
+        $this->save($data2);
+
 
     }
 

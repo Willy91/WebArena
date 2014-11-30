@@ -420,7 +420,7 @@ distance croissante.
                 //Return True si le fighter est mort à cause du monstre
                 if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter')))) )
                 {
-                        $this->Event->MonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                        $this->Event->DeathMonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
 
                 }
@@ -434,8 +434,20 @@ distance croissante.
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {		
-	            $this->newAction();         
-                    $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
+	            $this->newAction(); 
+                        $test=$this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
+                    if($test[0]==1 )
+                    {
+                        $this->Event->MonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                    }
+                    elseif($test[0] == 2)
+                    {
+                        $this->Event->NobodyAttackEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                    }
+                    elseif($test[0] == 3)
+                    {
+                        $this->Event->DoAttackEvent($this->Cookie->read('idFighter'),$test[1]);
+                    }
                 }
                  elseif(key($this->request->data) == 'Scream'){
                      $this->newAction();

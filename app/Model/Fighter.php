@@ -237,20 +237,19 @@ return true;
        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId);
        elseif ($direction == 'west') 
        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId);
-       else
-           return 3;
-       
+      
        //Si le mec qui défend est en fait le monstre on supprime le monstre et on augmente l'xp
        if($defenderId==-1){
            $this->query("Delete from surrounding where type='Monster'");
            $this->set('xp', $datas['Fighter']['xp']);
            //On sauvegarde
            $this->save();
+           return array(1,"Monster");
        }
        
        //Si on a pas détecté de défender, l'attaque est dans le vide 
        if(!$defenderId)
-           return 1;
+           return array(2,"Nobody");
        else{
            
            //Lire les info sur le défenseur
@@ -282,7 +281,7 @@ return true;
                $datas = $this->read(null, $fighterId);
                $this->set('xp', $datas['Fighter']['xp']+$xp);
                $this->save();
-               return 2;
+               return array(3,$datas2);
           }
           else{
               return false;
