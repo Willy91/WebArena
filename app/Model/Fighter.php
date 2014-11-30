@@ -57,6 +57,7 @@ class Fighter extends AppModel {
        $nb = 0;
        $tab = array();
        foreach($data2 as $key){
+           if($key['Fighter']['current_health']>0){
            $sight_x = $key['Fighter']['coordinate_x']-$x;
            if ($sight_x<0)
                $sight_x = $sight_x*(-1);
@@ -70,7 +71,7 @@ class Fighter extends AppModel {
                 $tab[$nb]=$key;
                $nb++;
            }
-               
+           }
        }
 
       // $tab[$nb]=$user;
@@ -136,6 +137,7 @@ class Fighter extends AppModel {
         // récupérer la position et fixer l'id de travail
         $datas = $this->read(null, $fighterId);
 
+        if($data['Fighter']['current_health']>0){
         if ($direction == 'east') {
 
             if ($datas['Fighter']['coordinate_x']+1<Configure::read('Largeur_x') && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
@@ -178,6 +180,8 @@ class Fighter extends AppModel {
 
 
 return true;
+        }
+        return false;
 }
     
 
@@ -339,8 +343,8 @@ return true;
         $fin = false;
         $pos = array();
       do{
-          $pos[0] = rand(0,LARGUEUR_X-1);
-          $pos[1] = rand(0,LONGUEUR_Y-1);
+          $pos[0] = rand(0,Configure::read('Largeur_x')-1);
+          $pos[1] = rand(0,Configure::read('Longueur_y')-1);
 
         if ($array[$pos[1]][$pos[0]]==true)
             $fin = true;
