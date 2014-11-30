@@ -274,7 +274,10 @@ distance croissante.
         $this->set('result_fighter',$this->Fighter->find('all'));
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
-
+                $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
+                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
+                $this->set('neartrap',$c);
+                $this->set('nearmonster',$d);
             //Si on a des paramètres reçus en post
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
@@ -296,9 +299,7 @@ distance croissante.
                 $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
                 $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
 
-                $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
-                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
-                
+
                 //Retourn True si le fighter est mort à cause d'un piège
                     $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter'))));
                 //Return True si le fighter est mort à cause du monstre
