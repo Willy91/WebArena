@@ -98,22 +98,7 @@
                 $set=false;      
                 $abs=9-$i;
                     echo "<td>";
-                  foreach ($result_sight as $item) {
-                        if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==($abs) && $item['Surrounding']['type']=="Colonne"){
-                            $value = $item['Surrounding']['type'];
-                            echo "<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
-                            $set=true;
-                        }
-                    }
-                   foreach ($result_tool as $item) {
-                        if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==($abs)){
-                            $value = $item['Tool']['type'];
-                            echo "<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
-                            
-                            $set=true;
-                        }
-                    }
-                    foreach ($result_fighter as $item) {
+                        foreach ($result_fighter as $item) {
                         if($item['Fighter']['coordinate_y']==$j && $item['Fighter']['coordinate_x']==($abs)){
                             $id=$item['Fighter']['id'].".jpg";
                             $name=$item['Fighter']['name'];
@@ -121,9 +106,25 @@
                             $set=true;
                         }
                     }
+                  foreach ($result_sight as $item) {
+                        if($item['Surrounding']['coordinate_y']==$j && $item['Surrounding']['coordinate_x']==($abs) && $item['Surrounding']['type']=="Colonne" && $set==false){
+                            $value = $item['Surrounding']['type'];
+                            echo "<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
+                            $set=true;
+                        }
+                    }
+                   foreach ($result_tool as $item) {
+                        if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==($abs) && $set==false){
+                            $value = $item['Tool']['type'];
+                            echo "<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
+                            
+                            $set=true;
+                        }
+                    }
+
   
                     if($set==false){
-                        echo "$abs $j<img src=\"../img/case.png\">";
+                        echo "<img src=\"../img/case.png\">";
                     }
                     echo "</td>";
                 }
