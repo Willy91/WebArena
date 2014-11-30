@@ -159,7 +159,9 @@
  		    if(key($this->request->data) == 'CreateFighter') 
 			{
                     if ($this->request->data['CreateFighter']['name']!=""){
-                           $this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
+                           $NFighter=$this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
+                           if($NFighter)
+                            $this->Event->newFighterEvent($NFighter);
                            $this->redirect(array('action' => 'fighter'));
                     }
             }
