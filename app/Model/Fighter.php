@@ -81,7 +81,7 @@ class Fighter extends AppModel {
     function checkPosition($coordonnee_x, $coordonnee_y, $fighterId)
     {
         $a = false;
-        $tab = $this->query("Select coordinate_x, coordinate_y from fighters where id <> $fighterId");
+        $tab = $this->query("Select coordinate_x, coordinate_y from fighters where id <> $fighterId and current_health>0");
    
         foreach($tab as $key)
             foreach($key as $value){
