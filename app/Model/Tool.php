@@ -76,25 +76,25 @@ class Tool extends AppModel {
        // $this->query("Delete from tools");
         $array = array();
        
-       for ($i=0; $i<10; $i++){
-           for ($j=0; $j<15;$j++){
+       for ($i=0; $i<Configure::read('Largeur_x'); $i++){
+           for ($j=0; $j<Configure::read('Longueur_y');$j++){
                $array[$i][$j] = true;
            }
        }
        
        //On marque indispo les cases occupées par l'es colonnes'environnement
         foreach($data2 as $key)
-               $array[$key['Surrounding']['coordinate_y']][$key['Surrounding']['coordinate_x']]= false;
+               $array[$key['Surrounding']['coordinate_x']][$key['Surrounding']['coordinate_y']]= false;
         
            
         //20 objets
         for ($i=0; $i<25; $i++){
            do{
                $fin = false;
-               $y = rand(0 , LONGUEUR_Y-1 );
-               $x = rand(0,LARGEUR_X-1);
+               $y = rand(0 , Configure::read('Longueur_y')-1 );
+               $x = rand(0,Configure::read('Largeur_x')-1);
                
-               if($array[$y][$x]==true)
+               if($array[$x][$y]==true)
                    $fin=true;
                
            }while(!$fin);
@@ -117,7 +117,7 @@ class Tool extends AppModel {
            
           $this->save($data);
            
-           $array[$y][$x] = false;
+           $array[$x][$y] = false;
        }  
         
         
