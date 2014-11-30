@@ -141,6 +141,7 @@ echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDe
           
             <?php
 echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
+       <?php echo $this->Form->input('Skill',array('type' => 'hidden'));?>
 
     
 <div class="form-group">

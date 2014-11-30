@@ -147,7 +147,6 @@
             
         if($this->request->is('post'))
  		{
-            pr("hello");
  		    if(key($this->request->data) == 'CreateFighter') 
 			{
                     if ($this->request->data['CreateFighter']['name']!=""){
@@ -156,16 +155,13 @@
                     }
             }
             elseif (key($this->request->data) == 'Upload') {
-                if(strlen($this->request->data['Upload']['avatar'])!=0){
-                           //TODO
-                }
+                    $this->Fighter->updateAvatar('idFighter',$this->request->data['Upload']['avatar']);                
             }
             elseif(key($this->request->data)=='PassLvl')
-                    //$this->redirect(array('action' => 'sight'));
                     $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
             elseif(key($this->request->data)=='ReviveFighter')
-                    $this->redirect(array('action' => 'guild'));
-            elseif (key($this->request->data)=='ChangeFighter') {
+                    $this->redirect(array('action' => 'sight'));
+            elseif(key($this->request->data)=='ChangeFighter') {
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
                     $this->Cookie->write('idFighter', $id);
             }     

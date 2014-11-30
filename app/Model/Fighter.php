@@ -212,6 +212,12 @@ return true;
 		move_uploaded_file($file,"/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
 
 	}
+
+  function updateAvatar($fighterId,$file){
+    $data=$this->read(null,$fighterId);
+    //unlink("/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
+    move_uploaded_file($file,"/var/www/html/WebArena/app/webroot/img/$fighterId.jpg");
+  }
     
     //Fonction faire l'attaque
     function doAttack($fighterId,$direction){
