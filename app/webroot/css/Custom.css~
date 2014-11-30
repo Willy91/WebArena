@@ -20,3 +20,14 @@ bottom:0;
 }
 
 body { overflow-x: hidden;}
+
+.car{
+background-color:#3e3f3a;
+color:white;
+
+
+}
+
+#signup{
+	padding-bottom:20px;
+}

@@ -20,7 +20,6 @@
 
         public $uses = array('Player', 'Fighter', 'Message', 'Event','Guild','Surrounding','Tool');
 
-    
         public $components = array('Cookie','Session');
 
        
@@ -49,7 +48,7 @@
         }
 
         
-        public function hallofframe(){
+        public function halloffame(){
             /*
         
             Ajoutez une page «hall of fame» en espace public où vous présentez une liste de
@@ -170,7 +169,7 @@
             elseif(key($this->request->data)=='PassLvl')
                     $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
             elseif(key($this->request->data)=='ReviveFighter')
-                    $this->redirect(array('action' => 'sight'));
+                    $this->Fighter->reviveFighter($this->Cookie->read('idFighter'));
             elseif(key($this->request->data)=='ChangeFighter') {
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
                     $this->Cookie->write('idFighter', $id);
@@ -340,7 +339,7 @@
             
             if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
-        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index' && $this->request->params['action']!='hallofframe'){
+        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index' && $this->request->params['action']!='halloffame'){
                         $this->request->params['action'];
         		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
                         }
@@ -356,15 +355,14 @@ distance croissante.
              * 
              * **/
             $this->Cookie->check('idFighter');
-            $this->Cookie->check('nbAction');
-
+           
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
          
         
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
-        //$this->Surrounding->beginGame();
-        //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
+       // $this->Surrounding->beginGame();
+       // $this->Tool->initPosition();
           
     
         //Partie à alex
@@ -373,11 +371,11 @@ distance croissante.
 
         $this->set('result_sight', $dd1);
         $this->set('result_tool', $dd2);
-
+        $this->set('idF', $this->Cookie->read('idFighter'));
         //$this->set('result_fighter',$this->Fighter->getSeen(1));
         //$this->set('result_fighter',$this->Fighter->find('all'));
         $this->set('result_fighter',$this->Fighter->getSeen($this->Cookie->read('idFighter')));
-
+        
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
                 $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -388,15 +386,17 @@ distance croissante.
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
                 if (key($this->request->data) == 'Tool') {
-                    $this->newAction();
+                 //   $this->newAction();
                     $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
+                
+                    $this->redirect(array('action'=>'fighter'));
                 }
                 
                 elseif(key($this->request->data) == 'Fightermove') {
                     
                     //Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
-                            $this->newAction();
+                         
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else

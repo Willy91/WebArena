@@ -127,18 +127,17 @@
     </div>
 </div>
 <?php $this->Form->end(); ?>
-      
-      
+     
     <?php
 echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-<div class="form-group">
-    
-    <div class="col-md-12 text-center">
+<div class="form-group  ">
+   
+    <div class="col-md-12 text-center top-margin">
         <?php echo $this->Form->input('Skill',array('options' => array('sight'=>'sight','strength'=>'strength        ','health'=>'health'), 'default' => 'sight', 'class' => 'form-control'));?>
     </div>
 </div>
 <div class="form-group">
-    <div class="col-md-12 text-center">
+    <div class="col-md-12 text-center ">
         <br>
         <?php echo $this->Form->submit('Upgrade Level', array('class' => 'btn btn-primary'));?>
     </div>

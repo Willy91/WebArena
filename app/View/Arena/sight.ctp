@@ -74,15 +74,30 @@
  
         <tbody>
             <?php foreach ($result_sight as $item) :?>
-                <tr>
-                    <td><?php echo $item['Surrounding']['type']; ?></td>
-                     <td><?php echo $item['Distance']; ?></td>
-
-                </tr>
+                
+                    <?php if($item['Surrounding']['type']=="Colonne"){
+                        echo "<tr><td>";
+                        echo $item['Surrounding']['type']; echo "</td><td>";
+                    echo $item['Distance']; echo "</td></tr>";} ?>
                 
             <?php endforeach;?>
             <?php if($neartrap==true) echo "<tr><td>Brise suspecte</td><td>1</td></tr>" ?>
                 <?php if($nearmonster==true) echo "<tr><td>Puanteur</td><td>1</td></tr>" ?>
+        <?php foreach ($result_tool as $item2) :?>
+            <?php 
+                        echo "<tr><td>";
+                        echo $item2['Tool']['type']; echo "</td><td>";
+                    echo $item2['Distance']; echo "</td></tr>"; ?>
+                
+            <?php endforeach;?>
+          <?php foreach ($result_fighter as $item3) : if ($item3['Fighter']['id']!= $idF){?>
+            <?php 
+                        echo "<tr><td>";
+                        echo $item3['Fighter']['name']; echo "</td><td>";
+                    echo $item3['Distance']; echo "</td></tr>"; ?>
+                
+          <?php }endforeach;?>  
+        
         </tbody>
     </table>
 

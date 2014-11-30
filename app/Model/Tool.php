@@ -73,7 +73,7 @@ class Tool extends AppModel {
     
     
     function initPositionTool($data2){
-       // $this->query("Delete from tools");
+       $this->query("Delete from tools");
         $array = array();
        
        for ($i=0; $i<Configure::read('Largeur_x'); $i++){
@@ -107,10 +107,10 @@ class Tool extends AppModel {
         
            $a = rand(0,3);
            switch($a){
-               case 0: $data['Tool']['type'] = 'Armure'; break;
-               case 1: $data['Tool']['type'] = 'Epee'; break;
-               case 2: $data['Tool']['type'] = 'Lunettes'; break;
-               case 3 : $data['Tool']['type'] = 'Armure'; break;
+               case 0: $data['Tool']['type'] = 'Shield'; break;
+               case 1: $data['Tool']['type'] = 'Sword'; break;
+               case 2: $data['Tool']['type'] = 'Helmet'; break;
+               case 3 : $data['Tool']['type'] = 'Shield'; break;
            }
            $data['Tool']['bonus'] = rand(1,3);
            
@@ -135,6 +135,7 @@ class Tool extends AppModel {
        $nb = 0;
        $tab = array();
        foreach($data2 as $key){
+           if($key['Tool']['fighter_id']==null){
            $sight_x = $key['Tool']['coordinate_x']-$x;
            if ($sight_x<0)
                $sight_x = $sight_x*(-1);
@@ -149,7 +150,7 @@ class Tool extends AppModel {
                 $tab[$nb]=$key;
                $nb++;
            }
-               
+           }  
        }
        
        return $tab;

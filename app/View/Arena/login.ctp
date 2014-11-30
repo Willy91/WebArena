@@ -2,7 +2,7 @@
 <?php echo $this->Html->script('fb');?>
 <?php echo $this->Html->script('gplus');?>
 <div class="col-md-8 col-md-offset-2 panel panel-default top-margin">
-    <div class="col-md-6 panel panel-default">
+    <div class="col-md-6 ">
     <h2>Join the Battle !</h2>
     <div class="panel-body">
         <?php echo $this->Form->create('Signup');?>
@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<div class="col-md-6  panel panel-default">
+<div class="col-md-6  ">
 <h2>Login and Go Fight!</h2>
 <div class="panel-body">
   <?php echo $this->Form->create('Login');?>
@@ -49,7 +49,7 @@
     <?php echo $this->Form->submit('Log In', array('class' => 'btn btn-primary'));
     echo $this->Form->end();?>
 
-	<h2>Ask for a new password</h2>
+	<h4>Forgotten password?</h4>
 	 <?php echo $this->Form->create('Password_forgotten')?>
 
         <div class="form-group">
