@@ -22,7 +22,7 @@ class Fighter extends AppModel {
     
     function add($playerId, $name) {
 
-        if($this->find('count', array("conditions" => array('name' => $name)))==0){
+        if($this->find('count', array("conditions" => array('Fighter.name' => $name)))==0){
         $data = array(
             'name' => $name,
             'player_id' => $playerId,
@@ -137,7 +137,7 @@ class Fighter extends AppModel {
         // récupérer la position et fixer l'id de travail
         $datas = $this->read(null, $fighterId);
 
-        if($data['Fighter']['current_health']>0){
+        if($datas['Fighter']['current_health']>0){
         if ($direction == 'east') {
 
             if ($datas['Fighter']['coordinate_x']+1<Configure::read('Largeur_x') && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
@@ -156,6 +156,7 @@ class Fighter extends AppModel {
             //$Even->MoveEvent($fighterId,$direction);
         } 
         elseif ($direction == 'north') {
+      
             if ($datas['Fighter']['coordinate_y']+1<Configure::read('Longueur_y') && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
             
             $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
@@ -386,7 +387,7 @@ return true;
     }
     
     function getFighterId($name, $player){
-        $data = $this->find('first', array('conditions'=> array('name'=> $name, 'player_id'=>$player)));
+        $data = $this->find('first', array('conditions'=> array('Fighter.name'=> $name, 'player_id'=>$player)));
     
         return $data['Fighter']['id'];
     }

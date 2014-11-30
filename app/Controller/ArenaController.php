@@ -355,8 +355,7 @@ distance croissante.
              * 
              * **/
             $this->Cookie->check('idFighter');
-            $this->Cookie->check('nbAction');
-            
+           
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
          
@@ -387,7 +386,7 @@ distance croissante.
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
                 if (key($this->request->data) == 'Tool') {
-                    $this->newAction();
+                 //   $this->newAction();
                     $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
                 
                     $this->redirect(array('action'=>'fighter'));
@@ -397,7 +396,7 @@ distance croissante.
                     
                     //Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
-                            $this->newAction();
+                         
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else
