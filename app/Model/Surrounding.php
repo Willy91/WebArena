@@ -20,8 +20,8 @@ class Surrounding extends AppModel {
        $array = array();
        
        //Tableau pour éviter qu'un mec soit bloqué par tous les poteaux autours de lui
-       for ($i=0; $i<10; $i++){
-           for ($j=0; $j<15;$j++){
+       for ($i=0; $i<LARGEUR_X; $i++){
+           for ($j=0; $j<LONGUEUR_Y;$j++){
                $array[$i][$j] = true;
            }
        }
@@ -31,8 +31,8 @@ class Surrounding extends AppModel {
            do{
                //PLacement aléatoire sur la map
                $fin = false;
-               $y = rand(0 , 9 );
-               $x = rand(0,14);
+               $y = rand(0 , LONGUEUR_Y );
+               $x = rand(0, LARGEUR_X);
                
                //Si l'espace est libre, on sort de la boucle sinon on recommence
                if($array[$y][$x]==true)
@@ -72,8 +72,8 @@ class Surrounding extends AppModel {
        
        $array = array();
        
-       for ($i=0; $i<10; $i++){
-           for ($j=0; $j<15;$j++){
+       for ($i=0; $i<LARGEUR_X; $i++){
+           for ($j=0; $j<LONGUEUR_Y;$j++){
                $array[$i][$j] = true;
            }
        }
@@ -88,8 +88,8 @@ class Surrounding extends AppModel {
         for ($i=0; $i<16; $i++){
            do{
                $fin = false;
-               $y = rand(0 , 9 );
-               $x = rand(0,14);
+               $y = rand(0 , LONGUEUR_Y-1);
+               $x = rand(0,LARGEUR_X-1);
                
                if($array[$y][$x]==true)
                    $fin=true;
@@ -202,7 +202,7 @@ class Surrounding extends AppModel {
                
        }
        
-       
+     
        return $tab;
        
    }

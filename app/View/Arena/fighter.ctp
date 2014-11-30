@@ -1,3 +1,9 @@
+<div class="panel panel-primary">
+    
+    <div class="panel-heading text-center"><h1>Fighter</h1></div>
+<div class="panel-body">
+
+
 <div class="col-sm-12 text-center">
     <div id="myCarousel" class="carousel slide panel panel-primary col-sm-6" data-interval="false" data-ride="carousel">
 
@@ -99,7 +105,7 @@
         
     
     
-    <div class="col-md-12">
+    <div class="col-md-12" >
         
         <div class="panel panel-default">
   <div class="panel-heading text-center"><?php foreach($table_fighter2 as $table_fighter){
@@ -142,7 +148,7 @@ echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDe
           
             <?php
 echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-       <?php echo $this->Form->input('Skill',array());?>
+       <?php echo $this->Form->input('Skill',array('type' => 'hidden'));?>
 
     
 <div class="form-group">
@@ -158,6 +164,9 @@ echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'i
 </div>
     </div>
 </div>
+
+<!--- -->
+
 </div>
 <div class="col-sm-12">
 <div class="panel panel-default">
@@ -211,4 +220,5 @@ echo $this->Form->create('ChangeFighter', array('class' => 'form-horizontal', 'i
     </div>
 </div>
 </div>    
-    
+</div>
+</div>
