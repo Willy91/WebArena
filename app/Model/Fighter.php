@@ -41,7 +41,7 @@ class Fighter extends AppModel {
         $data['coordinate_y'] = $pos[1];
         // prepare the model for adding a new entry
         $this->create();
-
+        copy($_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/template.jpg",$_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$data['fighterId']."jpg");
         // save the data
         return $this->save($data);
         }
