@@ -41,7 +41,7 @@ class Fighter extends AppModel {
         $data['coordinate_y'] = $pos[1];
         // prepare the model for adding a new entry
         $this->create();
-
+        copy($_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/template.jpg",$_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$data['fighterId']."jpg");
         // save the data
         return $this->save($data);
         }
@@ -65,8 +65,7 @@ class Fighter extends AppModel {
            if ($sight_y<0)
                $sight_y = $sight_y*(-1);
            $total = $sight_x+$sight_y;
-          
-           if ($total<=$user['Fighter']['skill_sight'] && $key['Fighter']['id']==NULL){
+           if ($total<=$user['Fighter']['skill_sight']){
                 echo $total . " ";
                $key['Distance']=$total;
                 $tab[$nb]=$key;
@@ -74,7 +73,8 @@ class Fighter extends AppModel {
            }
                
        }
-       $tab[$nb]=$user;
+
+      // $tab[$nb]=$user;
        //array_push($tab,$user);
        return $tab;
     }
@@ -218,7 +218,9 @@ return true;
   function updateAvatar($fighterId,$file){
     $data=$this->read(null,$fighterId);
     //unlink("/var/www/html/WebArena/app/Avatar/$fighterId.jpg");
-    move_uploaded_file($file,"/var/www/html/WebArena/app/webroot/img/$fighterId.jpg");
+    $output= $_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$fighterId.".jpg";
+    unlink("$output");
+    move_uploaded_file($file,$output);
   }
     
     //Fonction faire l'attaque
