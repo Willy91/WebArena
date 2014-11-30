@@ -110,7 +110,7 @@
  </div>
   <div class="panel-body">
       
-       <?php echo $this->Form->create('Upload',array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false))); ?>
+       <?php echo $this->Form->create('Upload',array('type'=>'file'),array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false))); ?>
 <div class="form-group">
 
     <div class="col-md-10"><?php echo $this->Form->file('avatar'); ?></div>
@@ -141,7 +141,7 @@ echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDe
           
             <?php
 echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-       <?php echo $this->Form->input('Skill',array('type' => 'hidden'));?>
+       <?php echo $this->Form->input('Skill',array());?>
 
     
 <div class="form-group">
