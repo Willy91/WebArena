@@ -276,13 +276,12 @@ distance croissante.
         //Partie à alex
         $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
         $dd2 =$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
-        pr($dd1);
-        pr($dd2);
+ 
         $this->set('result_sight', $dd1);
         $this->set('result_tool', $dd2);
 
         //$this->set('result_fighter',$this->Fighter->getSeen(1));
-        $this->set('result_fighter',$this->Fighter->find('all'));
+        $this->set('result_fighter',$this->Fighter->getSeen($this->Cookie->read('idFighter')));
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
                 $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
