@@ -1,10 +1,10 @@
-    <?php
+        <?php
 
 App::uses('AppModel', 'Model');
 
 class Event extends AppModel {
     
-    
+    public $uses = array('Fighter');    
     
     function doAttackEvent($idFighter, $idDefender){
         $data = $this->Fighter->findById($idFighter);
@@ -16,7 +16,7 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
@@ -31,7 +31,7 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
@@ -45,7 +45,7 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
@@ -60,7 +60,7 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
@@ -75,14 +75,14 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
     
     
     function newGuildEvent($idFighter, $nameGuild){
-        $data = $this->Fighter->findById($idFighter);
+        //$data = $this->Fighter->findById($idFighter);
         
         $name = $data['Fighter']['name'] . " crée une nouvelle guilde sous le nom de " . $nameGuild;
         
@@ -90,13 +90,13 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
     
-    function newDeathEvent($idFighter){
-        $data = $this->Fighter->findById($idFighter);
+    function newDeathEvent($data){
+       // $data = $this->Fighter->findById($idFighter);
         
         $name = $data['Fighter']['name'] . " est mort ";
         
@@ -104,7 +104,8 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $new['Event']['date'] = date("d-m-Y H-i-s");
+        //echo date("d-m-Y H-i-s");
+        $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
     }
@@ -117,7 +118,7 @@ class Event extends AppModel {
         $data2['Event']['name'] = $Name;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
     }
     
@@ -132,40 +133,40 @@ class Event extends AppModel {
         return $tab;
     }
 
-    function MoveEvent($idFighter,$direction){
-        $data = $this->Fighter->findById($idFighter);
+    function MoveEvent($data,$direction){
+        //$data = $this->Fighter->findById($idFighter);
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . "moves to " . $direction;
+        $data2['Event']['name'] = $data['Fighter']['name'] . " moves to " . $direction;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
     }
     
-    function FailMove($idFighter,$direction){
-        $data = $this->Fighter->findById($idFighter);
+    function FailMove($data,$direction){
+       
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . "fails to move to " . $direction;
+        $data2['Event']['name'] = $data['Fighter']['name'] . " fails to move to " . $direction;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
 
     }
 
-    function TrapEvent($idFighter){
-        $data = $this->Fighter->findById($idFighter);
+    function TrapEvent($data){
+        //$data = $this->Fighter->findById($idFighter);
 
         $data2 = $this->create();
 
         $data2['Event']['name'] = $data['Fighter']['name'] . "déclenche un piège";
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
 
     }
@@ -178,7 +179,7 @@ class Event extends AppModel {
         $data2['Event']['name'] = $data['Fighter']['name'] . "a tué un monstre";
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
 
     }
@@ -193,7 +194,7 @@ class Event extends AppModel {
         $data2['Event']['name'] = $data['Fighter']['name'] . "vient de gagner un niveau! Niveau ". $data['Fighter']['level'];
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        $data2['Event']['date'] = date("d-m-Y H:i:s");
+        $data2['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($data2);
 
 

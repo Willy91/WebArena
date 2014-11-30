@@ -11,6 +11,7 @@
     class ArenaController extends AppController
     {
 
+
         public $uses = array('Player', 'Fighter', 'Event','Guild','Surrounding','Tool');
 
     
@@ -280,23 +281,37 @@ distance croissante.
          
         
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
-        //$this->Surrounding->beginGame();
+        $this->Surrounding->beginGame();
         //$this->Tool->initPosition($this->Surrounding->getAllSurrounding());
-          echo $this->Cookie->read('idFighter');
+          
+        $this->Cookie->check('idFighter');
         //Partie à alex
-        $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById(1)));
-        $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById(1)));
+        $this->set('result_sight', $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
+        $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
 
-
+        //$this->set('result_fighter',$this->Fighter->getSeen(1));
+        $this->set('result_fighter',$this->Fighter->find('all'));
             //Alex
             $this->set('me',$this->Fighter->findById($this->Cookie->read('idFighter')));
+                $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
+                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
+                $this->set('neartrap',$c);
+                $this->set('nearmonster',$d);
             //Si on a des paramètres reçus en post
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
                 if(key($this->request->data) == 'Fightermove') {
                     
                     //Do Move 
-                    $this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']);
+                    if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
+                            
+                            $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
+                        }
+                    else
+                    {
+                        $this->Event->FailMove($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );
+
+                    }
                 
                 $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
                 $tab2 = $this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -304,20 +319,25 @@ distance croissante.
                 $this->set('result_tool',$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter'))));
 
 
-                $c = $this->Surrounding->nearFromPiege($this->Fighter->findById($this->Cookie->read('idFighter')));
-                $d = $this->Surrounding->nearFromMonster($this->Fighter->findById($this->Cookie->read('idFighter')));
-                
                 //Retourn True si le fighter est mort à cause d'un piège
-                $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter'))));
+                    if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter')))) )
+                        {
+                        $this->Event->TrapEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                        $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                        }
                 //Return True si le fighter est mort à cause du monstre
-                $this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter'))));
-                
-                /*
-                $this->Fighter->deathFromSurrounding(1, $a);*/
-                    
-                    $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
-                    
+                if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter')))) )
+                {
+                        $this->Event->MonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                        $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
 
+                }
+                /*
+                $this->Fighter->deathFromSurrounding(1, $a);*/  
+                    
+                   // $this->Session->setFlash('Une action a été réalisée.', 'flash_success');
+                    
+                    $this->redirect(array('controller' => 'Arena', 'action' => 'sight'));
                     
                 }
                 
