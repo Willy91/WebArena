@@ -1,4 +1,5 @@
-<div id="myCarousel" class="carousel slide panel panel-primary" data-interval="false" data-ride="carousel">
+<div class="col-sm-12 text-center">
+    <div id="myCarousel" class="carousel slide panel panel-primary col-sm-6" data-interval="false" data-ride="carousel">
 
     
     <div class="carousel-inner">
@@ -23,7 +24,7 @@
     
 <div class="panel-body">
 
-<div class="col-md-4 top-margin">
+<div class="col-sm-6 ">
     <table id="guild_table" class="display table table-striped table-bordered" cellspacing="0" width="100%">
         <tr>
             <th>Position X</th>
@@ -66,85 +67,14 @@
            
 </div>
     
-    <div class="col-md-4">
-        <div class="text-center">
+    <div class="col-md-6">
+        <div class="text-center ">
         <?php $a = $table_fighter['Fighter']['id'].".jpg";
-        echo $this->Html->image($a, array('alt' => 'CakePHP'));?>
+        echo $this->Html->image($a, array('alt' => 'CakePHP', 'width' => '200', 'height' => '200'));?>
         
-        <?php echo $this->Form->create('UploadPicture',array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false))); ?>
-<div class="form-group">
-
-    <div class="col-sm-10"><?php echo $this->Form->file('avatar'); ?></div>
-</div>
-<div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10"><?php echo $this->Form->submit('Upload', array('class' => 'btn btn-primary'));?>
-    </div>
-</div>
-<?php $this->Form->end(); ?>
         </div>
-        
-    </div>
-    
-    
-    <div class="col-md-4">
-        
-        <div class="panel panel-default">
-  <div class="panel-heading">Update Level</div>
-  <div class="panel-body">
-    <?php
-echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-<div class="form-group">
-    
-    <div class="col-sm-12 text-center">
-        <?php echo $this->Form->input('Choose a skill to upgrade',array('options' => array('sight'=>'sight+1','strength'=>'strength        +1','health'=>'health+3'), 'default' => 'sight+1', 'class' => 'form-control'));?>
-    </div>
 </div>
-<div class="form-group">
-    <div class="col-sm-12 text-center">
-        <br>
-        <?php echo $this->Form->submit('Upgrade', array('class' => 'btn btn-primary'));?>
-    </div>
 </div>
-<?php echo $this->Form->end(); ?>
-  </div>
-</div>
-
-        <div class="panel panel-default">
-  <div class="panel-heading">Change Fighter</div>
-  <div class="panel-body">
-    <?php
-echo $this->Form->create('ChangeFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-<div class="form-group">
-    
-<div class="form-group">
-    <div class="col-sm-12 text-center">
-        <?php $a = 'Choose ' . $table_fighter['Fighter']['name']; ?>
-        <?php echo $this->Form->submit($a, array('class' => 'btn btn-primary'));?>
-    </div>
-</div>
-<?php echo $this->Form->end(); ?>
-  </div>
-      
-          <?php
-echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-<div class="form-group">
-    
-<div class="form-group">
-    <div class="col-sm-12 text-center">
-        <?php $a = 'Revive ' . $table_fighter['Fighter']['name']; ?>
-        <?php echo $this->Form->submit($a, array('class' => 'btn btn-primary'));?>
-    </div>
-</div>
-<?php echo $this->Form->end(); ?>
-  </div>
-      
-</div>
-        
-        
-    </div> 
-    </div>
-</div>
-
 </div>
         <?php endforeach;?>
 </div>
@@ -162,23 +92,121 @@ echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'i
     
     
     </div>
+
+<!-- -->
+<div class="col-md-6" >
+       
+        
+    
+    
+    <div class="col-md-12">
+        
+        <div class="panel panel-default">
+  <div class="panel-heading text-center"><?php foreach($table_fighter2 as $table_fighter){
+      if ($table_fighter['Fighter']['id'] == $fighter){
+          echo $table_fighter['Fighter']['name'];
+      }
+  }?>
+ </div>
+  <div class="panel-body">
+      
+       <?php echo $this->Form->create('Upload',array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false))); ?>
+<div class="form-group">
+
+    <div class="col-md-10"><?php echo $this->Form->file('avatar'); ?></div>
+</div>
+<div class="form-group">
+    <div class="col-md-12 text-center"><?php echo $this->Form->submit('Upload Avatar', array('class' => 'btn btn-primary'));?>
+    </div>
+</div>
+<?php $this->Form->end(); ?>
+      
+      
+    <?php
+echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
+<div class="form-group">
+    
+    <div class="col-md-12 text-center">
+        <?php echo $this->Form->input('Skill',array('options' => array('sight'=>'sight','strength'=>'strength        ','health'=>'health'), 'default' => 'sight', 'class' => 'form-control'));?>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-12 text-center">
+        <br>
+        <?php echo $this->Form->submit('Upgrade Level', array('class' => 'btn btn-primary'));?>
+    </div>
+</div>
+<?php echo $this->Form->end(); ?>
+  </div>
+          
+            <?php
+echo $this->Form->create('ReviveFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
+
+    
+<div class="form-group">
+    <div class="col-md-12 text-center">
+        <?php $a = 'Revive'; ?>
+        <?php echo $this->Form->submit($a, array('class' => 'btn btn-primary'));?>
+    </div>
+</div>
+<?php echo $this->Form->end(); ?>
+  
+            
+            
+</div>
+    </div>
+</div>
+</div>
+<div class="col-sm-12">
+<div class="panel panel-default">
+  <div class="panel-heading">Change Fighter</div>
+  <div class="panel-body">
+      
+       <?php
+echo $this->Form->create('ChangeFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>   
+     <div class="form-group col-md-8">
+      <div class="input-group ">
+  <span class="input-group-addon">Name</span>
+  <?php echo $this->Form->input('OtherName', array('class' => 'form-control'));?>
+</div>
+     </div>
+
+    
+<div class="form-group col-md-4">
+    <div class="text-center">
+        <?php $a = 'Choose'; ?>
+        <?php echo $this->Form->submit($a, array('class' => 'btn btn-primary'));?>
+    </div>
+</div>
+<?php echo $this->Form->end(); ?>
+  </div>
+      
+          
+      
+</div>
+</div>  
+        
+   
+<div class=" col-sm-12">
 <div class="panel panel-primary">
     
     <div class="panel-heading">New Fighter</div>
     
 <div class="panel-body">
 <?php echo $this->Form->create('CreateFighter', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
-<div class="form-group">
-    <label class="col-sm-2 control-label">Name</label>
-    <div class="col-sm-10"><?php echo $this->Form->input('name', array('class' => 'form-control'));?></div>
+
+    
+    <div class="form-group">
+    <label class="col-md-2 control-label">Name</label>
+    <div class="col-md-10"><?php echo $this->Form->input('name', array('class' => 'form-control'));?></div>
 </div>
 <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
+    <div class="col-md-offset-2 col-md-10">
     <?php echo $this->Form->submit('Create New Fighter', array('class' => 'btn btn-primary'));?>
     </div>
 </div>
 <?php echo $this->Form->end();?>
     </div>
 </div>
-    
+</div>    
     

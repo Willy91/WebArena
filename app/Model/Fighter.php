@@ -23,7 +23,7 @@ class Fighter extends AppModel {
     
     function add($playerId, $name) {
 
-
+        if($this->find('count', array("conditions" => array('name' => $name, 'player_id' => $playerId)))==0){
         $data = array(
             'name' => $name,
             'player_id' => $playerId,
@@ -44,6 +44,9 @@ class Fighter extends AppModel {
 
         // save the data
         return $this->save($data);
+        }
+        else
+            return false;
     }
 
 
@@ -108,7 +111,7 @@ class Fighter extends AppModel {
         $datas = $this->read(null, $fighterId);      
         
         if ($direction == 'north') {
-            if ($datas['Fighter']['coordinate_x']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
+            if ($datas['Fighter']['coordinate_x']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
                 $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] + 1);
               //this->Event->MoveEvent($fighterId,$direction);
         } elseif ($direction == 'south') {
@@ -116,7 +119,7 @@ class Fighter extends AppModel {
             $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
           //this->Event->MoveEvent($fighterId,$direction);
         } elseif ($direction == 'east') {
-            if ($datas['Fighter']['coordinate_y']+1<10 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
+            if ($datas['Fighter']['coordinate_y']+1<15 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
                 $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
            //   this->Event->MoveEvent($fighterId,$direction);
         } elseif ($direction == 'west') {            
@@ -325,6 +328,12 @@ class Fighter extends AppModel {
 
     function getFighterview($idFighter){
         return $this->findById($idFighter);
+    }
+    
+    function getFighterId($name, $player){
+        $data = $this->find('first', array('conditions'=> array('name'=> $name, 'player_id'=>$player)));
+    
+        return $data['Fighter']['id'];
     }
     
     function getAllFighterviewPlayer($idPlayer){

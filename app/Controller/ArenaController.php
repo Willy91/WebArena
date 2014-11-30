@@ -26,7 +26,7 @@
         {
             //PAGE D ACCUEIL 
             /*
-            un slider des avatars
+            un slider des avapaars
              * Retourne un tableau décroissant des fighters classés par level
              * $this->Fighter->getRankFighter()
              */
@@ -101,13 +101,13 @@
         {
             
            $this->Cookie->check('idFighter');
-           pr($this->Cookie);
+       
 
             //Fighter view. Need IdFighter
             $tab = $this->Fighter->getAllFighterviewPlayer($this->Session->read('Connected'));
             
             $this->set('table_fighter2', $tab);
-        
+            
             /*
             $nb = $this->Fighter->getNbFighterFromPlayer($this->Player->getIdFighter($mail));
                if ($nb == 0)
@@ -140,12 +140,13 @@
         //)
         //$this->Guild->getAllGuild();
             
-            
+        $this->set('fighter', $this->Cookie->read('idFighter'));    
 	$this->set('players',$this->Player->find('list'));
 
             
             if($this->request->is('post'))
  		{
+                
  		if(key($this->request->data) == 'CreateFighter') 
 			{
                         if ($this->request->data['CreateFighter']['name']!=""){
@@ -155,14 +156,31 @@
                         
                                  
 			}
-		elseif (key($this->request->data) == 'UploadPicture') {
-                    if(strlen($this->request->data['UploadPicture']['avatar']) !=0){
-                                $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
-                    }
+		elseif (key($this->request->data) == 'Upload') {
+                       if(strlen($this->request->data['Upload']['avatar'])!=0){
+                           //TODO
+                       }
+                       
+                 
+                      }
+                elseif(key($this->request->data)=='PassLvl')
+                    $this->redirect(array('action' => 'sight'));
+//$this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
+                elseif(key($this->request->data)=='ReviveFighter')
+                    $this->redirect(array('action' => 'sight'));
+                elseif (key($this->request->data)=='ChangeFighter') {
+                    $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
+                    $this->Cookie->write('idFighter', $id);
+                }
+                       
+                $this->redirect(array('action' => 'fighter'));
+                
+                }
+                 
                 }
                 
-		}
-        }
+		
+        
 
         public function diary()  
         {
@@ -215,7 +233,7 @@
             }
             elseif (key($this->request->data) == 'Signup') {
                 if($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password']) {
-                    pr($this->request->data);
+                    
                     $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
                 }
             }
@@ -254,11 +272,12 @@ distance croissante.
              * faites apparaître un tooltip au survol des trucs sur le damier.
              * 
              * **/
-            
+            $this->Cookie->check('idFighter');
+            pr($this->Cookie);
             
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
-        
+         
         
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
         //$this->Surrounding->beginGame();
