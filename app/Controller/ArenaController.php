@@ -20,7 +20,6 @@
 
         public $uses = array('Player', 'Fighter', 'Message', 'Event','Guild','Surrounding','Tool');
 
-    
         public $components = array('Cookie','Session');
 
        
@@ -49,7 +48,7 @@
         }
 
         
-        public function hallofframe(){
+        public function halloffame(){
             /*
         
             Ajoutez une page «hall of fame» en espace public où vous présentez une liste de
@@ -108,7 +107,11 @@
         {
             
            $this->Cookie->check('idFighter');
+
+           //pr($this->Cookie);
+
        
+
 
             //Fighter view. Need IdFighter
             $tab = $this->Fighter->getAllFighterviewPlayer($this->Session->read('Connected'));
@@ -336,7 +339,7 @@
             
             if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
-        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index' && $this->request->params['action']!='hallofframe'){
+        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index' && $this->request->params['action']!='halloffame'){
                         $this->request->params['action'];
         		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
                         }

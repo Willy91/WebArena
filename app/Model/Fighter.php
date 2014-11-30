@@ -17,7 +17,7 @@ class Fighter extends AppModel {
             'foreignKey' => 'player_id',
 
         ),
-
+        'Guild'
     );
     
     function add($playerId, $name) {

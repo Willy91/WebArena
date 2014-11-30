@@ -38,7 +38,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
 </head>
 <body>
 
-    
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
 
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -64,7 +65,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
 			<li><?php echo $this->Html->link(__('Guild'), array('controller'=>'Arena','action'=>'guild'))?></li>
 			<li><?php echo $this->Html->link(__('Email box'), array('controller'=>'Arena','action'=>'message'))?></li>
                     <?php else: ?>
-			<li><?php echo $this->Html->link(__('Hall Of Frame'), array('controller'=>'Arena','action'=>'hallofframe'))?></li>
+			<li><?php echo $this->Html->link(__('Hall Of Fame'), array('controller'=>'Arena','action'=>'halloffame'))?></li>
 		    <?php endif; ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -140,17 +141,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
     </div>
 </footer>
 
-    <?php echo $this->element('sql_dump'); ?>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <?php echo $this->Html->script('bootstrap.min'); ?>
-    <?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
-    <?php echo $this->Html->script('dataTableJS.js');
-    echo $this->Html->script('jquery.jqplot.min.js');
-	echo $this->Html->script('jqplot.pieRenderer.min.js');
-    echo $this->Html->script('jqplot.donutRenderer.min.js');
-
-
-?>
+<?php echo $this->element('sql_dump'); ?>
+<?php echo $this->Html->script('bootstrap.min'); ?>
+<?php echo $this->Html->script('jquery.dataTables.min.js'); ?>
+<?php echo $this->Html->script('dataTableJS');?>
 
 </body>
 </html>
