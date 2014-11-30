@@ -90,7 +90,6 @@
 <div class="col-sm-12">        
 <h1>Damier</h1>
 <table id="damier" class="dataTable">
-    
         <?php for($i=0;$i<10;$i++){
             echo "<tr>";
 
@@ -109,7 +108,7 @@
                    foreach ($result_tool as $item) {
                         if($item['Tool']['coordinate_y']==$j && $item['Tool']['coordinate_x']==($abs)){
                             $value = $item['Tool']['type'];
-                            echo "<td>$abs $j<img src=\"../img/$value.png\"></td>";
+                            echo "<td>$abs $j<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\"></td>";
                             
                             $set=true;
                         }
