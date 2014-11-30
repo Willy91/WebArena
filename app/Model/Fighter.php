@@ -31,7 +31,8 @@ class Fighter extends AppModel {
             'skill_sight' => 0,
             'skill_strength' => 1,
             'skill_health' => 3,
-            'current_health' => 3
+            'current_health' => 3,
+            'next_action_time' => date("Y-m-d H:i:s")
         );
 
         $pos = $this->InitPosition();
@@ -417,16 +418,16 @@ return true;
     function Action($nb, $fighterId){
         $data=$this->findById($fighterId);
         
-        if(date("Y-m-d H:i:s")<=$data['Fighter']['next_action_time'])
-                return false;
+       if(strtotime(date("Y-m-d H:i:s"))<=strtotime($data['Fighter']['next_action_time']))
+                return -1;
         else{
         
         
-        if (date("Y-m-d H:i:s")>($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+2*DELAI,date("m"),date("d"),date("Y"))))
+        if (strtotime(date("Y-m-d H:i:s"))>strtotime($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+2*Configure::read('Delai'),date("m"),date("d"),date("Y"))))
             $nb--;
-        if (date("Y-m-d H:i:s")>($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+3*DELAI,date("m"),date("d"),date("Y"))))
+        if (strtotime(date("Y-m-d H:i:s"))>strtotime($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+3*Configure::read('Delai'),date("m"),date("d"),date("Y"))))
             $nb--;  
-        if (date("Y-m-d H:i:s")>($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+DELAI,date("m"),date("d"),date("Y")))){
+        if (strtotime(date("Y-m-d H:i:s"))>strtotime($data['Fighter']['next_action_time']+mktime(date("H"),date("i"),date("s")+Configure::read('Delai'),date("m"),date("d"),date("Y")))){
             $nb--;
             $data['Fighter']['next_action_time'] = date("Y-m-d H:i:s");
         }    
@@ -435,9 +436,10 @@ return true;
             $nb=0;
         
         $nb++;
-        if ($nb==POINT){
-            $data['Fighter']['next_action_time']=date ("Y-m-d H:i:s", mktime(date("H"),date("i"),date("s")+DELAI,date("m"),date("d"),date("Y")));
+        if ($nb==Configure::read('nbAction')+1){
+            $data['Fighter']['next_action_time']=date ("Y-m-d H:i:s", mktime(date("H"),date("i"),date("s")+Configure::read('Delai'),date("m"),date("d"),date("Y")));
             $this->save($data);
+            $nb=0;
         }
         return $nb;
     }
@@ -503,5 +505,7 @@ return true;
    function getFighterByName($name){
        return $this->find('first', array('conditions' => array('name' => $name)));
    }
+   
+   
    
 }

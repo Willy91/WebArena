@@ -93,11 +93,16 @@
         
         function newAction(){
             
-            //A TESTER QUAND CA MARCHERA BIEN
+        //A TESTER QUAND CA MARCHERA BIEN
         $nb = $this->Cookie->read("nbAction");
+        $pp = $this->Fighter->Action($nb, $this->Cookie->read('idFighter'));
+        if ($pp>=0){
+            $this->Cookie->write('nbAction', $pp);
+            return true;
+        }
+ else {return false;}
         
         
-        $this->Cookie->write("nbAction", $this->Fighter->Action($nb, $this->Cookie->read('idFighter')));
       
         
         }
@@ -355,16 +360,14 @@ distance croissante.
              * 
              * **/
             $this->Cookie->check('idFighter');
-           
           //Réinitialiser les objets s'ils ont tous été rammasé  
           $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
-         
         
           //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
        // $this->Surrounding->beginGame();
        // $this->Tool->initPosition();
           
-    
+    pr($this->Cookie);
         //Partie à alex
         $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
         $dd2 =$this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -387,22 +390,27 @@ distance croissante.
                 //Si le mec veut bouger 
                 if (key($this->request->data) == 'Tool') {
                  //   $this->newAction();
+                    $a = $this->newAction();
+                    if($a){//Do Move 
                     $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
-                
-                    $this->redirect(array('action'=>'fighter'));
+                    $a = $this->Cookie->read('nbAction');
+                    $this->Cookie->write('nbAction', $a+1);
+                    }
                 }
                 
                 elseif(key($this->request->data) == 'Fightermove') {
-                    
-                    //Do Move 
+                     $a = $this->newAction();
+                    if($a){//Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
-                         
+                  
+                          
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else
                     {
                         $this->Event->FailMove($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );
 
+                    }
                     }
                 
                 $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
@@ -434,13 +442,19 @@ distance croissante.
                 }
                 
                 elseif (key($this->request->data) == 'FighterAttack') {		
-	            $this->newAction();         
+	            $a = $this->newAction();
+                    if($a){//Do Move   
                     $this->Fighter->doAttack($this->Cookie->read('idFighter'), $this->request->data['FighterAttack']['direction']);
-                }
+                
+                    }                    
+                    }
                  elseif(key($this->request->data) == 'Scream'){
-                     $this->newAction();
+                      $a = $this->newAction();
+                    if($a){//Do Move 
                      $this->Event->Crier($this->Fighter->findById($this->Cookie->read('idFighter')), $this->request->data["Scream"]['name']);
-                 }
+                 
+                    }
+                    }
                 
             }
         }
