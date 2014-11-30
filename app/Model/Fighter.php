@@ -94,11 +94,13 @@ class Fighter extends AppModel {
         
         foreach($tab as $key)
             foreach($key as $value){
+                pr($value);
                 if ($value['coordinate_y']== $coordonnee_y && 
                      $value['coordinate_x']== $coordonnee_x)
                   $a = true;  
             }    
-            echo $a;
+        
+            
         return $a;
     }
     

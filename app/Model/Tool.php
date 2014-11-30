@@ -26,11 +26,13 @@ class Tool extends AppModel {
     
     
     function fighterOnTool($data2){
-       $data = $this->find('all', array('conditions'=>array('fighter_id' => "NULL")));
+       $data = $this->find('all', array('conditions'=>array('fighter_id' => NULL)));
        $x = $data2['Fighter']['coordinate_x'];
        $y = $data2['Fighter']['coordinate_y'];
+   
        foreach ($data as $key){
            if($key['Tool']['coordinate_x']==$x && $key['Tool']['coordinate_y']==$y){
+               
                $this->pickTool($data2, $key['Tool']['id']);
                return true;
            }     

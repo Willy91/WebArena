@@ -50,8 +50,9 @@
     
     <div class="form-group">  
         <div class="text-center">
-        <?php echo $this->Form->create('pickTool', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?> 
-        <?php echo $this->Form->submit('pickTool', array('class' => 'btn btn-primary'));?>
+        <?php echo $this->Form->create('Tool', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?> 
+        <?php echo $this->Form->input('Skill',array('type' => 'hidden'));?>
+            <?php echo $this->Form->submit('Tool', array('class' => 'btn btn-primary'));?>
         <?php echo $this->Form->end(); ?>
         </div>
     </div>
