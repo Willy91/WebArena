@@ -136,7 +136,7 @@ class Fighter extends AppModel {
         // récupérer la position et fixer l'id de travail
         $datas = $this->read(null, $fighterId);
 
-        if ($direction == 'east') {
+        if ($direction == 'north') {
 
             if ($datas['Fighter']['coordinate_x']+1<LARGEUR_X && !$this->checkPosition($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId))
             {
@@ -146,14 +146,14 @@ class Fighter extends AppModel {
             else
               return false;
         } 
-        elseif ($direction == 'west') {
+        elseif ($direction == 'south') {
             if ($datas['Fighter']['coordinate_x']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId))
             $this->set('coordinate_x', $datas['Fighter']['coordinate_x'] - 1);
           else 
             return false;
             //$Even->MoveEvent($fighterId,$direction);
         } 
-        elseif ($direction == 'north') {
+        elseif ($direction == 'east') {
             if ($datas['Fighter']['coordinate_y']+1<LONGUEUR_Y && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId))
             
             $this->set('coordinate_y', $datas['Fighter']['coordinate_y'] + 1);
@@ -162,7 +162,7 @@ class Fighter extends AppModel {
             //$Even->MoveEvent($fighterId,$direction);
           
         } 
-        elseif ($direction == 'south') {
+        elseif ($direction == 'west') {
 
             if ($datas['Fighter']['coordinate_y']-1>=0 && !$this->checkPosition($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId))
             

@@ -53,6 +53,11 @@
 		'level' => E_ALL & ~E_DEPRECATED,
 		'trace' => true
 	));
+        
+        Configure::write('Longueur_y','15');
+        
+        
+        
 
 /**
  * Configure the Exception handler used for uncaught exceptions. By default,
