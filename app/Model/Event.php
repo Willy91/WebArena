@@ -95,8 +95,8 @@ class Event extends AppModel {
         
     }
     
-    function newDeathEvent($idFighter){
-        $data = $this->Fighter->findById($idFighter);
+    function newDeathEvent($data){
+       // $data = $this->Fighter->findById($idFighter);
         
         $name = $data['Fighter']['name'] . " est mort ";
         
@@ -104,7 +104,7 @@ class Event extends AppModel {
         $new['Event']['name'] = $name;
         $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
-        echo date("d-m-Y H-i-s");
+        //echo date("d-m-Y H-i-s");
         $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         
@@ -150,7 +150,7 @@ class Event extends AppModel {
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . "fails to move to " . $direction;
+        $data2['Event']['name'] = $data['Fighter']['name'] . " fails to move to " . $direction;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -158,8 +158,8 @@ class Event extends AppModel {
 
     }
 
-    function TrapEvent($idFighter){
-        $data = $this->Fighter->findById($idFighter);
+    function TrapEvent($data){
+        //$data = $this->Fighter->findById($idFighter);
 
         $data2 = $this->create();
 
