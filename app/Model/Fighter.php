@@ -41,9 +41,13 @@ class Fighter extends AppModel {
         $data['coordinate_y'] = $pos[1];
         // prepare the model for adding a new entry
         $this->create();
-        copy($_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/template.jpg",$_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$data['fighterId']."jpg");
         // save the data
-        return $this->save($data);
+        $this->save($data);
+
+        $current = $this->find('first', array('conditions'=> array('Fighter.name'=> $data['name'], 'player_id'=>$data['player_id'])));
+        copy($_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/template.jpg",$_SERVER['DOCUMENT_ROOT']."/WebArena/app/webroot/img/".$current['Fighter']['id'].".jpg");
+
+        return true;
         }
         else
             return false;

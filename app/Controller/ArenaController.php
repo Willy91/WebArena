@@ -165,9 +165,13 @@
  		    if(key($this->request->data) == 'CreateFighter') 
 			{
                     if ($this->request->data['CreateFighter']['name']!=""){
-                           $NFighter=$this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name']);
-                           if($NFighter)
-                            $this->Event->newFighterEvent($NFighter);
+                           
+                           if($this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name'])){
+                                $new= $this->Fighter->find('first', array('conditions' => array('Fighter.name' => $this->request->data['CreateFighter']['name'])));
+                                 $this->Event->newFighterEvent($new);
+
+                           }
+                          
                            $this->redirect(array('action' => 'fighter'));
                     }
             }
