@@ -50,8 +50,7 @@ class Event extends AppModel {
     }
     
     function newFighterEvent($data){
-        //$data = $this->Fighter->findById($idFighter);
-        
+         
         $name = "Entrée de " . $data['Fighter']['name'];
         
         $new = $this->create();
