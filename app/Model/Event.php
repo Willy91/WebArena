@@ -6,11 +6,11 @@ class Event extends AppModel {
     
     public $uses = array('Fighter');    
     
-    function doAttackEvent($data, $data2){
-        $fighter = $this->Fighter->findById($data);
-      //  $data2 = $this->Fighter->findById($idDefender);
+    function doAttackEvent($idDefender, $Att){
+        $fighter = $this->Fighter->findById($Att);
+        $def = $this->Fighter->findById($idDefender);
         
-        $name = $fighter['Fighter']['name'] . " attaque " . $data2['Fighter']['name'] . " et le touche";
+        $name = $fighter['Fighter']['name'] . " attacked " . $def['Fighter']['name'] . " and touched him";
         
         $new = $this->create();
         $new['Event']['name'] = $name;
@@ -25,7 +25,7 @@ class Event extends AppModel {
     function NobodyAttackEvent($data){
       $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . " attaque dans le vent";
+        $data2['Event']['name'] = $data['Fighter']['name'] . " attacked in a wrong way";
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -38,7 +38,7 @@ class Event extends AppModel {
         $data = $this->Fighter->findById($idFighter);
         $data2 = $this->Fighter->findById($idDefender);
         
-        $name = $data['Fighter']['name'] . " attaque " . $data2['Fighter']['name'] . " mais le rate";
+        $name = $data['Fighter']['name'] . " attacked " . $data2['Fighter']['name'] . " but he missed him";
         
         $new = $this->create();
         $new['Event']['name'] = $name;
@@ -174,7 +174,7 @@ class Event extends AppModel {
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . " moves to " . $direction;
+        $data2['Event']['name'] = $data['Fighter']['name'] . " moved to " . $direction;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -186,7 +186,7 @@ class Event extends AppModel {
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . " fails to move to " . $direction;
+        $data2['Event']['name'] = $data['Fighter']['name'] . " failed to move to " . $direction;
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -199,7 +199,7 @@ class Event extends AppModel {
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . "déclenche un piège";
+        $data2['Event']['name'] = $data['Fighter']['name'] . " walked on a trap";
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -212,7 +212,7 @@ class Event extends AppModel {
 
         $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . "a tué un monstre";
+        $data2['Event']['name'] = $data['Fighter']['name'] . " killed the monster";
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");
@@ -222,7 +222,7 @@ class Event extends AppModel {
     function DeathMonsterEvent($data){
     $data2 = $this->create();
 
-        $data2['Event']['name'] = $data['Fighter']['name'] . "a été tué par un monstre";
+        $data2['Event']['name'] = $data['Fighter']['name'] . " has been killed by the monster";
         $data2['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
         $data2['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
         $data2['Event']['date'] = date("Y-m-d H:i:s");

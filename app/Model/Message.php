@@ -27,7 +27,7 @@ class Message extends AppModel {
         $data2['Message']['fighter_id_from'] = $sender;
         $data2['Message']['fighter_id'] = $dest['Fighter']['id'];
         
-        $this->save($data2);
+        return $this->save($data2);
         
     }
     

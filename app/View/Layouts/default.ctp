@@ -59,7 +59,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <?php if ($this->Session->read('Connected')): ?>
-                        <li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
+ 			                      
+			<li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
                         <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
                         <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
 			<li><?php echo $this->Html->link(__('Guild'), array('controller'=>'Arena','action'=>'guild'))?></li>

@@ -34,10 +34,10 @@ class Tool extends AppModel {
            if($key['Tool']['coordinate_x']==$x && $key['Tool']['coordinate_y']==$y){
                
                $this->pickTool($data2, $key['Tool']['id']);
-               return true;
+               return array(true, $key['Tool']['id']);
            }     
        }
-       return false;
+       return array(false,false);
    }
     
     //Vérifier si un fighter a déjà un équipement du type

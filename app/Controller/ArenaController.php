@@ -44,6 +44,7 @@
             
             if($this->request->is('post')){
                 $this->redirect(array('controller'=>'arena', 'action'=>'login'));
+                
             }
         }
 
@@ -78,11 +79,11 @@
                  $this->Guild->createGuild($this->request->data['CreateGuild']['name']);
                  $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['CreateGuild']['name']));
                  $this->redirect(array('controller'=>'Arena', 'action'=>'guild'));
-                 
+                 $this->Session->setFlash('You have created the guild. Be brave !', 'flash_success');
                 }
                 if(key($this->request->data) == 'JoinGuild'){
                     $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['JoinGuild']['name']));
-                
+                    $this->Session->setFlash('You have joined the guild. Honor and Sacrifice !', 'flash_success');
                     $this->redirect(array('controller'=>'Arena', 'action'=>'guild'));
                 }
                 
@@ -123,37 +124,6 @@
             
             $this->set('table_fighter2', $tab);
             
-            /*
-            $nb = $this->Fighter->getNbFighterFromPlayer($this->Player->getIdFighter($mail));
-               if ($nb == 0)
-        */
-        //Function to join a guild
-        //Need the name of the guild and the id of the fighter
-        //$this->Fighter->joinGuild($IdFighter, $this->Guild->getIdGuild($nameGuild) );
-        
-        
-        
-        //Function to revive. Need the idFighter 
-        //$this->Fighter->reviveFighter($idFighter);
-
-
-        //Function to create a guild. Need the fighter ID and the name of the guild
-        //$this->Guild->CreateGuild("Test2");
-        
-        
-        
-        //Function to get all the name of guilds.
-        //Return an array Array like this
-        //(
-        //  [0] => Array
-        //(
-        //    [Guild] => Array
-        //        (
-        //            [name] => Test
-        //       )
-        //  )
-        //)
-        //$this->Guild->getAllGuild();
             
         $this->set('fighter', $this->Cookie->read('idFighter'));    
         $this->set('players',$this->Player->find('list'));
@@ -169,36 +139,47 @@
                            if($this->Fighter->add($this->Session->read('Connected'), $this->request->data['CreateFighter']['name'])){
                                 $new= $this->Fighter->find('first', array('conditions' => array('Fighter.name' => $this->request->data['CreateFighter']['name'])));
                                  $this->Event->newFighterEvent($new);
-
+                                 $this->Session->setFlash('Your fighter has been created', 'flash_success');
                            }
-                            $this->Session->setFlash('Fighter created');
+                           else
+                               $this->Session->setFlash('Error occured. Name may be already used.', 'flash_error');
+                            
                            $this->redirect(array('action' => 'fighter'));
                     }
             }
             if(key($this->request->data) == 'PassLvl'){
               
-                $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
+               if($this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']))
+                       $this->Session->setFlash('Congratulations! You leveled up!', 'flash_success');
+               else
+                   $this->Session->setFlash('Go back to the war before leveling up.. Dude!', 'flash_error');
                   
             }
             elseif (key($this->request->data) == 'Upload') {
-                $this->Session->setFlash('Picture Uploaded !');
-                    $this->Fighter->updateAvatar($this->Cookie->read('idFighter'),$this->request->data['Upload']['avatar']['tmp_name']);                
+                    if($this->Fighter->updateAvatar($this->Cookie->read('idFighter'),$this->request->data['Upload']['avatar']['tmp_name']))
+                            $this->Session->setFlash('Picture Uploaded !', 'flash_success');
+                    else
+                        $this->Session->setFlash('You are not cute enough on this picture.. Sorry I cannot upload it !', 'flash_error');
             }
-            elseif(key($this->request->data)=='PassLvl'){
-                $this->Session->setFlash('Level Passed !');
-                    $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
-                    }
             elseif(key($this->request->data)=='ReviveFighter'){
-                $this->Session->setFlash('Fighter Reborn');
-                $this->Fighter->reviveFighter($this->Cookie->read('idFighter'));
+                if($this->Fighter->reviveFighter($this->Cookie->read('idFighter')))
+                    $this->Session->setFlash('Welcome back from the hell! Go back to the battlefield! Be Brave..', 'flash_success');
+                else
+                    $this->Session->setFlash('You are not dead.. But I hope you will pass away soon to have try this action!', 'flash_error');
+   
 
             }
             
             elseif(key($this->request->data)=='ChangeFighter') {
 
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
-                    $this->Session->setFlash('Fighter created');
+                    if(id){
+                        $this->Session->setFlash('Your wish is my command!', 'flash_success');
                     $this->Cookie->write('idFighter', $id);
+                    }
+                    else
+                        $this->Session->setFlash('I don\'t know this fighter..', 'flash_error');
+                        
             }     
             $this->redirect(array('action' => 'fighter'));
         }
@@ -245,9 +226,10 @@
                     $this->Cookie->write('nbAction', 0);
                     
                     $d = $this->Fighter->find('first', array ('conditions' => array('player_id' => $this->Player->getidPlayer($this->request->data['Login']['Email address']))));
-                    
-                    $this->Cookie->write('idFighter',$d['Fighter']['id'], false, '1 Month');
-                    
+                    if(!empty($d))
+                        $this->Cookie->write('idFighter',$d['Fighter']['id'], false, '1 Month');
+                    else
+                        $this->Cookie->write('idFighter',-1, false, '1 Month');
                     
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
                     $this->Session->setFlash('Login');
@@ -347,7 +329,11 @@
                    $data['message'] = $this->request->data['CreateMessage']['message'];
                    $dest = $this->Fighter->getFighterByName($this->request->data['CreateMessage']['to']);
                    
-                   $this->Message->sendMessage($data,$this->Cookie->read('idFighter'), $dest);
+                   if($this->Message->sendMessage($data,$this->Cookie->read('idFighter'), $dest))
+                        $this->Session->setFlash('The message has been sent', 'flash_success');
+                   else $this->Session->setFlash('The message has not been sent', 'flash_error');
+
+
                    $this->redirect(array('action'=>'message'));
                }
                
@@ -420,31 +406,44 @@ distance croissante.
                  //   $this->newAction();
                     $a = $this->newAction();
                     if($a){//Do Move 
-                    $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
-                    $a = $this->Cookie->read('nbAction');
-                    $this->Cookie->write('nbAction', $a+1);
-                                    $this->Session->setFlash('Tool picked !');
+                    $bool = $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
+                    if($bool[0]){
+                        $fighter = $this->Cookie->read('idFighter');
+                        $this->Event->getToolEvent($fighter, $bool[1]);
+                        $this->Session->setFlash('You picked the tool !', 'flash_success');
+                    }
+                    else
+                    {
+                        $this->Session->setFlash('Go away! There is nothing here!', 'flash_error');            
 
                     }
+                }
+                else $this->Session->setFlash('You get the limit of actions in a short time. Be patient!', 'flash_error');
                 }
                 
                 elseif(key($this->request->data) == 'Fightermove') {
                      $a = $this->newAction();
                     if($a){//Do Move 
-                    if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
+                    $result_move = $this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']);
+                    if( $result_move == 1){
                   
-                                          $this->Session->setFlash('You have mooved !');
+                                          $this->Session->setFlash('Yeah you moved!', 'flash_success');
 
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else
                     {
-                                                                  $this->Session->setFlash('You failed moving !');
-
+                                                                  
+                        if ($result_move == 2){
+                            $this->Session->setFlash('So What? You are dead! You cannot move !!!', 'flash_error');
+                        }
+                        else
+                             $this->Session->setFlash('You cannot move !! Something blocks the way..', 'flash_error');
                         $this->Event->FailMove($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );
 
                     }
-                    }
+                    }else $this->Session->setFlash('You get the limit of actions in a short time. Be patient!', 'flash_error');
+
                 
                 $tab = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));    
                 $tab2 = $this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -455,7 +454,7 @@ distance croissante.
                 //Retourn True si le fighter est mort à cause d'un piège
                     if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter')))) )
                         {
-                             $this->Session->setFlash('You have been trapped and your are dead !');
+                             $this->Session->setFlash('You have been trapped.. YOU ARE DEAD! BYE BYE!', 'flash_error');
 
                         $this->Event->TrapEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -463,7 +462,7 @@ distance croissante.
                 //Return True si le fighter est mort à cause du monstre
                 if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter')))) )
                 {
-                    $this->Session->setFlash('You have been killed by monster !');
+                    $this->Session->setFlash('Do you smell the odor of the death? YOU ARE DEAD', 'flash_error');
                         $this->Event->DeathMonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
 
@@ -486,24 +485,44 @@ distance croissante.
                     if($test[0]==1 )
                     {
                         $this->Event->MonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                       $this->Session->setFlash('What a man!! You killed the monster!', 'flash_success');
+                        
                     }
                     elseif($test[0] == 2)
                     {
                         $this->Event->NobodyAttackEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
+                        $this->Session->setFlash('Why did you attack in this direction? There is nobody! What a fail move!', 'flash_error');
                     }
                     elseif($test[0] == 3)
                     {
-                        $this->Event->DoAttackEvent($this->Cookie->read('idFighter'),$test[1]);
+              
+                        if($test[2]){
+                            $this->Session->setFlash('You killed him! May he rest in peace!', 'flash_success');
+                        }
+                        else{
+                            if ($test[1]){
+                                $this->Session->setFlash('He is not dead! Come on guy !!', 'flash_success');
+                                $this->Event->DoAttackEvent($test[1], $this->Cookie->read('idFighter'));
+                            }
+                            else{
+                                $this->Session->setFlash('You failed your attack! Paid attention on the revenge!', 'flash_error');
+                                 $this->Event->failAttackEvent($this->Cookie->read('idFighter'), $test[1]);
+                            }
+                                
+                        } 
+                            
                     }
-                }
+                }else $this->Session->setFlash('You get the limit of actions in a short time. Be patient!', 'flash_error');
+
                 }
 
                  elseif(key($this->request->data) == 'Scream'){
                       $a = $this->newAction();
                     if($a){//Do Move 
                      $this->Event->Crier($this->Fighter->findById($this->Cookie->read('idFighter')), $this->request->data["Scream"]['name']);
-                        $this->Session->setFlash('You have Screamed !');
-                    }
+                        $this->Session->setFlash('You have Screamed !', 'flash_success');
+                    }else $this->Session->setFlash('You get the limit of actions in a short time. Be patient!', 'flash_error');
+
                     }
                 
             }
