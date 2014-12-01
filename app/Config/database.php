@@ -91,7 +91,7 @@ class DATABASE_CONFIG {
   public $default;
   function __construct() {
     $this->default = array(
-      'datasource' => 'Database/Postgres',
+      'datasource' => 'Database/Mysql',
       'persistent' => false,
       'host'       => getenv('DB_HOST'),
       'login'      => getenv('DB_USER'),
