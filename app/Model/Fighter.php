@@ -481,5 +481,6 @@ class Fighter extends AppModel {
     function getFighterByName($name) {
         return $this->find('first', array('conditions' => array('Fighter.name' => $name)));
     }
+    
 
 }

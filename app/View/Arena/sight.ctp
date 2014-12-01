@@ -115,7 +115,11 @@
             if($item['Fighter']['coordinate_x']==$j && $item['Fighter']['coordinate_y']==($abs)){
                 $id=$item['Fighter']['id'].".jpg";
                 $name=$item['Fighter']['name'];
-                echo $this->Html->image($id,array('class'=>'damier_picture', 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'title'=>"$name" ));
+                $healh =$item['Fighter']['current_health'];
+                $lvl = $item['Fighter']['level'];
+                $strenght = $item['Fighter']['skill_strength'];
+                $sight = $item['Fighter']['skill_sight'];
+                echo $this->Html->image($id,array('class'=>'damier_picture', 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'title'=>"name: $name \nhealth: $healh \nlevel: $lvl \nstrenght: $strenght \nSight: $sight" ));
                 $set=true;
             }
         }

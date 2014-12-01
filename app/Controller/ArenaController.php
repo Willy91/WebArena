@@ -162,8 +162,9 @@ class ArenaController extends AppController {
 
                 elseif (key($this->request->data) == 'ChangeFighter') {
 
-                    $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'], $this->Session->read('Connected'));
-                    if (id) {
+                    $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
+                    if($id){
+
                         $this->Session->setFlash('Your wish is my command!', 'flash_success');
                         $this->Cookie->write('idFighter', $id);
                     } else
