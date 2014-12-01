@@ -242,13 +242,13 @@ return true;
        $datas = $this->read(null, $fighterId); 
        
        //Obtenir l'ID du mec qui défend
-       if ($direction == 'north') 
+       if ($direction == 'east') 
        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']+1, $datas['Fighter']['coordinate_y'], $fighterId);
-       elseif ($direction == 'south') 
-       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId);
-       elseif ($direction == 'east') 
-       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId);
        elseif ($direction == 'west') 
+       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x']-1, $datas['Fighter']['coordinate_y'], $fighterId);
+       elseif ($direction == 'north') 
+       $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']+1, $fighterId);
+       elseif ($direction == 'south') 
        $defenderId = $this->getIdDef($datas['Fighter']['coordinate_x'], $datas['Fighter']['coordinate_y']-1, $fighterId);
       
        //Si le mec qui défend est en fait le monstre on supprime le monstre et on augmente l'xp
