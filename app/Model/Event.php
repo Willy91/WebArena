@@ -7,15 +7,15 @@ class Event extends AppModel {
     public $uses = array('Fighter');    
     
     function doAttackEvent($data, $data2){
-        $data = $this->Fighter->findById($idFighter);
-        $data2 = $this->Fighter->findById($idDefender);
+        $fighter = $this->Fighter->findById($data);
+      //  $data2 = $this->Fighter->findById($idDefender);
         
-        $name = $data['Fighter']['name'] . " attaque " . $data2['Fighter']['name'] . " et le touche";
+        $name = $fighter['Fighter']['name'] . " attaque " . $data2['Fighter']['name'] . " et le touche";
         
         $new = $this->create();
         $new['Event']['name'] = $name;
-        $new['Event']['coordinate_x']=$data['Fighter']['coordinate_x'];
-        $new['Event']['coordinate_y']=$data['Fighter']['coordinate_y'];
+        $new['Event']['coordinate_x']=$fighter['Fighter']['coordinate_x'];
+        $new['Event']['coordinate_y']=$fighter['Fighter']['coordinate_y'];
         $new['Event']['date'] = date("Y-m-d H:i:s");
         $this->save($new);
         

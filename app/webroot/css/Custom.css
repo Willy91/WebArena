@@ -24,8 +24,15 @@ body { overflow-x: hidden;}
 .car{
 background-color:#3e3f3a;
 color:white;
-
-
 }
 
 
+
+.damier_picture{
+  width:60;
+  height:57px;
+      display: block;
+
+    margin-left: auto;
+    margin-right: auto;
+}

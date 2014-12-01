@@ -62,6 +62,7 @@ table.dataTable tbody tr.selected {
 table.dataTable tbody th,
 table.dataTable tbody td {
   padding: 8px 10px;
+    box-shadow: 10px 10px 5px #888888;
 }
 table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
   border-top: 1px solid #dddddd;
@@ -474,3 +475,4 @@ table.dataTable td {
     margin-top: 0.5em;
   }
 }
+

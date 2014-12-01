@@ -104,7 +104,7 @@
 </div>
 <div class="col-sm-12">        
 <h1>Damier</h1>
-<table id="damier" class="dataTable">
+<table class="dataTable table-bordered" id="damier">
     <?php for($i=0;$i<Configure::read('Longueur_y');$i++){
     echo "<tr>";
     for ($j=0; $j < Configure::read('Largeur_x'); $j++) {
@@ -115,26 +115,26 @@
             if($item['Fighter']['coordinate_x']==$j && $item['Fighter']['coordinate_y']==($abs)){
                 $id=$item['Fighter']['id'].".jpg";
                 $name=$item['Fighter']['name'];
-                echo $this->Html->image($id,array('width' => "60",'height'=>"57",'data-toggle'=>"tooltip", 'data-placement'=>"top", 'title'=>"$name" ));
+                echo $this->Html->image($id,array('class'=>'damier_picture', 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'title'=>"$name" ));
                 $set=true;
             }
         }
         foreach ($result_sight as $item) {
             if($item['Surrounding']['coordinate_x']==$j && $item['Surrounding']['coordinate_y']==($abs) && $item['Surrounding']['type']=="Colonne" && $set==false){
                 $value = $item['Surrounding']['type'];
-                echo "<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
+                echo "<img class=\"damier_picture\" src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
                 $set=true;
             }
         }
         foreach ($result_tool as $item) {
             if($item['Tool']['coordinate_x']==$j && $item['Tool']['coordinate_y']==($abs) && $set==false){
                 $value = $item['Tool']['type'];
-                echo "<img src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
+                echo "<img class=\"damier_picture\" src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
                 $set=true;
             }
         }
         if($set==false){
-            echo "<img src=\"../img/case.png\">";
+            echo "<img class=\"damier_picture\" src=\"../img/case.png\">";
         }
         echo "</td>";
     }

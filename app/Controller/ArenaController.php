@@ -100,7 +100,7 @@
             $this->Cookie->write('nbAction', $pp);
             return true;
         }
- else {return false;}
+            else {return false;}
         
         
       
@@ -170,19 +170,26 @@
                                  $this->Event->newFighterEvent($new);
 
                            }
-                          
+                            $this->Session->setFlash('Fighter created');
                            $this->redirect(array('action' => 'fighter'));
                     }
             }
             elseif (key($this->request->data) == 'Upload') {
+                $this->Session->setFlash('Picture Uploaded !');
                     $this->Fighter->updateAvatar($this->Cookie->read('idFighter'),$this->request->data['Upload']['avatar']['tmp_name']);                
             }
-            elseif(key($this->request->data)=='PassLvl')
+            elseif(key($this->request->data)=='PassLvl'){
+                $this->Session->setFlash('Level Passed !');
                     $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
-            elseif(key($this->request->data)=='ReviveFighter')
+                    }
+            elseif(key($this->request->data)=='ReviveFighter'){
+                $this->Session->setFlash('Fighter Reborn');
                     $this->Fighter->reviveFighter($this->Cookie->read('idFighter'));
+            }
             elseif(key($this->request->data)=='ChangeFighter') {
+
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
+                    $this->Session->setFlash('Fighter created');
                     $this->Cookie->write('idFighter', $id);
             }     
             $this->redirect(array('action' => 'fighter'));
@@ -213,6 +220,7 @@
                  return $this->redirect(array('action' => 'index'));
                  */
                 $this->Player->send_email($this->request->data['Password_forgotten']['Email']);
+                $this->Session->setFlash('Password Resend !');
                 return $this->redirect(array('action' => 'resend_password'));
             }
         }
@@ -233,17 +241,21 @@
                     
                     
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
+                    $this->Session->setFlash('Login');
                     $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
             
                 }
             }
             elseif (key($this->request->data) == 'Password_forgotten') {
                 $this->Player->send_email($this->request->data['Password_forgotten']['Email']);
+                 $this->Session->setFlash('Email Sent !');
+
                 return $this->redirect(array('action' => 'resend_password'));
             }
             elseif (key($this->request->data) == 'Signup') {
                 if($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password']) {
-                    
+                    $this->Session->setFlash('Signup !');
+
                     $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
                 }
             }
@@ -340,6 +352,7 @@
         {
 
             $this->Session->delete('Connected');
+            $this->Session->setFlash('Logout !');
             $this->redirect(array('controller' => 'Arena', 'action' => 'index'));
             
         }
@@ -401,6 +414,8 @@ distance croissante.
                     $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
                     $a = $this->Cookie->read('nbAction');
                     $this->Cookie->write('nbAction', $a+1);
+                                    $this->Session->setFlash('Tool picked !');
+
                     }
                 }
                 
@@ -409,11 +424,14 @@ distance croissante.
                     if($a){//Do Move 
                     if($this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']) == true){
                   
-                          
+                                          $this->Session->setFlash('You have mooved !');
+
                             $this->Event->MoveEvent($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );    
                         }
                     else
                     {
+                                                                  $this->Session->setFlash('You failed moving !');
+
                         $this->Event->FailMove($this->Fighter->findById($this->Cookie->read('idFighter')),$this->request->data['Fightermove']['direction'] );
 
                     }
@@ -428,12 +446,15 @@ distance croissante.
                 //Retourn True si le fighter est mort à cause d'un piège
                     if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnPiege($this->Fighter->findById($this->Cookie->read('idFighter')))) )
                         {
+                             $this->Session->setFlash('You have been trapped and your are dead !');
+
                         $this->Event->TrapEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         }
                 //Return True si le fighter est mort à cause du monstre
                 if($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'),$this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter')))) )
                 {
+                    $this->Session->setFlash('You have been killed by monster !');
                         $this->Event->DeathMonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
 
@@ -472,7 +493,7 @@ distance croissante.
                       $a = $this->newAction();
                     if($a){//Do Move 
                      $this->Event->Crier($this->Fighter->findById($this->Cookie->read('idFighter')), $this->request->data["Scream"]['name']);
-                 
+                        $this->Session->setFlash('You have Screamed !');
                     }
                     }
                 
