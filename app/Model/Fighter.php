@@ -108,24 +108,27 @@ class Fighter extends AppModel {
 //changement de niveau
     function upgrade($fighterId,$upskill)
 	{
-	$datas = $this->read(null, $fighterId); 
-
-	 if ($upskill == 'sight') {
-            
-                $this->set('skill_sight', $datas['Fighter']['skill_sight'] + 1);
+	$datas = $this->findById($fighterId); 
+        
+        if ($datas['Fighter']['xp']/($datas['Fighter']['level']*4)>=1 && $datas['Fighter']['current_health']){
+	    $datas['Fighter']['level']++;
+        if ($upskill == 'sight') {
+                
+                $datas['Fighter']['skill_sight'] = $datas['Fighter']['skill_sight'] + 1;
         } elseif ($upskill == 'strength') {
-            
-                $this->set('skill_strength', $datas['Fighter']['skill_strength'] + 1);
+                $datas['Fighter']['skill_strength'] = $datas['Fighter']['skill_strength'] + 1;
+               
         } elseif ($upskill == 'health') {
-            
-                $this->set('skill_health', $datas['Fighter']['skill_health'] + 3);
-		$this->set('current_health', $datas['Fighter']['current_health'] + 3);
-        }  else {
-            return false;
+            $datas['Fighter']['skill_health'] = $datas['Fighter']['skill_health'] + 3;
+               $datas['Fighter']['current_health'] = $datas['Fighter']['current_health'] + 3;
+	
         }
-	$this->save();
+        
+        
+	return $this->save($datas);
 
-	return true;
+        }
+        else return false;
 	}
 
 
