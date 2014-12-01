@@ -244,7 +244,16 @@ class ArenaController extends AppController {
                 if ($this->request->data['Signup']['Password'] == $this->request->data['Signup']['Confirm Password']) {
                     $this->Session->setFlash('Signup !');
 
-                    $this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']);
+                    if($this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']))
+                    {
+
+                    $this->Cookie->write('idFighter',-1, false, '1 Month');
+                    
+                    $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Signup']['Email address']));
+                    $this->Session->setFlash('Login');
+                    $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
+                    }
+                    else $this->Session->setFlash('An account with this email already exists', 'flash_error');
                 }
                 }
                 else
