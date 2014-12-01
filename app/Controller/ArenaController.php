@@ -362,11 +362,10 @@ class ArenaController extends AppController {
         //Réinitialiser les objets s'ils ont tous été rammasé  
         if ($this->Cookie->read('nbFighter') > 0) {
 
-            $this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
+            //$this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
 
             //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
-            // $this->Surrounding->beginGame();
-            // $this->Tool->initPosition();
+ 
             //Partie à alex
             $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
             $dd2 = $this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -485,6 +484,11 @@ class ArenaController extends AppController {
                         $this->Session->setFlash('You have Screamed !', 'flash_success');
                     } else
                         $this->Session->setFlash('You get the limit of actions in a short time. Be patient!', 'flash_error');
+                }
+                elseif (key($this->request->data) == 'Initialisation'){
+                     $this->Surrounding->beginGame($this->Fighter->getFreePosition());
+                    $this->Tool->initPositionTool($this->Surrounding->getAllSurrounding());
+                    $this->Session->setFlash('New surroundings and new objects in the grid !', 'flash_success');
                 }
             }
         } else

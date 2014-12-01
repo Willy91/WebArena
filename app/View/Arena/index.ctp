@@ -13,10 +13,7 @@
 
         <p><i><big>Alios autem dicere aiunt multo etiam inhumanius (quem locum breviter paulo ante perstrinxi) praesidii adiumentique causa, non benevolentiae neque caritatis, amicitias esse expetendas; itaque, ut quisque minimum firmitatis haberet minimumque virium, ita amicitias appetere maxime; ex eo fieri ut mulierculae magis amicitiarum praesidia quaerant quam viri et inopes quam opulenti et calamitosi quam ii qui putentur beati.
         </big></i></p>
-    <?php echo $this->Form->create('Login') ?>
-    
-    <?php echo $this->Form->submit('Log In', array('class' => 'btn btn-primary'));
-    echo $this->Form->end();?>
+
             
            
     </div>

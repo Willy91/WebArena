@@ -482,5 +482,22 @@ class Fighter extends AppModel {
         return $this->find('first', array('conditions' => array('Fighter.name' => $name)));
     }
     
+    function getFreePosition(){
+        $tab=array();
+        for($i=0; $i<Configure::read('Largeur_x'); $i++){
+            for ($j=0; $j<Configure::read('Longueur_y'); $j++){
+                $tab[$i][$j]=true;
+            }
+        }
+        
+        $data = $this->find('all', array('conditions'=>array('current_health <>' => 0)));
+        
+        foreach($data as $key){
+            $tab[$key['Fighter']['coordinate_x']][$key['Fighter']['coordinate_y']] = false;
+        }
+        
+        return $tab;
+        
+    }
 
 }

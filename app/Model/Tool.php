@@ -61,7 +61,7 @@ class Tool extends AppModel {
         return $this->findById($idTool);
     }
       
-    function useAgainTool($data){
+  /*  function useAgainTool($data){
         $nb = $this->find('count', array('conditions' => array('fighter_id' => NULL)));
         if ($nb==0){
             $this->initPositionTool($data);
@@ -69,7 +69,7 @@ class Tool extends AppModel {
         }
         else
             return false;
-    }
+    }*/
     
     
     function initPositionTool($data2){

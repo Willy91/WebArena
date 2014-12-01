@@ -61,12 +61,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
                     <?php if ($this->Session->read('Connected')): ?>
  			                      
 			<li><?php echo $this->Html->link(__('Fighter'),array('controller'=>'Arena','action'=>'fighter'))?></li>
-			<?php if($this->Cookie->read('idFighter')!=-1) : ?>                        
-			<li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
+                        <li><?php echo $this->Html->link(__('Sight'),array('controller'=>'Arena','action'=>'sight'))?></li>
                         <li><?php echo $this->Html->link(__('Diary'), array('controller'=>'Arena','action'=>'diary'))?></li>
 			<li><?php echo $this->Html->link(__('Guild'), array('controller'=>'Arena','action'=>'guild'))?></li>
 			<li><?php echo $this->Html->link(__('Email box'), array('controller'=>'Arena','action'=>'message'))?></li>
-			<?php endif;?>
                     <?php else: ?>
 			<li><?php echo $this->Html->link(__('Hall Of Fame'), array('controller'=>'Arena','action'=>'halloffame'))?></li>
 		    <?php endif; ?>

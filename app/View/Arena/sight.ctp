@@ -146,6 +146,16 @@
 echo "</tr>";
 ?>
 </table>
+<?php echo $this->Form->create('Initialisation', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
+		    <div class="form-group">
+			<?php echo $this->Form->input('name', array('class' => 'form-control', 'type'=>'hidden'));?>
+		    </div>
+		    <div class="form-group">
+   			 <div class="col-sm-10">
+  				  <?php echo $this->Form->submit('Init Grid', array('class' => 'btn btn-primary btn-xs'));?>
+   			 </div>
+		    </div>
+	            <?php echo $this->Form->end();?>
 </div>
     </div>
 </div>
