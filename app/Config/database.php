@@ -62,7 +62,7 @@
  * flags =>
  * A key/value array of driver specific connection options.
  */
-/*class DATABASE_CONFIG {
+class DATABASE_CONFIG {
 
 	public $default = array(
 		'datasource' => 'Database/Mysql',
@@ -86,7 +86,7 @@
 		//'encoding' => 'utf8',
 	);
 }
-*/
+/*
 class DATABASE_CONFIG {
   public $default;
   function __construct() {
@@ -101,4 +101,4 @@ class DATABASE_CONFIG {
       'encoding'   => 'utf8',
     );
   }
-}
+}*/
