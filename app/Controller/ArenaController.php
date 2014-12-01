@@ -201,7 +201,8 @@
         public function diary()  
         {
             $this->Cookie->check('idFighter');
-            $data = $this->Event->getEvent();
+            $tab = $this->Fighter->findById($this->Cookie->read('idFighter'));
+            $data = $this->Event->getEvent($tab);
             $this->set('raw',$data);
             
         }

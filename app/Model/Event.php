@@ -136,13 +136,37 @@ class Event extends AppModel {
     
     
     //In order to get the events in last 24 hours.
-    function getEvent(){
+    function getEvent($data_fighter){
         
         $date_lim = date ("Y-m-d H:i:s", mktime(date("H"),date("i"),date("s"),date("m"),date("d")-1,date("Y")));
         
-        $tab = $this->find('all', array('conditions' => array ("date >" => $date_lim)));        
+        $data = $this->find('all', array('conditions' => array ("date >" => $date_lim)));        
         
-        return $tab;
+       $x = $data_fighter['Fighter']['coordinate_x'];
+       $y = $data_fighter['Fighter']['coordinate_y'];
+       
+      
+       $nb = 0;
+       $tab = array();
+       foreach($data as $key){
+           
+           $sight_x = $key['Event']['coordinate_x']-$x;
+           if ($sight_x<0)
+               $sight_x = $sight_x*(-1);
+           $sight_y = $key['Event']['coordinate_y']-$y;
+           if ($sight_y<0)
+               $sight_y = $sight_y*(-1);
+           $total = $sight_x+$sight_y;
+          
+           if ($total<=$data_fighter['Fighter']['skill_sight']){
+                $tab[$nb]=$key;
+                $nb++;
+           }
+             
+       }
+       
+       return $tab;
+       
     }
 
     function MoveEvent($data,$direction){
