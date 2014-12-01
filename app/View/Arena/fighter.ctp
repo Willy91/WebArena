@@ -120,20 +120,39 @@
 <div class="form-group">
 
     <div class="col-md-10"><?php echo $this->Form->file('avatar'); ?></div>
-    <?php echo $this->Form->input('Skill',array('type' => 'hidden'));?>
+    <?php echo $this->Form->input('dd',array('type' => 'hidden'));?>
 </div>
 <div class="form-group">
     <div class="col-md-12 text-center"><?php echo $this->Form->submit('Upload Avatar', array('class' => 'btn btn-primary'));?>
     </div>
 </div>
-<?php $this->Form->end(); ?>
+      <?php $this->Form->end();?>
+
+      <?php
+      
+echo $this->Form->create('Tampon', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
+<div class="form-group  " style="display:none;">
+   
+    <div class="col-md-12 text-center top-margin">
+        <?php echo $this->Form->input('dsfs',array('options' => array('sight'=>'sight','strength'=>'strength','health'=>'health'), 'default' => 'sight', 'class' => 'form-control'));?>
+    </div>
+</div>
+<div class="form-group" style="display:none;">
+    <div class="col-md-12 text-center ">
+        <br>
+        <?php echo $this->Form->submit('Upgrade Level', array('class' => 'btn btn-primary'));?>
+    </div>
+</div>
+<?php echo $this->Form->end(); ?>
+      
+      
      
     <?php
 echo $this->Form->create('PassLvl', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
 <div class="form-group  ">
    
     <div class="col-md-12 text-center top-margin">
-        <?php echo $this->Form->input('Skill',array('options' => array('sight'=>'sight','strength'=>'strength        ','health'=>'health'), 'default' => 'sight', 'class' => 'form-control'));?>
+        <?php echo $this->Form->input('Skill',array('options' => array('sight'=>'sight','strength'=>'strength','health'=>'health'), 'default' => 'sight', 'class' => 'form-control'));?>
     </div>
 </div>
 <div class="form-group">

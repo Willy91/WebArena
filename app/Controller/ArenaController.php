@@ -161,6 +161,7 @@
             
         if($this->request->is('post'))
  		{
+        
  		    if(key($this->request->data) == 'CreateFighter') 
 			{
                     if ($this->request->data['CreateFighter']['name']!=""){
@@ -174,6 +175,11 @@
                            $this->redirect(array('action' => 'fighter'));
                     }
             }
+            if(key($this->request->data) == 'PassLvl'){
+              
+                $this->Fighter->upgrade($this->Cookie->read('idFighter'),$this->request->data['PassLvl']['Skill']);
+                  
+            }
             elseif (key($this->request->data) == 'Upload') {
                 $this->Session->setFlash('Picture Uploaded !');
                     $this->Fighter->updateAvatar($this->Cookie->read('idFighter'),$this->request->data['Upload']['avatar']['tmp_name']);                
@@ -184,8 +190,10 @@
                     }
             elseif(key($this->request->data)=='ReviveFighter'){
                 $this->Session->setFlash('Fighter Reborn');
-                    $this->Fighter->reviveFighter($this->Cookie->read('idFighter'));
+                $this->Fighter->reviveFighter($this->Cookie->read('idFighter'));
+
             }
+            
             elseif(key($this->request->data)=='ChangeFighter') {
 
                     $id = $this->Fighter->getFighterId($this->request->data['ChangeFighter']['OtherName'],$this->Session->read('Connected'));
@@ -202,7 +210,8 @@
         public function diary()  
         {
             $this->Cookie->check('idFighter');
-            $data = $this->Event->getEvent();
+            $tab = $this->Fighter->findById($this->Cookie->read('idFighter'));
+            $data = $this->Event->getEvent($tab);
             $this->set('raw',$data);
             
         }
