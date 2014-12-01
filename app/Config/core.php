@@ -230,12 +230,14 @@
 /**
  * A random string used in security hashing methods.
  */
-Configure::write('Security.salt', 'grosalex');
-
+Configure::write('Security.salt', getenv('SECURITY_SALT'));
+Configure::write('Security.cipherSeed', getenv('CIPHER_SEED'));
+//Configure::write('Security.salt', 'grosalex');
+//Configure::write('Security.cipherSeed', '300593');
 /**
  * A random numeric string (digits only) used to encrypt/decrypt strings.
  */
-Configure::write('Security.cipherSeed', '300593');
+
 
 /**
  * Apply timestamps with the last modified time to static assets (js, css, images).
