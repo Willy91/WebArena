@@ -502,7 +502,7 @@ return true;
    }
    
    function getFighterByName($name){
-       return $this->find('first', array('conditions' => array('name' => $name)));
+       return $this->find('first', array('conditions' => array('Fighter.name' => $name)));
    }
    
    
