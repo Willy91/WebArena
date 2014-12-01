@@ -75,6 +75,7 @@ class ArenaController extends AppController {
                 }
                 if (key($this->request->data) == 'JoinGuild') {
                     $this->Fighter->joinGuild($this->Cookie->read('idFighter'), $this->Guild->getIdGuild($this->request->data['JoinGuild']['name']));
+                    $this->Event->joinGuildEvent($this->Fighter->findById($this->Cookie->read('idFighter')), $this->request->data['JoinGuild']['name']);
                     $this->Session->setFlash('You have joined the guild. Honor and Sacrifice !', 'flash_success');
                     $this->redirect(array('controller' => 'Arena', 'action' => 'guild'));
                 }
@@ -87,7 +88,11 @@ class ArenaController extends AppController {
 
         //A TESTER QUAND CA MARCHERA BIEN
         $nb = $this->Cookie->read("nbAction");
+        
         $pp = $this->Fighter->Action($nb, $this->Cookie->read('idFighter'));
+       // pr($this->Cookie);
+         echo $pp;
+         echo "dd" . Configure::read('Delai');
         if ($pp >= 0) {
             $this->Cookie->write('nbAction', $pp);
             return true;
@@ -227,7 +232,7 @@ class ArenaController extends AppController {
                         $this->Cookie->write('idFighter', -1, false, '1 Month');
 
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Login']['Email address']));
-                    $this->Session->setFlash('Welcome back!', 'flash_error');
+                    $this->Session->setFlash('Welcome back! Go fight !!', 'flash_success');
                     $this->redirect(array('controller' => 'Arena', 'action' => 'fighter'));
                 }
                 else{
@@ -246,8 +251,9 @@ class ArenaController extends AppController {
 
                     if($this->Player->createNew($this->request->data['Signup']['Email address'], $this->request->data['Signup']['Password']))
                     {
-
+                           $this->Cookie->write('nbAction',0);
                     $this->Cookie->write('idFighter',-1, false, '1 Month');
+                    $this->Cookie->write('nbFighter',0);
                     
                     $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['Signup']['Email address']));
                     $this->Session->setFlash('Login');
@@ -255,6 +261,7 @@ class ArenaController extends AppController {
                     }
                     else $this->Session->setFlash('An account with this email already exists', 'flash_error');
                 }
+                else $this->Session->setFlash('Passwords have to be the same', 'flash_error');
                 }
                 else
                      $this->Session->setFlash('Error in your email', 'flash_error');
@@ -291,7 +298,11 @@ class ArenaController extends AppController {
 
         $this->Cookie->check('idFighter');
 
-        $this->set('message_table', $this->Message->getAllMessageSent($this->Cookie->read('idFighter')));
+        $tab = $this->Message->getAllMessageSent($this->Cookie->read('idFighter'));
+        $tab2 = $this->Fighter->getAllFighterview();
+        $tt = $this->Message->MessageSentforView($tab, $tab2);
+     
+        $this->set('message_table', $tt);
 
 
 
@@ -345,7 +356,7 @@ class ArenaController extends AppController {
     public function logout() {
 
         $this->Session->delete('Connected');
-        $this->Session->setFlash('Logout !');
+        $this->Session->setFlash('Logout ! See you soon!', 'flash_success');
         $this->redirect(array('controller' => 'Arena', 'action' => 'index'));
     }
 
@@ -374,7 +385,7 @@ class ArenaController extends AppController {
             //$this->Tool->useAgainTool($this->Surrounding->getAllSurrounding());
 
             //A ENLEVER SAUF POUR CEUX QUI N ONT PAS ENCORE INITIALISE LA BDD DES OBJETS ET DES SURROUNDING
- 
+         
             //Partie à alex
             $dd1 = $this->Surrounding->getSurroundingSight($this->Fighter->findById($this->Cookie->read('idFighter')));
             $dd2 = $this->Tool->getToolSight($this->Fighter->findById($this->Cookie->read('idFighter')));
@@ -395,14 +406,19 @@ class ArenaController extends AppController {
             //Si on a des paramètres reçus en post
             if ($this->request->is('post')) {
                 //Si le mec veut bouger 
+                $tt = $this->Fighter->findById($this->Cookie->read('idFighter'));
+                if ($tt['Fighter']['current_health']>0){
                 if (key($this->request->data) == 'Tool') {
                     //   $this->newAction();
                     $a = $this->newAction();
                     if ($a) {//Do Move 
+                       
                         $bool = $this->Tool->fighterOnTool($this->Fighter->getFighterview($this->Cookie->read('idFighter')));
+                        if($bool[0])
+                        $this->Fighter->getBonusTool($this->Cookie->read('idFighter'), $bool[2], $bool[3]);
                         if ($bool[0]) {
                             $fighter = $this->Cookie->read('idFighter');
-                            $this->Event->getToolEvent($fighter, $bool[1]);
+                            $this->Event->getToolEvent($this->Fighter->findById($fighter), $this->Tool->findById($bool[1]));
                             $this->Session->setFlash('You picked the tool !', 'flash_success');
                         } else {
                             $this->Session->setFlash('Go away! There is nothing here!', 'flash_error');
@@ -414,6 +430,7 @@ class ArenaController extends AppController {
                 elseif (key($this->request->data) == 'Fightermove') {
                     $a = $this->newAction();
                     if ($a) {//Do Move 
+                        
                         $result_move = $this->Fighter->doMove($this->Cookie->read('idFighter'), $this->request->data['Fightermove']['direction']);
                         if ($result_move == 1) {
 
@@ -447,7 +464,7 @@ class ArenaController extends AppController {
                     }
                     //Return True si le fighter est mort à cause du monstre
                     if ($this->Fighter->deathFromSurrounding($this->Cookie->read('idFighter'), $this->Surrounding->fighterOnMonster($this->Fighter->findById($this->Cookie->read('idFighter'))))) {
-                        $this->Session->setFlash('Do you smell the odor of the death? YOU ARE DEAD', 'flash_error');
+                        $this->Session->setFlash('Do you smell the odor of the death? The monster is here.. and he killed you!', 'flash_error');
                         $this->Event->DeathMonsterEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                         $this->Event->NewDeathEvent($this->Fighter->findById($this->Cookie->read('idFighter')));
                     }
@@ -472,13 +489,16 @@ class ArenaController extends AppController {
 
                             if ($test[2]) {
                                 $this->Session->setFlash('You killed him! May he rest in peace!', 'flash_success');
+                                $this->Event->killAttackEvent($this->Fighter->findById($test[1]), $this->Fighter->findById($this->Cookie->read('idFighter')));
                             } else {
-                                if ($test[1]) {
+                                if ($test[2]) {
                                     $this->Session->setFlash('He is not dead! Come on guy !!', 'flash_success');
-                                    $this->Event->DoAttackEvent($test[1], $this->Cookie->read('idFighter'));
+                                    $this->Event->DoAttackEvent($this->Fighter->findById($test[1]), $this->Fighter->findById($this->Cookie->read('idFighter')));
+                                   
+                                    
                                 } else {
                                     $this->Session->setFlash('You failed your attack! Paid attention on the revenge!', 'flash_error');
-                                    $this->Event->failAttackEvent($this->Cookie->read('idFighter'), $test[1]);
+                                    $this->Event->failAttackEvent($this->Fighter->findById($this->Cookie->read('idFighter')), $this->Fighter->findById($test[1]));
                                 }
                             }
                         }
@@ -499,6 +519,10 @@ class ArenaController extends AppController {
                     $this->Tool->initPositionTool($this->Surrounding->getAllSurrounding());
                     $this->Session->setFlash('New surroundings and new objects in the grid !', 'flash_success');
                 }
+                }
+                else
+                    $this->Session->setFlash('So What? You are dead! You cannot do anything !!!', 'flash_error');
+
             }
         } else
             $this->redirect(array('action' => 'fighter'));

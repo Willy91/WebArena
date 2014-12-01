@@ -13,7 +13,7 @@
 </div>
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10 text-center">
-    <?php echo $this->Form->submit('Create New Guild', array('class' => 'btn mini-btn'));?>
+    <?php echo $this->Form->submit('Create New Guild', array('class' => 'btn btn-primary'));?>
     </div>
 </div>
 <?php echo $this->Form->end();?>

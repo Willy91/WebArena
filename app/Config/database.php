@@ -70,7 +70,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '1234',
-		'database' => 'web_arena',
+		'database' => 'Web_Arena',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
@@ -81,7 +81,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '1234',
-		'database' => 'web_arena',
+		'database' => 'Web_Arena',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);

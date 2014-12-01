@@ -75,14 +75,14 @@
         <tbody>
             <?php foreach ($result_sight as $item) :?>
                 
-                    <?php if($item['Surrounding']['type']=="Colonne"){
+                    <?php if($item['Surrounding']['type']=="Column"){
                         echo "<tr><td>";
                         echo $item['Surrounding']['type']; echo "</td><td>";
                     echo $item['Distance']; echo "</td></tr>";} ?>
                 
             <?php endforeach;?>
-            <?php if($neartrap==true) echo "<tr><td>Brise suspecte</td><td>1</td></tr>" ?>
-                <?php if($nearmonster==true) echo "<tr><td>Puanteur</td><td>1</td></tr>" ?>
+            <?php if($neartrap==true) echo "<tr><td>Suspicious breeze</td><td>1</td></tr>" ?>
+                <?php if($nearmonster==true) echo "<tr><td>Stench</td><td>1</td></tr>" ?>
         <?php foreach ($result_tool as $item2) :?>
             <?php 
                         echo "<tr><td>";
@@ -124,7 +124,7 @@
             }
         }
         foreach ($result_sight as $item) {
-            if($item['Surrounding']['coordinate_x']==$j && $item['Surrounding']['coordinate_y']==($abs) && $item['Surrounding']['type']=="Colonne" && $set==false){
+            if($item['Surrounding']['coordinate_x']==$j && $item['Surrounding']['coordinate_y']==($abs) && $item['Surrounding']['type']=="Column" && $set==false){
                 $value = $item['Surrounding']['type'];
                 echo "<img class=\"damier_picture\" src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
                 $set=true;

@@ -38,7 +38,7 @@ class Surrounding extends AppModel {
            $data=$this->create();
            $data['Surrounding']['coordinate_x'] = $x;
            $data['Surrounding']['coordinate_y'] = $y;
-           $data['Surrounding']['type'] = "Colonne";
+           $data['Surrounding']['type'] = "Column";
            $this->save($data);
            
            //On indique sur le tableau des cases libres, que les cases alentours
@@ -54,7 +54,7 @@ class Surrounding extends AppModel {
            $array[$x+1][$y-1]=false;
            
        }
-       
+
        return $array;
        
    }
@@ -83,7 +83,7 @@ class Surrounding extends AppModel {
            if ($i==15)
                $data['Surrounding']['type'] = "Monster";
            else
-               $data['Surrounding']['type'] = "Piege";
+               $data['Surrounding']['type'] = "Trap";
            
            $this->save($data);
            
@@ -93,7 +93,7 @@ class Surrounding extends AppModel {
    }
    
    function nearFromPiege($data2){
-       $data = $this->find('all', array('conditions'=>array('type' => "Piege")));
+       $data = $this->find('all', array('conditions'=>array('type' => "Trap")));
        $x = $data2['Fighter']['coordinate_x'];
        $y = $data2['Fighter']['coordinate_y'];
        foreach ($data as $key){
@@ -110,7 +110,7 @@ class Surrounding extends AppModel {
    }
    
    function fighterOnPiege($data2){
-       $data = $this->find('all', array('conditions'=>array('type' => "Piege")));
+       $data = $this->find('all', array('conditions'=>array('type' => "Trap")));
        $x = $data2['Fighter']['coordinate_x'];
        $y = $data2['Fighter']['coordinate_y'];
        foreach ($data as $key){

@@ -45,7 +45,20 @@ class Message extends AppModel {
         
     }
     
-    
+    function MessageSentforView($tab1, $tab2){
+        $data = array();
+        $n=0;
+        foreach ($tab1 as $key){
+            foreach($tab2 as $fighter){
+                if($fighter['Fighter']['id']==$key['Message']['fighter_id']){
+                    $data[$n]= array('date'=>$key['Message']['date'], 'to' => $fighter['Fighter']['name'], 'title' => $key['Message']['title'], 'mes'=> $key['Message']['message']);
+                    $n++;
+                    
+                }
+            }
+        }
+        return $data;
+    }
     
     
     

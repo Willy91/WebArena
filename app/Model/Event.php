@@ -6,11 +6,24 @@ class Event extends AppModel {
     
     public $uses = array('Fighter');    
     
-    function doAttackEvent($idDefender, $Att){
-        $fighter = $this->Fighter->findById($Att);
-        $def = $this->Fighter->findById($idDefender);
+    function doAttackEvent($def, $fighter){
+
         
         $name = $fighter['Fighter']['name'] . " attacked " . $def['Fighter']['name'] . " and touched him";
+        
+        $new = $this->create();
+        $new['Event']['name'] = $name;
+        $new['Event']['coordinate_x']=$fighter['Fighter']['coordinate_x'];
+        $new['Event']['coordinate_y']=$fighter['Fighter']['coordinate_y'];
+        $new['Event']['date'] = date("Y-m-d H:i:s");
+        $this->save($new);
+        
+    }
+    
+    function killAttackEvent($def, $fighter){
+
+        
+        $name = $fighter['Fighter']['name'] . " attacked " . $def['Fighter']['name'] . " and killed him";
         
         $new = $this->create();
         $new['Event']['name'] = $name;
@@ -34,9 +47,7 @@ class Event extends AppModel {
 
     }
     
-    function failAttackEvent($idFighter, $idDefender){
-        $data = $this->Fighter->findById($idFighter);
-        $data2 = $this->Fighter->findById($idDefender);
+    function failAttackEvent($data, $data2){
         
         $name = $data['Fighter']['name'] . " attacked " . $data2['Fighter']['name'] . " but he missed him";
         
@@ -62,9 +73,8 @@ class Event extends AppModel {
         
     }
     
-    function getToolEvent($idFighter, $idTool){
-        $data = $this->Fighter->findById($idFighter);
-        $data2 = $this->Tool->findById($idTool);
+    function getToolEvent($data, $data2){
+       
         
         $name = $data['Fighter']['name'] . " ramasse un nouvel objet : " . $data2['Tool']['type'];
         
@@ -77,11 +87,10 @@ class Event extends AppModel {
         
     }
     
-    function joinGuildEvent($idFighter, $idGuid){
-        $data = $this->Fighter->findById($idFighter);
-        $data2 = $this->Guild->findById($idGuid);
+    function joinGuildEvent($data, $data2){
         
-        $name = $data['Fighter']['name'] . " rejoint " . $data2['Guild']['name'];
+        
+        $name = $data['Fighter']['name'] . " rejoint " . $data2;
         
         $new = $this->create();
         $new['Event']['name'] = $name;

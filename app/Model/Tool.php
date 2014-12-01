@@ -33,11 +33,12 @@ class Tool extends AppModel {
        foreach ($data as $key){
            if($key['Tool']['coordinate_x']==$x && $key['Tool']['coordinate_y']==$y){
                
-               $this->pickTool($data2, $key['Tool']['id']);
-               return array(true, $key['Tool']['id']);
+               $tab = $this->pickTool($data2, $key['Tool']['id']);
+               pr($tab);
+               return array(true, $key['Tool']['id'], $tab[0], $tab[1]);
            }     
        }
-       return array(false,false);
+       return array(false,false,false,false);
    }
     
     //Vérifier si un fighter a déjà un équipement du type
@@ -46,15 +47,16 @@ class Tool extends AppModel {
      
         $data2['Tool']['fighter_id']=$data['Fighter']['id'];
         $this->save($data2);
-        if($data2['Tool']['type']=='Armure'){
-             $data['Fighter']['skill_health']= $data['Fighter']['skill_health']+$data2['Tool']['bonus'];
-             $data['Fighter']['current_health']=$data['Fighter']['current_health']+$data2['Tool']['bonus'];
+        if($data2['Tool']['type']=='Shield'){
+            return array('skill_health', $data2['Tool']['bonus']); 
         }
-        if($data2['Tool']['type']=='Epee')
-            $data['Fighter']['skill_strenght']= $data['Fighter']['skill_strength']+$data2['Tool']['bonus'];
-        if($data2['Tool']['type']=='Lunette')
-            $data['Fighter']['skill_sight']= $data['Fighter']['skill_sight']+$data2['Tool']['bonus'];
-        $this->Fighter->save($data);
+        if($data2['Tool']['type']=='Sword')
+            return array('skill_strength', $data2['Tool']['bonus']); 
+        if($data2['Tool']['type']=='Helmet')
+return array('skill_sight', $data2['Tool']['bonus']);        
+        
+        
+     
     }
     
     function getTool($idTool){
