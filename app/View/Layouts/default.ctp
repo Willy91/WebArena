@@ -99,11 +99,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
                     <li>Group: SI4-05</li>
                     <li>Matthieu BLAIS - Alexandre BRUNEAU - William MARQUES - Victor TASSY</li>
                     <li>Options: Chat + Bootstrap (BF)</li>
+                    <li>Extras: ACDEG</li>
+                    <li>Bonuses Done</li>
                 </ul>
             </div>
             <div class="col-md-6 text-right">
                 <ul>
                     <li>Find this project on <?php echo $this->Html->link("GitHub", "https://github.com/Willy91/WebArena");?></li>
+                    <li>Or <?php echo $this->Html->link("Online", "http://webarenasi4bf-acrabug.rhcloud.com/Arena");?></li>
                     <li><?php echo $this->Html->link(
                     $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
                     'http://www.cakephp.org/',
