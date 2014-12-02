@@ -4,15 +4,16 @@
     <div class="page-header text-center">    
         <h1><strong>WebArena</strong></h1>
     </div>
-    <div class="col-md-8 col-md-offset-2 text-center">
+    <div class="panel col-md-8 col-md-offset-2 text-center" style="background-color:#333366;
+	border-color:white; padding:15px;" id="accueillant">
         
-        <p><i><big>
-            Quanta autem vis amicitiae sit, ex hoc intellegi maxime potest, quod ex infinita societate generis humani, quam conciliavit ipsa natura, ita contracta res est et adducta in angustum ut omnis caritas aut inter duos aut inter paucos iungeretur.</big></i></p>
+        <h3><i><big>
+            Welcome in the WebArena!! Create your fighter, join a guild and try to survive !</big></i></h3>
         
-        <p><i><big>Sed tamen haec cum ita tutius observentur, quidam vigore artuum inminuto rogati ad nuptias ubi aurum dextris manibus cavatis offertur, inpigre vel usque Spoletium pergunt. haec nobilium sunt instituta.</big></i></p>
-
-        <p><i><big>Alios autem dicere aiunt multo etiam inhumanius (quem locum breviter paulo ante perstrinxi) praesidii adiumentique causa, non benevolentiae neque caritatis, amicitias esse expetendas; itaque, ut quisque minimum firmitatis haberet minimumque virium, ita amicitias appetere maxime; ex eo fieri ut mulierculae magis amicitiarum praesidia quaerant quam viri et inopes quam opulenti et calamitosi quam ii qui putentur beati.
-        </big></i></p>
+        <h3 class='top-margin'><i><big>Only one rule : Do not die ! </big></i></h3>
+        
+        <h3><i><big>Do not wait more. Join the WebArena !!
+        </big></i></h3>
 
             
            

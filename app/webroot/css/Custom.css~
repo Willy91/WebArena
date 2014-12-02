@@ -24,10 +24,21 @@ body { overflow-x: hidden;}
 .car{
 background-color:#3e3f3a;
 color:white;
-
-
 }
 
-#signup{
-	padding-bottom:100px;
+table.dataTable {
+  table-layout: fixed;
+}
+
+.damier_picture{
+  width:100%;
+  display: block;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.accueillant{
+	background-color:#333366;
+	border-color:white;
 }
