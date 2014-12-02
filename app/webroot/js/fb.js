@@ -7,9 +7,8 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      $('.fb_iframe_widget').hide();
-      $('#signinButton').hide();
-      testAPI();
+      //$('.fb_iframe_widget').hide();
+      //$('#signinButton').hide();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
@@ -70,7 +69,6 @@
   // successful.  See statusChangeCallback() for when this call is made.
   function testAPI() {
     FB.api('/me', function(response) {
-      document.getElementById('SignupEmailAddress').value = response.email;
-      //document.getElementById('SignupEmailAddress').disabled = true;
+      //location.reload();
     });
   }

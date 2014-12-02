@@ -1,5 +1,9 @@
 <?php 
-
+    use Facebook\FacebookSession;
+    use Facebook\FacebookJavaScriptLoginHelper;
+    use Facebook\FacebookRequest;
+    use Facebook\FacebookRedirectLoginHelper;
+    use Facebook\GraphUser;
     App::uses('AppController', 'Controller');
     App::uses('CakeEmail', 'Network/Email');
 
@@ -216,7 +220,11 @@
         }
         public function login()
         {
+            
             $this->Cookie->check('idFighter');
+            
+            
+
             if($this->request->is('post')) {
 
             if(key($this->request->data) == 'Login') {
@@ -255,6 +263,30 @@
             }
 
         }
+
+        public function gPLusLogin() {
+            
+            if ($this->request->is('post')) {
+              pr($this->request->data['GPlusLogin']);
+
+                if(!$this->Player->createNew($this->request->data['GPlusLogin']['email'], "pass")) {
+                    $this->Cookie->write('nbAction', 0);
+                    
+                    $d = $this->Fighter->find('first', array ('conditions' => array('player_id' => $this->Player->getidPlayer($this->request->data['GPlusLogin']['email']))));
+                    if(!empty($d))
+                        $this->Cookie->write('idFighter',$d['Fighter']['id'], false, '1 Month');
+                    else
+                        $this->Cookie->write('idFighter',-1, false, '1 Month');
+                    
+                    $this->Session->write('Connected', $this->Player->getidPlayer($this->request->data['GPlusLogin']['email']));
+                    $this->Session->setFlash('Login');
+                    $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
+                    
+                }
+                
+            }
+        }
+
 
         public function message(){
             
@@ -349,21 +381,66 @@
             $this->Session->delete('Connected');
             $this->Session->setFlash('Logout !');
             $this->redirect(array('controller' => 'Arena', 'action' => 'index'));
+
             
         }
 
 
+
     	public function BeforeFilter() {
+          
+            App::import('Vendor', 'FacebookAuto', array('file' => 'facebook-php-sdk/autoload.php'));
+          
+            FacebookSession::setDefaultApplication('1518513541735492', '88bff13a4900ece7ca389e7b5e8ad2b4');
             
+            $facebookRedirect = Router::url('/arena/fbLogin', true);
+            session_start();
+            $helper2 = new FacebookRedirectLoginHelper($facebookRedirect);
             
+            $this->set('fbUrl', $helper2->getLoginUrl());
+                        
             if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
-        		if ($this->request->params['action']!='login' && $this->request->params['action']!='signup' && $this->request->params['action']!='index' && $this->request->params['action']!='halloffame'){
+        		if ($this->request->params['action']!='fbLogin' && $this->request->params['action']!='gPlusLogin' && $this->request->params['action']!='index' && $this->request->params['action']!='halloffame'){
                         $this->request->params['action'];
         		$this->redirect(array('controller' => 'Arena', 'action' => 'login'));	
                         }
         	}
     	}
+
+      public function fbLogin () {
+          $helper = new FacebookJavaScriptLoginHelper();
+
+          try {
+              $session = $helper->getSession();
+          } catch(FacebookRequestException $ex) {
+              // When Facebook returns an error
+          } catch(\Exception $ex) {
+              // When validation fails or other local issues
+          }
+
+          if ($session) {
+                $request = new FacebookRequest($session, 'GET', '/me');
+                $response = $request->execute();
+                $graphObject = $response->getGraphObject(GraphUser::className());
+                pr($graphObject->getEmail()); 
+
+                if(!$this->Player->createNew($graphObject->getEmail(), "pass")) {
+                    $this->Cookie->write('nbAction', 0);
+                    
+                    $d = $this->Fighter->find('first', array ('conditions' => array('player_id' => $this->Player->getidPlayer($graphObject->getEmail()))));
+                    if(!empty($d))
+                        $this->Cookie->write('idFighter',$d['Fighter']['id'], false, '1 Month');
+                    else
+                        $this->Cookie->write('idFighter',-1, false, '1 Month');
+                    
+                    $this->Session->write('Connected', $this->Player->getidPlayer($graphObject->getEmail()));
+                    $this->Session->setFlash('Login');
+                    
+                }
+                $this->redirect(array('controller'=>'Arena', 'action'=>'fighter'));
+            }
+      }
 
         public function sight()  
         {

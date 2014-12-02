@@ -80,30 +80,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version());
             </div>
         </div>
     </nav>
-    <div class="modal fade" id="loginModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h4 class="modal-title">Log In</h4>
-                </div>
-                <div class="modal-body">
-                  <div class="form-group">
-                    <input class="form-control" placeholder="Email" type="email">
-                  </div>
-                  <div class="form-group">
 
-                    <input class="form-control" placeholder="Password" type="password">
-                  </div>
-                  <p class="text-right"><?php echo $this->Html->link(__('Not registered? Sign Up Now!'), array('controller'=>'Arena','action'=>'signup'))?> / <a href="#">Forgot password?</a></p>
-                </div>
-                <div class="modal-footer">
-                  <a href="#" data-dismiss="modal" class="btn">Close</a>
-                  <a href="#" class="btn btn-primary">Log-in</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="container" class="fond" style="padding-top:50px; margin-top:-20px">
 	        <div class="row" id="fond">
 	<div class="container-fluid col-md-10 col-md-offset-1" id="content">
