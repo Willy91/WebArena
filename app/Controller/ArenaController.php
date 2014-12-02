@@ -344,6 +344,7 @@ class ArenaController extends AppController {
                     
                 }
                 
+                
             }
         }
 
@@ -398,10 +399,13 @@ class ArenaController extends AppController {
             FacebookSession::setDefaultApplication('1518513541735492', '88bff13a4900ece7ca389e7b5e8ad2b4');
             
             $facebookRedirect = Router::url('/arena/fbLogin', true);
+            $params = array(
+                'scope' => 'email'
+                );
             session_start();
             $helper2 = new FacebookRedirectLoginHelper($facebookRedirect);
             
-            $this->set('fbUrl', $helper2->getLoginUrl());
+            $this->set('fbUrl', $helper2->getLoginUrl($params));
                         
             if(!$this->Session->read('Connected') && $this->request->params['action']!='login' && $this->request->params['action']!='index' && $this->request->params['action']!='signup')
         	{
@@ -411,6 +415,7 @@ class ArenaController extends AppController {
                         }
         	}
     	}
+
 
       public function fbLogin () {
           $helper = new FacebookJavaScriptLoginHelper();
