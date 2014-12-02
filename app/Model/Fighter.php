@@ -88,7 +88,7 @@ class Fighter extends AppModel {
             }
 
 
-        $tab = $this->query("Select coordinate_x, coordinate_y from surroundings where type='Colonne'");
+        $tab = $this->query("Select coordinate_x, coordinate_y from surroundings where type='Column'");
 
         foreach ($tab as $key)
             foreach ($key as $value) {
@@ -217,6 +217,18 @@ class Fighter extends AppModel {
                 return false;
     }
 
+    function getBonusTool($id, $type, $bonus){
+        $tab = $this->findById($id);
+        
+        $tab['Fighter'][$type] = $tab['Fighter'][$type]+$bonus;
+        if($type == 'skill_health'){
+             $tab['Fighter']['current_health'] = $tab['Fighter']['current_health']+$bonus;
+        }
+        
+        $this->save($tab);
+    }
+    
+    
     //Fonction faire l'attaque
     function doAttack($fighterId, $direction) {
 
@@ -278,7 +290,7 @@ class Fighter extends AppModel {
                 $this->save();
                 return array(3, $idDef, $death);
             } else {
-                return array(3, false, false);
+                return array(3, $defenderId, false);
             }
         }
     }
@@ -399,30 +411,42 @@ class Fighter extends AppModel {
 
     function Action($nb, $fighterId) {
         $data = $this->findById($fighterId);
-
+        
+        
+        echo "tttt ".strtotime(date("Y-m-d H:i:s"))." ". (strtotime($data['Fighter']['next_action_time']) + 1  * Configure::read('Delai'));
         if (strtotime(date("Y-m-d H:i:s")) <= strtotime($data['Fighter']['next_action_time']))
             return -1;
         else {
 
 
-            if (strtotime(date("Y-m-d H:i:s")) > strtotime($data['Fighter']['next_action_time'] + mktime(date("H"), date("i"), date("s") + 2 * Configure::read('Delai'), date("m"), date("d"), date("Y"))))
+            if (strtotime(date("Y-m-d H:i:s")) > (strtotime($data['Fighter']['next_action_time']) + 3 * Configure::read('Delai'))){
+                 $nb--;
+                 echo "++++++";
+            }
+               
+            if (strtotime(date("Y-m-d H:i:s")) > (strtotime($data['Fighter']['next_action_time']) + 2 * Configure::read('Delai')))                
+            {
+                echo "-------";
                 $nb--;
-            if (strtotime(date("Y-m-d H:i:s")) > strtotime($data['Fighter']['next_action_time'] + mktime(date("H"), date("i"), date("s") + 3 * Configure::read('Delai'), date("m"), date("d"), date("Y"))))
-                $nb--;
-            if (strtotime(date("Y-m-d H:i:s")) > strtotime($data['Fighter']['next_action_time'] + mktime(date("H"), date("i"), date("s") + Configure::read('Delai'), date("m"), date("d"), date("Y")))) {
+            }
+            if (strtotime(date("Y-m-d H:i:s")) > (strtotime($data['Fighter']['next_action_time']) + 1  * Configure::read('Delai')))                
+            {
+                echo "ggg ".strtotime(date("Y-m-d H:i:s"))." ". (strtotime($data['Fighter']['next_action_time']) + 1  * Configure::read('Delai'));
                 $nb--;
                 $data['Fighter']['next_action_time'] = date("Y-m-d H:i:s");
             }
-
+            
             if ($nb < 0)
                 $nb = 0;
 
             $nb++;
-            if ($nb == Configure::read('nbAction') + 1) {
-                $data['Fighter']['next_action_time'] = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s") + Configure::read('Delai'), date("m"), date("d"), date("Y")));
-                $this->save($data);
-                $nb = 0;
+            if ($nb == Configure::read('nbAction')) {
+                $date = (strtotime(date("Y-m-d H:i:s"))+Configure::read('Delai'));
+                echo "data data data " . $date;
+                $data['Fighter']['next_action_time'] = date("Y-m-d H:i:s", $date);
+                $nb = Configure::read('nbAction')-1;
             }
+            $this->save($data);
             return $nb;
         }
     }
@@ -480,6 +504,24 @@ class Fighter extends AppModel {
 
     function getFighterByName($name) {
         return $this->find('first', array('conditions' => array('Fighter.name' => $name)));
+    }
+    
+    function getFreePosition(){
+        $tab=array();
+        for($i=0; $i<Configure::read('Largeur_x'); $i++){
+            for ($j=0; $j<Configure::read('Longueur_y'); $j++){
+                $tab[$i][$j]=true;
+            }
+        }
+        
+        $data = $this->find('all', array('conditions'=>array('current_health <>' => 0)));
+        
+        foreach($data as $key){
+            $tab[$key['Fighter']['coordinate_x']][$key['Fighter']['coordinate_y']] = false;
+        }
+        
+        return $tab;
+        
     }
 
 }

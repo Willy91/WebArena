@@ -75,14 +75,14 @@
         <tbody>
             <?php foreach ($result_sight as $item) :?>
                 
-                    <?php if($item['Surrounding']['type']=="Colonne"){
+                    <?php if($item['Surrounding']['type']=="Column"){
                         echo "<tr><td>";
                         echo $item['Surrounding']['type']; echo "</td><td>";
                     echo $item['Distance']; echo "</td></tr>";} ?>
                 
             <?php endforeach;?>
-            <?php if($neartrap==true) echo "<tr><td>Brise suspecte</td><td>1</td></tr>" ?>
-                <?php if($nearmonster==true) echo "<tr><td>Puanteur</td><td>1</td></tr>" ?>
+            <?php if($neartrap==true) echo "<tr><td>Suspicious breeze</td><td>1</td></tr>" ?>
+                <?php if($nearmonster==true) echo "<tr><td>Stench</td><td>1</td></tr>" ?>
         <?php foreach ($result_tool as $item2) :?>
             <?php 
                         echo "<tr><td>";
@@ -115,12 +115,16 @@
             if($item['Fighter']['coordinate_x']==$j && $item['Fighter']['coordinate_y']==($abs)){
                 $id=$item['Fighter']['id'].".jpg";
                 $name=$item['Fighter']['name'];
-                echo $this->Html->image($id,array('class'=>'damier_picture', 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'title'=>"$name" ));
+                $healh =$item['Fighter']['current_health'];
+                $lvl = $item['Fighter']['level'];
+                $strenght = $item['Fighter']['skill_strength'];
+                $sight = $item['Fighter']['skill_sight'];
+                echo $this->Html->image($id,array('class'=>'damier_picture', 'data-toggle'=>"tooltip", 'data-placement'=>"top", 'title'=>"name: $name \nhealth: $healh \nlevel: $lvl \nstrenght: $strenght \nSight: $sight" ));
                 $set=true;
             }
         }
         foreach ($result_sight as $item) {
-            if($item['Surrounding']['coordinate_x']==$j && $item['Surrounding']['coordinate_y']==($abs) && $item['Surrounding']['type']=="Colonne" && $set==false){
+            if($item['Surrounding']['coordinate_x']==$j && $item['Surrounding']['coordinate_y']==($abs) && $item['Surrounding']['type']=="Column" && $set==false){
                 $value = $item['Surrounding']['type'];
                 echo "<img class=\"damier_picture\" src=\"../img/$value.png\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"$value\" href=\"#\">";
                 $set=true;
@@ -142,6 +146,16 @@
 echo "</tr>";
 ?>
 </table>
+<?php echo $this->Form->create('Initialisation', array('class' => 'form-horizontal', 'inputDefaults'=>array('label'=>false)));?>
+		    <div class="form-group">
+			<?php echo $this->Form->input('name', array('class' => 'form-control', 'type'=>'hidden'));?>
+		    </div>
+		    <div class="form-group">
+   			 <div class="col-sm-10">
+  				  <?php echo $this->Form->submit('Init Grid', array('class' => 'btn btn-primary btn-xs'));?>
+   			 </div>
+		    </div>
+	            <?php echo $this->Form->end();?>
 </div>
     </div>
 </div>

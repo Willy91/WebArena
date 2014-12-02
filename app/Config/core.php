@@ -58,8 +58,8 @@
         Configure::write('Largeur_x','15');
         Configure::write('nbAction',3);
         Configure::write('Delai',10);
-        
-        
+        Configure::write('nbColonne',15);
+        Configure::write('nbPiege',16);
         
 
 /**

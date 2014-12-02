@@ -7,27 +7,21 @@ class Surrounding extends AppModel {
         public $displayField = 'name';
     public $uses = array('Fighter');
    //Initialisation du plateau
-   function beginGame(){
+   function beginGame($tab){
        //On enlève toute trace du plateau précédent et on crée colonne, piege, monstre
+    
        $this->query("Delete from surroundings");
-       $this->createColonne();
-       $this->createPiegeMonster(); 
+       $tab = $this->createColonne($tab);
+       $this->createPiegeMonster($tab); 
    } 
    
    
    //Créer les colonnes
-   function createColonne(){
-       $array = array();
+   function createColonne($array){
        
-       //Tableau pour éviter qu'un mec soit bloqué par tous les poteaux autours de lui
-       for ($i=0; $i<Configure::read('Largeur_x'); $i++){
-           for ($j=0; $j<Configure::read('Longueur_y');$j++){
-               $array[$i][$j] = true;
-           }
-       }
        
        //1 colonne pour 10 cases or 150 cases donc 15 colonnes
-       for ($i=0; $i<15; $i++){
+       for ($i=0; $i<Configure::read('nbColonne'); $i++){
            do{
                //PLacement aléatoire sur la map
                $fin = false;
@@ -44,7 +38,7 @@ class Surrounding extends AppModel {
            $data=$this->create();
            $data['Surrounding']['coordinate_x'] = $x;
            $data['Surrounding']['coordinate_y'] = $y;
-           $data['Surrounding']['type'] = "Colonne";
+           $data['Surrounding']['type'] = "Column";
            $this->save($data);
            
            //On indique sur le tableau des cases libres, que les cases alentours
@@ -60,32 +54,17 @@ class Surrounding extends AppModel {
            $array[$x+1][$y-1]=false;
            
        }
-       
-       
+
+       return $array;
        
    }
 
    //Même principe que les colonnes
-   function createPiegeMonster(){
-       //On obtient les cases niquées par les colonnes
-       $tab = $this->query("Select coordinate_x, coordinate_y from surroundings");
+   function createPiegeMonster($array){
+
        
-       $array = array();
-       
-       for ($i=0; $i<Configure::read('Largeur_x'); $i++){
-           for ($j=0; $j<Configure::read('Longueur_y');$j++){
-               $array[$i][$j] = true;
-           }
-       }
-       
-       //On marque indispo les cases occupées par les colonnes
-        foreach($tab as $key)
-            foreach($key as $value){
-               $array[$value['coordinate_x']][$value['coordinate_y']]= false;
-            }
-            
             //15 pièges + un monstre
-        for ($i=0; $i<16; $i++){
+        for ($i=0; $i<Configure::read('nbPiege'); $i++){
            do{
                $fin = false;
                $y = rand(0 , Configure::read('Longueur_y')-1);
@@ -104,7 +83,7 @@ class Surrounding extends AppModel {
            if ($i==15)
                $data['Surrounding']['type'] = "Monster";
            else
-               $data['Surrounding']['type'] = "Piege";
+               $data['Surrounding']['type'] = "Trap";
            
            $this->save($data);
            
@@ -114,7 +93,7 @@ class Surrounding extends AppModel {
    }
    
    function nearFromPiege($data2){
-       $data = $this->find('all', array('conditions'=>array('type' => "Piege")));
+       $data = $this->find('all', array('conditions'=>array('type' => "Trap")));
        $x = $data2['Fighter']['coordinate_x'];
        $y = $data2['Fighter']['coordinate_y'];
        foreach ($data as $key){
@@ -131,7 +110,7 @@ class Surrounding extends AppModel {
    }
    
    function fighterOnPiege($data2){
-       $data = $this->find('all', array('conditions'=>array('type' => "Piege")));
+       $data = $this->find('all', array('conditions'=>array('type' => "Trap")));
        $x = $data2['Fighter']['coordinate_x'];
        $y = $data2['Fighter']['coordinate_y'];
        foreach ($data as $key){

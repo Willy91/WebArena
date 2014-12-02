@@ -43,10 +43,10 @@
         </tr>
         <?php foreach($message_table as $data):?>
         <tr>
-            <td><?php echo $data['Message']['date']; ?></td>
-            <td><?php echo $data['Fighter']['name'];?></td>
-            <td><?php echo $data['Message']['title'];?></td>
-            <td style="word-wrap: break-word;"><?php echo $data['Message']['message'];?>
+            <td><?php echo $data['date']; ?></td>
+            <td><?php echo $data['to'];?></td>
+            <td><?php echo $data['title'];?></td>
+            <td style="word-wrap: break-word;"><?php echo $data['mes'];?>
                 
                 
                 
